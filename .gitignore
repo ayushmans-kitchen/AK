@@ -1,0 +1,39 @@
+# Python bytecode
+*.pyc
+__pycache__/
+*.egg-info/
+.pytest_cache/
+
+# Virtual environment
+zenv/
+env/
+
+# Database files
+
+# Media and static files (generated or uploaded)
+media/
+static_collected/ # If you use collectstatic to a specific directory
+staticfiles/ # Common alternative for collected static files
+
+# Environment variables and sensitive settings
+.env
+*.env
+local_settings.py # If you separate local settings from base settings
+
+# Logs and backups
+*.log
+*.bak
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Operating System generated files
+.DS_Store
+Thumbs.db
+
+# Deployment related files (if not part of your build process)
+*.tar.gz
+*.zip
