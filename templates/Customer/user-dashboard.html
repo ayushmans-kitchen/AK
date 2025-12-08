@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Hotel Meal Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'Customer/styles-user-dashboard.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <img src="logo.PNG" alt="" class="logo-image">
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="navbar-nav" id="navbarNav">
+                <a href="{% url 'user_dashboard' %}" class="nav-link active">My Meals</a>
+                <a href="{% url 'user_history' %}" class="nav-link ">History</a>
+                <a href="login.html" class="nav-link">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="user-page">
+        <div class="user-container">
+            
+            <h1 class="page-title">WELCOME VIVEK</h1>
+            <p class="user-plan-display" id="userPlanDisplay">Your Current Plan: Loading...</p>
+
+            <section class="meal-counters">
+                <div class="counter-card">
+                    <div class="counter-icon">🍽️</div>
+                    <div class="counter-content">
+                        <p class="counter-label">Meals Used</p>
+                        <p class="counter-number" id="mealsUsed">12</p>
+                    </div>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon">❌</div>
+                    <div class="counter-content">
+                        <p class="counter-label">Meals Cancelled</p>
+                        <p class="counter-number" id="mealsCancelled">10</p>
+                    </div>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon">📊</div>
+                    <div class="counter-content">
+                        <p class="counter-label">Meals Available</p>
+                        <p class="counter-number" id="mealsAvailable">48</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="today-meals">
+                <h2 class="section-title">Today's Meals</h2>
+                <div class="meals-grid">
+                    
+                    <div class="meal-card">
+                        <div class="meal-time">Lunch</div>
+                        <div class="meal-details">
+                            <p class="meal-course">Select Meal Type</p>
+                            <select id="lunchFoodType" class="food-type-dropdown">
+                                <option value="default" disabled selected>Choose your food type</option>
+                            </select>
+                            <p class="meal-description">Meal details will appear here...</p>
+                            <p class="meal-time-slot">12:30 PM - 03:00 PM</p>
+                        </div>
+                        
+                        <div class="meal-actions radio-group" id="lunchServiceOptions">
+                            <input type="radio" id="lunch-dining" name="lunch_service" value="dining" checked>
+                            <label for="lunch-dining" class="radio-label btn-dining">Dining</label>
+
+                            <input type="radio" id="lunch-pickup" name="lunch_service" value="pickup">
+                            <label for="lunch-pickup" class="radio-label btn-pickup">Pickup</label>
+
+                            <input type="radio" id="lunch-delivery" name="lunch_service" value="delivery">
+                            <label for="lunch-delivery" class="radio-label btn-delivery">Delivery</label>
+                            
+                            <input type="radio" id="lunch-cancel" name="lunch_service" value="cancel">
+                            <label for="lunch-cancel" class="radio-label btn-cancel">Cancel</label>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-confirm" data-meal-type="Lunch" onclick="confirmSelection('Lunch')">Confirm Selection</button>
+                    </div>
+                    
+                    <div class="meal-card">
+                        <div class="meal-time">Dinner</div>
+                        <div class="meal-details">
+                            <p class="meal-course">Select Meal Type</p>
+                            <select id="dinnerFoodType" class="food-type-dropdown">
+                                <option value="default" disabled selected>Choose your food type</option>
+                            </select>
+                            <p class="meal-description">Meal details will appear here...</p>
+                            <p class="meal-time-slot">08:00 PM - 10:30 PM</p>
+                        </div>
+                        
+                        <div class="meal-actions radio-group" id="dinnerServiceOptions">
+                            <input type="radio" id="dinner-dining" name="dinner_service" value="dining" checked>
+                            <label for="dinner-dining" class="radio-label btn-dining">Dining</label>
+
+                            <input type="radio" id="dinner-pickup" name="dinner_service" value="pickup">
+                            <label for="dinner-pickup" class="radio-label btn-pickup">Pickup</label>
+
+                            <input type="radio" id="dinner-delivery" name="dinner_service" value="delivery">
+                            <label for="dinner-delivery" class="radio-label btn-delivery">Delivery</label>
+                            
+                            <input type="radio" id="dinner-cancel" name="dinner_service" value="cancel">
+                            <label for="dinner-cancel" class="radio-label btn-cancel">Cancel</label>
+                        </div>
+
+                        <button class="btn btn-primary btn-confirm" data-meal-type="Dinner" onclick="confirmSelection('Dinner')">Confirm Selection</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Ayushman's Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Data structure for the different plans
+        const MEAL_PLANS = {
+            'normal_30': { name: "Normal (₹1500 for 30 meals)", totalMeals: 30, usedMeals: 5, cancelledMeals: 2, isPremium: false, lunchOptions: [], dinnerOptions: [] },
+            'normal_60': { name: "Normal (₹3000 for 60 meals)", totalMeals: 60, usedMeals: 15, cancelledMeals: 5, isPremium: false, lunchOptions: [], dinnerOptions: [] },
+            'premium1_30': { name: "Premium 1 (₹1800 for 30 meals)", totalMeals: 30, usedMeals: 8, cancelledMeals: 0, isPremium: true, lunchOptions: ["PANEER", "MASHROOM", "CHICKEN"], dinnerOptions: ["PANEER", "MASHROOM", "CHICKEN"] },
+            'premium1_60': { name: "Premium 1 (₹3400 for 60 meals)", totalMeals: 60, usedMeals: 18, cancelledMeals: 1, isPremium: true, lunchOptions: ["PANEER", "MASHROOM", "CHICKEN"], dinnerOptions: ["PANEER", "MASHROOM", "CHICKEN"] },
+            'premium2_30': { name: "Premium 2 (₹2200 for 30 meals)", totalMeals: 30, usedMeals: 10, cancelledMeals: 0, isPremium: true, lunchOptions: ["PANEER", "MASHROOM", "CHICKEN", "EGG", "PRAWN", "FISH", "VEG"], dinnerOptions: ["PANEER", "MASHROOM", "CHICKEN", "EGG", "VEG"] },
+            'premium2_60': { name: "Premium 2 (₹4200 for 60 meals)", totalMeals: 60, usedMeals: 12, cancelledMeals: 10, isPremium: true, lunchOptions: ["PANEER", "MASHROOM", "CHICKEN", "EGG", "PRAWN", "FISH", "VEG"], dinnerOptions: ["PANEER", "MASHROOM", "CHICKEN", "EGG", "VEG"] }
+        };
+
+        // We use a fixed plan key since the selector is removed.
+        const CURRENT_PLAN_KEY = 'premium2_60'; 
+
+        const lunchDropdown = document.getElementById('lunchFoodType');
+        const dinnerDropdown = document.getElementById('dinnerFoodType');
+        
+        // --- Core Logic for Dashboard Setup ---
+
+        function displayDashboard() {
+            const plan = MEAL_PLANS[CURRENT_PLAN_KEY];
+            
+            // 1. Display User Plan
+            document.getElementById('userPlanDisplay').textContent = `Your Current Plan: ${plan.name}`;
+            document.getElementById('userGreeting').textContent = `Welcome back, User on the ${plan.name} Plan`;
+            
+            // 2. Update Meal Counters
+            document.getElementById('mealsUsed').textContent = plan.usedMeals;
+            document.getElementById('mealsCancelled').textContent = plan.cancelledMeals;
+            const available = plan.totalMeals - plan.usedMeals + plan.cancelledMeals;
+            document.getElementById('mealsAvailable').textContent = available;
+
+            // 3. Update/Control Food Type Dropdowns
+            if (plan.isPremium) {
+                lunchDropdown.style.display = 'block';
+                dinnerDropdown.style.display = 'block';
+                populateDropdown(lunchDropdown, plan.lunchOptions);
+                populateDropdown(dinnerDropdown, plan.dinnerOptions);
+                // Ensure default description is shown when a dropdown is visible
+                document.getElementById('lunchFoodType').nextElementSibling.textContent = 'Select a food type from the dropdown.';
+                document.getElementById('dinnerFoodType').nextElementSibling.textContent = 'Select a food type from the dropdown.';
+            } else {
+                // Hide dropdown for Normal plans (no menu option)
+                lunchDropdown.style.display = 'none';
+                dinnerDropdown.style.display = 'none';
+                document.getElementById('lunchFoodType').nextElementSibling.textContent = 'Standard meal selection applies.';
+                document.getElementById('dinnerFoodType').nextElementSibling.textContent = 'Standard meal selection applies.';
+            }
+
+            // Set default radio selection
+            document.getElementById('lunch-dining').checked = true;
+            document.getElementById('dinner-dining').checked = true;
+        }
+
+        // --- Logic for Food Type Dropdowns ---
+
+        function populateDropdown(dropdownElement, options) {
+            dropdownElement.innerHTML = '<option value="default" disabled selected>Choose your food type</option>';
+            options.forEach(option => {
+                const newOption = document.createElement('option');
+                newOption.value = option.toLowerCase();
+                newOption.textContent = option;
+                dropdownElement.appendChild(newOption);
+            });
+        }
+        
+        function updateMealDescription(event) {
+            const dropdown = event.target;
+            const mealTime = dropdown.closest('.meal-card').querySelector('.meal-time').textContent;
+            const selectedFood = dropdown.options[dropdown.selectedIndex].textContent;
+            const descriptionElement = dropdown.nextElementSibling;
+
+            if (dropdown.value === 'default') {
+                 descriptionElement.textContent = 'Select a food type from the dropdown.';
+            } else {
+                descriptionElement.textContent = `Premium ${mealTime} Selection: ${selectedFood}`;
+            }
+        }
+
+        // --- Confirmation Logic ---
+        
+        function confirmSelection(mealType) {
+            const time = mealType.toLowerCase();
+            const serviceRadios = document.getElementsByName(`${time}_service`);
+            let selectedService = '';
+            
+            // Get selected service (Dining, Pickup, Delivery, Cancel)
+            for (const radio of serviceRadios) {
+                if (radio.checked) {
+                    selectedService = radio.value;
+                    break;
+                }
+            }
+            
+            const foodDropdown = document.getElementById(`${time}FoodType`);
+            let selectedFood = foodDropdown.value !== 'default' ? foodDropdown.options[foodDropdown.selectedIndex].textContent : 'Standard/Not Specified';
+            
+            const currentPlan = MEAL_PLANS[CURRENT_PLAN_KEY];
+            
+            // Check for validation if it's a Premium plan and food hasn't been selected
+            if (currentPlan.isPremium && selectedService !== 'cancel' && foodDropdown.style.display !== 'none' && foodDropdown.value === 'default') {
+                 alert(`Please select a food type for ${mealType} before confirming, or choose 'Cancel'.`);
+                 return;
+            }
+
+            // Simulated Submission
+            console.log(`--- ${mealType} Order Confirmed ---`);
+            console.log(`Plan: ${currentPlan.name}`);
+            console.log(`Service: ${selectedService.toUpperCase()}`);
+            
+            if (selectedService !== 'cancel' && currentPlan.isPremium) {
+                console.log(`Food Selection: ${selectedFood}`);
+                alert(`${mealType} selection confirmed! Service: ${selectedService.toUpperCase()}, Food: ${selectedFood}.`);
+            } else if (selectedService === 'cancel') {
+                alert(`${mealType} meal has been successfully cancelled.`);
+            } else {
+                 alert(`${mealType} selection confirmed! Service: ${selectedService.toUpperCase()}.`);
+            }
+
+            // In a real application, you would send this data to a server here.
+        }
+
+
+        // --- Event Listeners and Initial Load ---
+        
+        lunchDropdown.addEventListener('change', updateMealDescription);
+        dinnerDropdown.addEventListener('change', updateMealDescription);
+
+        // Hamburger menu toggle (copied from your original script)
+        const hamburger = document.getElementById('hamburger');
+        const navbarNav = document.getElementById('navbarNav');
+        hamburger.addEventListener('click', function() {
+            navbarNav.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navbarNav.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+
+        // Load the dashboard on page load
+        document.addEventListener('DOMContentLoaded', displayDashboard);
+    </script>
+</body>
+</html>

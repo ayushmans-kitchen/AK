@@ -64,6 +64,8 @@ class Customer(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
     profile_updated_at = models.DateTimeField(auto_now=True)
 
+    password = models.CharField(max_length=128, blank=True, null=True)
+
     user_status_active = models.BooleanField(default=True)
     lunch_status_active = models.BooleanField(default=True)
     dinner_status_active = models.BooleanField(default=True)

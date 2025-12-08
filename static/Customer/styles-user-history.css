@@ -1,0 +1,479 @@
+/* ===========================
+   DESIGN TOKENS & VARIABLES
+   =========================== */
+:root {
+  --color-primary: #d4af37;
+  --color-primary-dark: #b8860b;
+  --color-background: #000000;
+  --color-background-secondary: #0a0a0a;
+  --color-background-tertiary: #1c1c1c;
+  --color-text: #ffffff;
+  --color-text-secondary: #e0e0e0;
+  --color-text-muted: #a0a0a0;
+  --color-border: #333333;
+  --color-success: #4ade80;
+  --color-success-bg: #1a3a1a;
+  --color-danger: #ef4444;
+  --color-danger-bg: #3a1a1a;
+  --color-card-bg: #0f0f0f;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  --font-sans: "Montserrat", sans-serif;
+  --font-display: "Playfair Display", serif;
+
+  --border-radius: 0.5rem;
+  --transition: 0.3s ease;
+}
+
+/* ===========================
+   RESET & BASE STYLES
+   =========================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-lg);
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+/* ===========================
+   NAVBAR
+   =========================== */
+.navbar {
+  background-color: var(--color-background-secondary);
+  border-bottom: 2px solid var(--color-primary);
+  padding: var(--spacing-md) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image{
+  height: 40px;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.navbar-nav {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  transition: color var(--transition);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* ===========================
+   HAMBURGER MENU
+   =========================== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-md);
+  gap: var(--spacing-xs);
+  z-index: 101;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  transition: all var(--transition);
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* ===========================
+   BUTTONS
+   =========================== */
+.btn {
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: center;
+  font-size: 1rem;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  transform: translateY(-2px);
+}
+
+/* ===========================
+   LAYOUT CONTAINERS
+   =========================== */
+.user-page {
+  min-height: 100vh;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  background-color: var(--color-background);
+}
+
+.user-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ===========================
+   PAGE TITLE
+   =========================== */
+.page-title {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
+  font-size: 2.5rem;
+}
+
+.history-subtitle {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+  font-size: 1.1rem;
+}
+
+/* ===========================
+   TABLE STYLES
+   =========================== */
+.table-responsive {
+  overflow-x: auto;
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--border-radius);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+}
+
+.data-table thead {
+  background-color: var(--color-background-tertiary);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.data-table th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.data-table td {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.data-table tbody tr:hover {
+  background-color: var(--color-background-tertiary);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===========================
+   BADGES
+   =========================== */
+.badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-completed {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.badge-cancelled {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+/* ===========================
+   HISTORY ACTIONS
+   =========================== */
+.history-actions {
+  display: flex;
+  gap: var(--spacing-lg);
+  justify-content: center;
+  margin-top: var(--spacing-2xl);
+}
+
+/* ===========================
+   FOOTER
+   =========================== */
+.footer {
+  background-color: var(--color-background-secondary);
+  border-top: 2px solid var(--color-primary);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  text-align: center;
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-2xl);
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .navbar-nav {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: var(--color-background-secondary);
+    flex-direction: column;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition);
+  }
+
+  .navbar-nav.active {
+    max-height: 200px;
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .nav-link {
+    padding: var(--spacing-lg) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .navbar-container {
+    padding: 0 var(--spacing-md);
+    gap: var(--spacing-md);
+    flex-wrap: nowrap;
+  }
+
+  .navbar-logo {
+    width: auto;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: var(--spacing-sm);
+  }
+
+  .btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+  }
+
+  .user-page {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .logo-text {
+    font-size: 1rem;
+  }
+
+  .hamburger {
+    padding: var(--spacing-md);
+  }
+
+  .nav-link {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 0.875rem;
+  }
+
+  .history-subtitle {
+    font-size: 1rem;
+  }
+
+  /* Mobile table responsive layout */
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table,
+  .data-table tbody,
+  .data-table tr,
+  .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table tr {
+    margin-bottom: var(--spacing-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    background-color: var(--color-background-tertiary);
+  }
+
+  .data-table td {
+    text-align: left;
+    padding: var(--spacing-sm) 0;
+    border: none;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-right: var(--spacing-md);
+  }
+
+  .history-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .navbar-container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .navbar-logo {
+    width: auto;
+  }
+
+  .hamburger {
+    padding: var(--spacing-sm);
+  }
+
+  .hamburger span {
+    width: 20px;
+    height: 2.5px;
+  }
+
+  .logo-text {
+    font-size: 0.95rem;
+  }
+
+  .nav-link {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 0.75rem;
+  }
+
+  .data-table td {
+    grid-template-columns: 80px 1fr;
+  }
+}

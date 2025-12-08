@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ meal|title }} - {{ service }}</title>
+    <link rel="stylesheet" href="{% static 'Admin/styles-admin-dashboard.css' %}">
+</head>
+
+<body>
+<h1>{{ meal|title }} - {{ service }}</h1>
+<p>Date: {{ today|date:"l, F j, Y" }}</p>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>UID</th>
+            <th>Name</th>
+            <th>Meal Plan</th>
+            <th>Food Choice</th>
+        </tr>
+    </thead>
+
+   <tbody>
+    {% for r in records %}
+    <tr>
+        <td>{{ r.customer.id }}</td>
+        <td>{{ r.customer.name }}</td>
+        <td>{{ r.customer.subscription_choice }}</td>
+
+        <td>
+            {% if r.customer.subscription_choice == "NORMAL30" or r.customer.subscription_choice == "NORMAL60" %}
+                Standard
+            {% else %}
+                {{ r.final_food_choice }}
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4" class="text-center">No records found</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+</table>
+
+
+<a href="{% url 'admin_dashboard' %}" class="btn-back">Back to Dashboard</a>
+
+</body>
+</html>

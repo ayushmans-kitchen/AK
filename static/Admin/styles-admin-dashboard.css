@@ -1,0 +1,385 @@
+/* ===========================
+    BASIC COLORS (Simplified from Variables)
+    =========================== */
+/* Gold/Yellow Primary */
+.primary-color { color: #d4af37; }
+.dark-bg { background-color: #000000; }
+.card-bg { background-color: #0f0f0f; }
+.secondary-bg { background-color: #0a0a0a; }
+.tertiary-bg { background-color: #1c1c1c; }
+.text-white { color: #ffffff; }
+.text-gray { color: #e0e0e0; }
+.text-muted { color: #a0a0a0; }
+.border-color { border-color: #333333; }
+
+/* Status Colors */
+.text-green { color: #4ade80; } /* Success */
+.text-red { color: #ef4444; }    /* Danger */
+.text-orange { color: #ff9800; }  /* Warning */
+.text-blue { color: #60a5fa; }    /* Info/Delivery */
+.text-primary-dark { color: #b8860b; } /* Total Row Highlight */
+
+/* Meal Plan Colors */
+.status-normal { color: #60a5fa; } 
+.status-premium1 { color: #d4af37; } 
+.status-premium2 { color: #4ade80; } 
+
+
+/* ===========================
+    RESET & BASE STYLES
+    =========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    background-color: #000000;
+    color: #ffffff;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+h1, h2, h3 {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+a {
+    color: #d4af37;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* ===========================
+    NAVBAR & HEADER
+    =========================== */
+.navbar {
+    background-color: #0a0a0a;
+    border-bottom: 2px solid #d4af37;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.logo-image {
+    height: 40px; 
+    border-radius: 4px;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 20px;
+    margin-left: auto;
+}
+
+.nav-link {
+    color: #e0e0e0;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+}
+
+.nav-link.active {
+    color: #d4af37;
+    border-bottom-color: #d4af37;
+}
+
+/* --- HAMBURGER MENU STYLING FIX --- */
+
+/* Base style for the hamburger button container: HIDDEN BY DEFAULT */
+.hamburger {
+    display: none; /* Only show in mobile media query */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 101;
+}
+.hamburger:focus {
+    outline: none;
+}
+
+/* Style for each of the three lines */
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #d4af37; /* Gold color */
+    border-radius: 2px;
+    transition: all 0.3s linear;
+    transform-origin: 1px;
+}
+
+/* Animation when menu is active (optional, but good practice) */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(20px);
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg);
+}
+/* --- END HAMBURGER FIX --- */
+
+
+/* ===========================
+    PAGE LAYOUT & TYPOGRAPHY
+    =========================== */
+.admin-page {
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-color: #000000;
+}
+
+.admin-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.page-title {
+    color: #d4af37;
+    margin-bottom: 5px;
+    font-size: 2.5rem;
+}
+
+.dashboard-date {
+    color: #a0a0a0;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.meal-section-title {
+    color: #e0e0e0;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.75rem;
+    border-bottom: 1px solid #333333;
+    padding-bottom: 8px;
+}
+
+.section-title {
+    color: #d4af37;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-weight: 600;
+    border: 2px solid #d4af37;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background-color: #d4af37;
+    color: #000000;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #d4af37;
+}
+
+/* ===========================
+    TABLE STYLES
+    =========================== */
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 40px;
+    border-radius: 8px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #0f0f0f;
+    border: 1px solid #333333;
+    min-width: 600px; /* Base minimum width */
+}
+
+.data-table thead {
+    background-color: #1c1c1c;
+    border-bottom: 2px solid #d4af37;
+}
+
+.data-table th {
+    padding: 10px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #d4af37;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: 15px;
+    border-bottom: 1px solid #333333;
+    color: #e0e0e0;
+    white-space: nowrap;
+}
+
+.data-table tbody tr:hover {
+    background-color: #1c1c1c;
+}
+
+/* --- Breakdown Table (Transposed) --- */
+#serviceBreakdownTable {
+    min-width: 750px;
+}
+#serviceBreakdownTable th { text-align: center; }
+#serviceBreakdownTable th:nth-child(1) { text-align: left; width: 25%; } /* Service Type column */
+#serviceBreakdownTable td:nth-child(1) { width: 25%; }
+
+/* Total column styling */
+.total-column { 
+    font-weight: 700; 
+    background-color: rgba(212, 175, 55, 0.1); 
+    border-left: 2px solid #d4af37; 
+}
+#serviceBreakdownTable th.total-column { color: #d4af37; }
+
+
+/* --- Low Balance Users Table --- */
+#lowBalanceUsersTable {
+    min-width: 650px;
+}
+#lowBalanceUsersTable th:nth-child(4), #lowBalanceUsersTable td:nth-child(4),
+#lowBalanceUsersTable th:nth-child(5), #lowBalanceUsersTable td:nth-child(5) { 
+    text-align: center; 
+}
+
+
+/* Meal Plan Badges (inside table cell) */
+.data-table td span {
+    font-weight: 600; 
+    background: none; 
+}
+
+/* ===========================
+    FOOTER
+    =========================== */
+.footer {
+    background-color: #0a0a0a;
+    border-top: 2px solid #d4af37;
+    padding: 30px 20px;
+    text-align: center;
+    color: #a0a0a0;
+    margin-top: 40px;
+}
+
+/* ===========================
+    RESPONSIVE DESIGN (Simplified Logic)
+    =========================== */
+
+/* Tablets (Max Width 768px) */
+@media (max-width: 768px) {
+    .hamburger { display: flex; } /* <-- SHOW HAMBURGER ON TABLET/MOBILE */
+    
+    .navbar-nav {
+        position: absolute; 
+        top: 60px; /* Approximate navbar height */
+        left: 0; 
+        right: 0; 
+        background-color: #0a0a0a;
+        flex-direction: column; 
+        width: 100%; 
+        border-bottom: 2px solid #d4af37;
+        max-height: 0; 
+        overflow: hidden; 
+        transition: max-height 0.3s ease; 
+        padding: 0;
+        margin-left: 0;
+    }
+    .navbar-nav.active { max-height: 500px; padding: 10px 0; }
+    
+    .page-title { font-size: 2rem; }
+    .meal-section-title { font-size: 1.5rem; }
+
+    /* Tables become vertical stacked cards on mobile */
+    .data-table { min-width: 100%; } 
+    .data-table thead { display: none; }
+    .data-table, .data-table tbody, .data-table tr, .data-table td { display: block; width: 100%; }
+
+    .data-table tr {
+        margin-bottom: 15px;
+        border: 1px solid #333333;
+        padding: 15px;
+        background-color: #1c1c1c;
+    }
+
+    .data-table td {
+        padding: 5px 15px 5px 0; /* Add right padding to content, keep left for label */
+        border: none;
+        display: grid;
+        grid-template-columns: 140px 1fr; /* Give more space to the label column */
+        white-space: normal;
+    }
+
+    /* Show the column headers as labels in mobile view */
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #d4af37;
+        margin-right: 15px; /* Increase margin for better separation */
+    }
+    
+    /* Responsive logo size */
+    .logo-image { height: 30px; }
+}
+
+/* Small Phones (Max Width 480px) */
+@media (max-width: 480px) {
+    body { font-size: 14px; }
+    .page-title { font-size: 1.75rem; }
+    .admin-page { padding: 15px 10px; }
+    
+    .meal-section-title { font-size: 1.4rem; }
+
+    /* Further adjust grid column size for small screens */
+    .data-table td {
+        grid-template-columns: 110px 1fr; /* Adjusted for smaller screens */
+        padding: 5px 10px 5px 0; /* Slightly less padding on very small screens */
+    }
+
+    .data-table td::before {
+        margin-right: 10px;
+    }
+}

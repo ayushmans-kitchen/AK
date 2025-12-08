@@ -1,0 +1,383 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Report - Hotel Meal Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'Admin/styles-admin-report.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <img src="logo.png" alt="Hotel Logo" class="logo-image">
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="navbar-nav" id="navbarNav">
+                <a href="{% url 'admin_dashboard' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'daily_report'%}" class="nav-link active">Daily Report</a>
+                <a href="admin-complete-report.html" class="nav-link">Complete Report</a>
+                <a href="admin-user-management.html" class="nav-link">User Management</a>
+                <a href="login.html" class="nav-link">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-page">
+        <div class="admin-container">
+            <div class="report-header">
+                <div>
+                    <h1 class="page-title">Daily Meal Report</h1>
+                    <p class="report-date">Date: <span id="reportCurrentDate">November 24, 2025</span></p>
+                </div>
+                <div class="header-actions">
+                    <!-- Action now downloads CSV -->
+                    <button class="btn btn-primary print-button" onclick="downloadDailyReportCsv()">Download Daily CSV</button>
+                </div>
+            </div>
+
+            <section class="filter-section">
+                <div class="filter-controls">
+                    <div class="search-wrapper">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            class="search-input" 
+                            placeholder="Search by name or UID..."
+                            onkeyup="filterTable()"
+                        >
+                        <span class="search-icon">🔍</span>
+                    </div>
+                    
+                    <div class="meal-filter">
+                        <label for="serviceFilter">Filter by Service:</label>
+                        <select id="serviceFilter" class="meal-dropdown" onchange="filterTable()">
+                            <option value="all">All Services</option>
+                            <option value="dining">Dining</option>
+                            <option value="pickup">Pickup</option>
+                            <option value="delivery">Delivery</option>
+                            <option value="cancel">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="report-section">
+                <div class="meal-tables-container">
+                    
+                    <!-- LUNCH ORDERS TABLE -->
+                    <div class="meal-table-wrapper">
+                        <h2 class="meal-section-title">Lunch Orders</h2>
+                        <div class="table-responsive">
+                            <table class="data-table report-table" id="lunchReportTable">
+                                <thead>
+                                    <tr>
+                                        <th>UID</th>
+                                        <th>Name</th>
+                                        <th>Meal Plan</th>
+                                        <th>Food Chosen</th>
+                                        <th>Service</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- STATIC DATA ROWS - SORTED BY SERVICE (Alphabetical) -->
+                                    
+                                    <!-- CANCELLED -->
+                                    <tr data-uid="104" data-name="Sneha Reddy" data-service="cancel">
+                                        <td data-label="UID">104</td>
+                                        <td data-label="Name">Sneha Reddy</td>
+                                        <td data-label="Meal Plan"><span class="status-premium2">Premium 2<br>(₹4200)</span></td>
+                                        <td data-label="Food Chosen"><span class="status-empty">Standard</span></td>
+                                        <td data-label="Service"><span class="status-cancel">Cancel</span></td>
+                                    </tr>
+                                    <tr data-uid="108" data-name="Meera Nair" data-service="cancel">
+                                        <td data-label="UID">108</td>
+                                        <td data-label="Name">Meera Nair</td>
+                                        <td data-label="Meal Plan"><span class="status-premium1">Premium 1<br>(₹1800)</span></td>
+                                        <td data-label="Food Chosen"><span class="status-empty">Standard</span></td>
+                                        <td data-label="Service"><span class="status-cancel">Cancel</span></td>
+                                    </tr>
+                                    
+                                    <!-- DELIVERY -->
+                                    <tr data-uid="105" data-name="Vivek Jain" data-service="delivery">
+                                        <td data-label="UID">105</td>
+                                        <td data-label="Name">Vivek Jain</td>
+                                        <td data-label="Meal Plan"><span class="status-normal">Normal<br>(₹1500)</span></td>
+                                        <td data-label="Food Chosen"><span class="status-empty">Standard</span></td>
+                                        <td data-label="Service"><span class="status-delivery">Delivery</span></td>
+                                    </tr>
+
+                                    <!-- DINING -->
+                                    <tr data-uid="101" data-name="Anil Sharma" data-service="dining">
+                                        <td data-label="UID">101</td>
+                                        <td data-label="Name">Anil Sharma</td>
+                                        <td data-label="Meal Plan"><span class="status-premium2">Premium 2<br>(₹4200)</span></td>
+                                        <td data-label="Food Chosen">PANEER</td>
+                                        <td data-label="Service"><span class="status-dining">Dining</span></td>
+                                    </tr>
+                                    <tr data-uid="103" data-name="Rohan Gupta" data-service="dining">
+                                        <td data-label="UID">103</td>
+                                        <td data-label="Name">Rohan Gupta</td>
+                                        <td data-label="Meal Plan"><span class="status-premium1">Premium 1<br>(₹1800)</span></td>
+                                        <td data-label="Food Chosen">MASHROOM</td>
+                                        <td data-label="Service"><span class="status-dining">Dining</span></td>
+                                    </tr>
+                                    <tr data-uid="107" data-name="Rahul Kumar" data-service="dining">
+                                        <td data-label="UID">107</td>
+                                        <td data-label="Name">Rahul Kumar</td>
+                                        <td data-label="Meal Plan"><span class="status-premium2">Premium 2<br>(₹2200)</span></td>
+                                        <td data-label="Food Chosen">EGG</td>
+                                        <td data-label="Service"><span class="status-dining">Dining</span></td>
+                                    </tr>
+                                    
+                                    <!-- PICKUP -->
+                                    <tr data-uid="102" data-name="Priya Verma" data-service="pickup">
+                                        <td data-label="UID">102</td>
+                                        <td data-label="Name">Priya Verma</td>
+                                        <td data-label="Meal Plan"><span class="status-normal">Normal<br>(₹3000)</span></td>
+                                        <td data-label="Food Chosen"><span class="status-empty">Standard</span></td>
+                                        <td data-label="Service"><span class="status-pickup">Pickup</span></td>
+                                    </tr>
+                                    <tr data-uid="106" data-name="Tanya Singh" data-service="pickup">
+                                        <td data-label="UID">106</td>
+                                        <td data-label="Name">Tanya Singh</td>
+                                        <td data-label="Meal Plan"><span class="status-premium1">Premium 1<br>(₹3400)</span></td>
+                                        <td data-label="Food Chosen">CHICKEN</td>
+                                        <td data-label="Service"><span class="status-pickup">Pickup</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- DINNER ORDERS TABLE -->
+                    <div class="meal-table-wrapper">
+                        <h2 class="meal-section-title">Dinner Orders</h2>
+                        <div class="table-responsive">
+                            <table class="data-table report-table" id="dinnerReportTable">
+                                <thead>
+                                    <tr>
+                                        <th>UID</th>
+                                        <th>Name</th>
+                                        <th>Meal Plan</th>
+                                        <th>Food Chosen</th>
+                                        <th>Service</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- STATIC DATA ROWS - SORTED BY SERVICE (Alphabetical) -->
+
+                                    <!-- CANCELLED -->
+                                    <tr data-uid="105" data-name="Vivek Jain" data-service="cancel">
+                                        <td data-label="UID">105</td>
+                                        <td data-label="Name">Vivek Jain</td>
+                                        <td data-label="Meal Plan"><span class="status-normal">Normal<br>(₹1500)</span></td>
+                                        <td data-label="Food Chosen"><span class="status-empty">Standard</span></td>
+                                        <td data-label="Service"><span class="status-cancel">Cancel</span></td>
+                                    </tr>
+                                    <tr data-uid="107" data-name="Rahul Kumar" data-service="cancel">
+                                        <td data-label="UID">107</td>
+                                        <td data-label="Name">Rahul Kumar</td>
+                                        <td data-label="Meal Plan"><span class="status-premium2">Premium 2<br>(₹2200)</span></td>
+                                        <td data-label="Food Chosen"><span class="status-empty">Standard</span></td>
+                                        <td data-label="Service"><span class="status-cancel">Cancel</span></td>
+                                    </tr>
+                                    
+                                    <!-- DELIVERY -->
+                                    <tr data-uid="101" data-name="Anil Sharma" data-service="delivery">
+                                        <td data-label="UID">101</td>
+                                        <td data-label="Name">Anil Sharma</td>
+                                        <td data-label="Meal Plan"><span class="status-premium2">Premium 2<br>(₹4200)</span></td>
+                                        <td data-label="Food Chosen">VEG</td>
+                                        <td data-label="Service"><span class="status-delivery">Delivery</span></td>
+                                    </tr>
+                                    <tr data-uid="106" data-name="Tanya Singh" data-service="delivery">
+                                        <td data-label="UID">106</td>
+                                        <td data-label="Name">Tanya Singh</td>
+                                        <td data-label="Meal Plan"><span class="status-premium1">Premium 1<br>(₹3400)</span></td>
+                                        <td data-label="Food Chosen">MASHROOM</td>
+                                        <td data-label="Service"><span class="status-delivery">Delivery</span></td>
+                                    </tr>
+
+                                    <!-- DINING -->
+                                    <tr data-uid="102" data-name="Priya Verma" data-service="dining">
+                                        <td data-label="UID">102</td>
+                                        <td data-label="Name">Priya Verma</td>
+                                        <td data-label="Meal Plan"><span class="status-normal">Normal<br>(₹3000)</span></td>
+                                        <td data-label="Food Chosen"><span class="status-empty">Standard</span></td>
+                                        <td data-label="Service"><span class="status-dining">Dining</span></td>
+                                    </tr>
+                                    <tr data-uid="104" data-name="Sneha Reddy" data-service="dining">
+                                        <td data-label="UID">104</td>
+                                        <td data-label="Name">Sneha Reddy</td>
+                                        <td data-label="Meal Plan"><span class="status-premium2">Premium 2<br>(₹4200)</span></td>
+                                        <td data-label="Food Chosen">CHICKEN</td>
+                                        <td data-label="Service"><span class="status-dining">Dining</span></td>
+                                    </tr>
+
+                                    <!-- PICKUP -->
+                                    <tr data-uid="103" data-name="Rohan Gupta" data-service="pickup">
+                                        <td data-label="UID">103</td>
+                                        <td data-label="Name">Rohan Gupta</td>
+                                        <td data-label="Meal Plan"><span class="status-premium1">Premium 1<br>(₹1800)</span></td>
+                                        <td data-label="Food Chosen">PANEER</td>
+                                        <td data-label="Service"><span class="status-pickup">Pickup</span></td>
+                                    </tr>
+                                    <tr data-uid="108" data-name="Meera Nair" data-service="pickup">
+                                        <td data-label="UID">108</td>
+                                        <td data-label="Name">Meera Nair</td>
+                                        <td data-label="Meal Plan"><span class="status-premium1">Premium 1<br>(₹1800)</span></td>
+                                        <td data-label="Food Chosen">PANEER</td>
+                                        <td data-label="Service"><span class="status-pickup">Pickup</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="report-actions">
+                <a href="admin-dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Ayushman's Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('reportCurrentDate').textContent = new Date().toLocaleDateString('en-US', { dateStyle: 'long' });
+
+        // --- CSV DOWNLOAD FUNCTION (Simplified for Two Tables) ---
+        function downloadDailyReportCsv() {
+            const tables = [
+                { id: 'lunchReportTable', name: 'LUNCH' },
+                { id: 'dinnerReportTable', name: 'DINNER' }
+            ];
+            
+            const BOM = "\ufeff"; 
+            let csvContent = BOM;
+            const reportDate = document.getElementById('reportCurrentDate').textContent;
+
+            // Helper function to clean text for CSV
+            function cleanText(htmlCell) {
+                let text = htmlCell.textContent.trim();
+                
+                // If text contains newline (from the <br> tag), replace it with a space or semicolon for readability
+                text = text.replace(/(\r\n|\n|\r)/gm, ' '); 
+
+                // Robust quoting: Wrap any field that contains spaces, commas, or special chars
+                if (text.includes(',') || text.includes('"') || text.includes('₹') || text.includes(' ')) {
+                    return `"${text.replace(/"/g, '""')}"`;
+                }
+                return text;
+            }
+
+            tables.forEach(tableInfo => {
+                const table = document.getElementById(tableInfo.id);
+                if (!table) return;
+
+                // Add Meal Title Header
+                csvContent += `\n\nMeal,${tableInfo.name} (${reportDate})\n`;
+
+                // 1. Get Column Headers
+                const headerRow = table.querySelector('thead tr');
+                const headers = Array.from(headerRow.querySelectorAll('th')).map(th => th.textContent.trim());
+                csvContent += headers.join(',') + '\n';
+
+                // 2. Get Body Data
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const rowData = [];
+                    if (window.getComputedStyle(row).display === 'none') return;
+
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    cells.forEach(cell => {
+                        rowData.push(cleanText(cell));
+                    });
+                    csvContent += rowData.join(',') + '\n';
+                });
+            });
+
+            // 3. Trigger Download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            
+            if (link.download !== undefined) { 
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", `Daily_Meal_Report_${new Date().toISOString().slice(0, 10)}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("Your browser does not support automatic CSV download.");
+            }
+        }
+
+
+        // --- FILTER FUNCTION (Updated for Simple Two Tables) ---
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase().trim();
+            const serviceFilter = document.getElementById('serviceFilter').value; 
+            
+            const tables = [
+                document.getElementById('lunchReportTable'),
+                document.getElementById('dinnerReportTable')
+            ];
+
+            tables.forEach(table => {
+                if (!table) return;
+
+                const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+                
+                for (let row of rows) {
+                    // Search data stored in attributes (UID, Name, Service)
+                    const uid = row.getAttribute('data-uid').toLowerCase();
+                    const name = row.getAttribute('data-name').toLowerCase();
+                    const serviceStatus = row.getAttribute('data-service'); 
+                    
+                    let matchesSearch = searchInput === '' || uid.includes(searchInput) || name.includes(searchInput);
+                    let matchesService = serviceFilter === 'all' || serviceStatus === serviceFilter;
+
+                    if (matchesSearch && matchesService) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        }
+        
+        // --- INITIALIZATION (Hamburger Logic) ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.getElementById('hamburger');
+            const navbarNav = document.getElementById('navbarNav');
+
+            hamburger.addEventListener('click', function() {
+                navbarNav.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navbarNav.classList.remove('active');
+                    hamburger.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

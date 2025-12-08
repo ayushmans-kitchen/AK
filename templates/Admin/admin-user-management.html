@@ -1,0 +1,471 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>User Management — Admin</title>
+
+    <link rel="stylesheet" href="{% static 'Admin/styles-admin-user-management.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            <a href="{% url 'admin_dashboard' %}">
+                <img src="{% static 'assets/logo.PNG' %}" alt="Logo" class="logo-image" />
+            </a>
+        </div>
+
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+
+        <nav class="navbar-nav" id="navbarNav">
+            <a href="{% url 'admin_dashboard' %}" class="nav-link">Dashboard</a>
+            <a href="#" class="nav-link">Daily Reports</a>
+            <a href="#" class="nav-link">Complete Reports</a>
+            <a href="{% url 'admin_user_management' %}" class="nav-link active">User Management</a>
+            <a href="#" class="nav-link">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<main class="admin-page">
+<div class="admin-container">
+
+<h1 class="page-title">User Management</h1>
+
+<section class="user-form-section">
+    <h2 class="section-title">Create New User</h2>
+
+    <div class="form-card vertical-form">
+        <form id="createUserForm" method="POST">
+            {% csrf_token %}
+
+            <!-- NAME + EMAIL -->
+            <div class="form-row-compact">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input name="name" class="form-input" required />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input name="email" type="email" class="form-input" required />
+                </div>
+            </div>
+
+            <!-- PHONE + PASSWORD -->
+            <div class="form-row-compact">
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input name="phone" class="form-input" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-input" required>
+                </div>
+            </div>
+
+            <!-- MEAL PLAN -->
+            <div class="form-group">
+                <label class="form-label">Meal Plan</label>
+                <select id="planSelect" name="subscription_choice" class="form-input" required>
+                    <option value="">-- choose plan --</option>
+                    <option value="NORMAL30">Normal — ₹1500 (30 meals)</option>
+                    <option value="NORMAL60">Normal — ₹3000 (60 meals)</option>
+                    <option value="FLAGSHIP30">Premium 1 — ₹1800 (30 meals)</option>
+                    <option value="FLAGSHIP60">Premium 1 — ₹3400 (60 meals)</option>
+                    <option value="PREMIUM30">Premium 2 — ₹2200 (30 meals)</option>
+                    <option value="PREMIUM60">Premium 2 — ₹4200 (60 meals)</option>
+                </select>
+            </div>
+
+            <!-- ADDRESS -->
+            <div class="form-row-compact">
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="address" class="form-input">
+                </div>
+            </div>
+
+            <!-- DEFAULTS: service + meal -->
+            <div class="form-row-compact">
+                <div class="form-group">
+                    <label class="form-label">Default Service Choice</label>
+                    <select name="default_service_choice" class="form-input" required>
+                        <option value="">Select</option>
+                        <option value="DineIn">DineIn</option>
+                        <option value="PickUp">PickUp</option>
+                        <option value="Delivery">Delivery</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Default Meal Choice</label>
+                    <select name="default_meal_choice" class="form-input" required>
+                        <option value="">Select</option>
+                        <option value="VEG">VEG</option>
+                        <option value="NON-VEG">NON-VEG</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ACCESS RADIO FOR 30 MEALS -->
+            <div class="form-group" id="accessBox" style="display:none;">
+                <label class="form-label">Access (Only for 30-meal plans)</label>
+                <div class="radio-row">
+                    <label><input type="radio" name="access_choice" value="lunch" id="accessLunch"> Lunch</label>
+                    <label><input type="radio" name="access_choice" value="dinner" id="accessDinner"> Dinner</label>
+                </div>
+            </div>
+
+            <!-- FLAGSHIP DEFAULTS -->
+            <div class="form-row-compact">
+                <div class="form-group" id="flagship_lunch_box" style="display:none;">
+                    <label class="form-label">Flagship Lunch Default</label>
+                    <select name="flagship_lunch_default" class="form-input">
+                        {% for val,label in FLAGSHIP_MENU_LUNCH %}
+                        <option value="{{ val }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group" id="flagship_dinner_box" style="display:none;">
+                    <label class="form-label">Flagship Dinner Default</label>
+                    <select name="flagship_dinner_default" class="form-input">
+                        {% for val,label in FLAGSHIP_MENU_DINNER %}
+                        <option value="{{ val }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- PREMIUM DEFAULTS -->
+            <div class="form-row-compact">
+                <div class="form-group" id="premium_lunch_box" style="display:none;">
+                    <label class="form-label">Premium Lunch Default</label>
+                    <select name="premium_lunch_default" class="form-input">
+                        {% for val,label in PREMIUM_MENU_LUNCH %}
+                        <option value="{{ val }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group" id="premium_dinner_box" style="display:none;">
+                    <label class="form-label">Premium Dinner Default</label>
+                    <select name="premium_dinner_default" class="form-input">
+                        {% for val,label in PREMIUM_MENU_DINNER %}
+                        <option value="{{ val }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- ACTIVE CHECKBOXES -->
+            <div class="checkbox-group-compact">
+                <label><input type="checkbox" name="user_status_active" checked> User Active</label>
+                <label><input type="checkbox" name="lunch_status_active" id="lunch_status_active" checked> Lunch Active</label>
+                <label><input type="checkbox" name="dinner_status_active" id="dinner_status_active" checked> Dinner Active</label>
+            </div>
+
+            <!-- SUBMIT -->
+            <button class="btn btn-primary btn-full" type="submit">Save User</button>
+
+        </form>
+    </div>
+</section>
+
+
+
+
+<!-- USERS TABLE -->
+<section class="users-section">
+    <h2 class="section-title">All Users</h2>
+
+    <div class="section-header">
+        <div class="search-box">
+            <input id="searchInput" class="search-input" placeholder="Search by name or ID…" />
+            <span class="search-icon">🔍</span>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Meal Plan</th>
+                    <th>Meals Left</th>
+                    <th>Access</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="usersTableBody">
+                {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td class="user-link">{{ u.name }}</td>
+                    <td>{{ u.phone }}</td>
+                    <td>{{ u.email }}</td>
+
+                    <td>{{ PLAN_MAP_DISPLAY.u.subscription_choice }}</td>
+
+                    <td class="{% if u.meal_balance < 6 %}text-red{% endif %}">
+                        {{ u.meal_balance }}
+                    </td>
+
+                    <td>
+                        {% if u.lunch_status_active and u.dinner_status_active %}Both
+                        {% elif u.lunch_status_active %}Lunch only
+                        {% elif u.dinner_status_active %}Dinner only
+                        {% else %}-{% endif %}
+                    </td>
+
+                    <td>
+                        {% if u.user_status_active %}
+                        <span class="badge badge-active">Active</span>
+                        {% else %}
+                        <span class="badge badge-inactive">Inactive</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8" class="text-center">No users found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</div>
+</main>
+
+<footer class="footer">
+    <p>© 2025 Ayushman's Kitchen. All rights reserved.</p>
+</footer>
+
+<script >
+// ==========================
+// USER MANAGEMENT JS LOGIC
+// ==========================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const planSelect = document.getElementById("planSelect");
+
+    // Access (only for 30-meal plans)
+    const accessBox = document.getElementById("accessBox");
+    const accessLunch = document.getElementById("accessLunch");
+    const accessDinner = document.getElementById("accessDinner");
+
+    // Default menu dropdown boxes
+    const flagshipLunchBox = document.getElementById("flagship_lunch_box");
+    const flagshipDinnerBox = document.getElementById("flagship_dinner_box");
+    const premiumLunchBox = document.getElementById("premium_lunch_box");
+    const premiumDinnerBox = document.getElementById("premium_dinner_box");
+
+    // Active checkboxes
+    const lunchActive = document.getElementById("lunch_status_active");
+    const dinnerActive = document.getElementById("dinner_status_active");
+
+    // Search
+    const searchInput = document.getElementById("searchInput");
+    const usersTableBody = document.getElementById("usersTableBody");
+
+    // Hamburger
+    const hamburger = document.getElementById("hamburger");
+    const navbarNav = document.getElementById("navbarNav");
+
+    function hideAllDefaults() {
+        flagshipLunchBox.style.display = "none";
+        flagshipDinnerBox.style.display = "none";
+        premiumLunchBox.style.display = "none";
+        premiumDinnerBox.style.display = "none";
+    }
+
+    function set60MealMode() {
+        // Hide radio access and force both checked
+        accessBox.style.display = "none";
+        accessLunch.checked = false;
+        accessDinner.checked = false;
+        accessLunch.disabled = true;
+        accessDinner.disabled = true;
+
+        lunchActive.checked = true;
+        dinnerActive.checked = true;
+    }
+
+    function set30MealMode() {
+        // Show radio and enable for selection
+        accessBox.style.display = "block";
+        accessLunch.disabled = false;
+        accessDinner.disabled = false;
+    }
+
+    function updateUI() {
+        const plan = planSelect.value.toUpperCase();
+
+        hideAllDefaults();
+
+        if (!plan) {
+            accessBox.style.display = "none";
+            return;
+        }
+
+        const isNormal = plan.startsWith("NORMAL");
+        const isFlagship = plan.startsWith("FLAGSHIP");
+        const isPremium = plan.startsWith("PREMIUM");
+
+        const is60 = plan.endsWith("60");
+        const is30 = plan.endsWith("30");
+
+        // NORMAL PLAN → hide all dropdowns always
+        if (isNormal) {
+            hideAllDefaults();
+            if (is60) set60MealMode();
+            else set30MealMode();
+            return;
+        }
+
+        // FLAGSHIP LOGIC
+        if (isFlagship) {
+
+            if (is60) {
+                set60MealMode();
+                flagshipLunchBox.style.display = "block";
+                flagshipDinnerBox.style.display = "block";
+                return;
+            }
+
+            // 30-MEAL → Lunch OR Dinner logic
+            set30MealMode();
+
+            if (accessLunch.checked) flagshipLunchBox.style.display = "block";
+            if (accessDinner.checked) flagshipDinnerBox.style.display = "block";
+
+            return;
+        }
+
+        // PREMIUM LOGIC
+        if (isPremium) {
+
+            if (is60) {
+                set60MealMode();
+                premiumLunchBox.style.display = "block";
+                premiumDinnerBox.style.display = "block";
+                return;
+            }
+
+            set30MealMode();
+
+            if (accessLunch.checked) premiumLunchBox.style.display = "block";
+            if (accessDinner.checked) premiumDinnerBox.style.display = "block";
+
+            return;
+        }
+    }
+
+    function handleAccessRadio() {
+        const plan = planSelect.value.toUpperCase();
+        const is30 = plan.includes("30");
+
+        if (!is30) return;
+
+        hideAllDefaults();
+
+        const isFlagship = plan.startsWith("FLAGSHIP");
+        const isPremium = plan.startsWith("PREMIUM");
+
+        // If lunch chosen
+        if (accessLunch.checked) {
+            lunchActive.checked = true;
+            dinnerActive.checked = false;
+
+            if (isFlagship) flagshipLunchBox.style.display = "block";
+            if (isPremium) premiumLunchBox.style.display = "block";
+        }
+
+        // If dinner chosen
+        if (accessDinner.checked) {
+            lunchActive.checked = false;
+            dinnerActive.checked = true;
+
+            if (isFlagship) flagshipDinnerBox.style.display = "block";
+            if (isPremium) premiumDinnerBox.style.display = "block";
+        }
+    }
+
+    // Submit logic
+    document.querySelector("#createUserForm").addEventListener("submit", (e) => {
+
+        const plan = planSelect.value.toUpperCase();
+
+        if (!plan) {
+            alert("Please select a meal plan.");
+            e.preventDefault();
+            return;
+        }
+
+        const is30 = plan.includes("30");
+        const is60 = plan.includes("60");
+
+        if (is30) {
+            if (!accessLunch.checked && !accessDinner.checked) {
+                alert("30-meal plans require selecting either LUNCH or DINNER access.");
+                e.preventDefault();
+                return;
+            }
+
+            if (accessLunch.checked) {
+                lunchActive.checked = true;
+                dinnerActive.checked = false;
+            }
+
+            if (accessDinner.checked) {
+                lunchActive.checked = false;
+                dinnerActive.checked = true;
+            }
+        }
+
+        if (is60) {
+            lunchActive.checked = true;
+            dinnerActive.checked = true;
+        }
+    });
+
+    // Search system
+    if (searchInput) {
+        searchInput.addEventListener("keyup", () => {
+            const term = searchInput.value.toLowerCase();
+            document.querySelectorAll("#usersTableBody tr").forEach(row => {
+                const id = row.cells[0].innerText.toLowerCase();
+                const name = row.cells[1].innerText.toLowerCase();
+                row.style.display = (id.includes(term) || name.includes(term)) ? "" : "none";
+            });
+        });
+    }
+
+    // Hamburger menu
+    hamburger.addEventListener("click", () => navbarNav.classList.toggle("active"));
+
+    // Trigger initial UI update
+    updateUI();
+
+    // Event listeners
+    planSelect.addEventListener("change", updateUI);
+    accessLunch.addEventListener("change", handleAccessRadio);
+    accessDinner.addEventListener("change", handleAccessRadio);
+
+});
+</script>
+
+</body>
+</html>
