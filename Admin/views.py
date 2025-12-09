@@ -462,3 +462,8 @@ def admin_user_management(request):
 
 def daily_report(request):
     return render(request,"Admin/admin-daily-report.html")
+
+
+
+def complete_report(request):
+    return render(request,"Admin/admin-complete-report.html")

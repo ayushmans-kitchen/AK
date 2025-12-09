@@ -1,0 +1,344 @@
+/* This CSS file uses simplified terms and direct values, avoiding CSS variables for easier reading, while ensuring the page is fully responsive and visually correct. */
+
+/* ===========================
+    BASIC COLORS (Direct Values)
+    =========================== */
+.primary-color { color: #d4af37; } /* Gold */
+.primary-dark-color { color: #b8860b; }
+.dark-bg { background-color: #000000; }
+.secondary-bg { background-color: #0a0a0a; }
+.tertiary-bg { background-color: #1c1c1c; }
+.card-bg { background-color: #0f0f0f; }
+.text-white { color: #ffffff; }
+.text-gray-light { color: #e0e0e0; }
+.text-gray-muted { color: #a0a0a0; }
+.border-line { border-color: #333333; }
+
+/* Status Colors (for the table checkmarks/crosses) */
+.status-completed { color: #4ade80; } /* Green */
+.status-canceled { color: #ef4444; }  /* Red */
+.status-empty { color: #a0a0a0; } /* Muted */
+
+/* Specific status for dates before user joined */
+.status-inactive-date {
+    color: #555555 !important; 
+    font-weight: 400 !important;
+}
+
+
+/* ===========================
+    RESET & BASE STYLES
+    =========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    background-color: #000000;
+    color: #ffffff;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+h1, h2, h3 {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 24px; /* 1.5rem */
+}
+
+a {
+    color: #d4af37;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+/* ===========================
+    NAVBAR & HEADER
+    =========================== */
+.navbar {
+    background-color: #0a0a0a;
+    border-bottom: 2px solid #d4af37;
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 24px;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+}
+
+.logo-image {
+    height: 40px; 
+    border-radius: 4px;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 24px;
+    margin-left: auto;
+}
+
+.nav-link {
+    color: #e0e0e0;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+}
+
+.nav-link.active {
+    color: #d4af37;
+    border-bottom-color: #d4af37;
+}
+
+/* --- HAMBURGER MENU --- */
+.hamburger {
+    display: none; 
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 16px;
+    gap: 4px;
+    z-index: 101;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #d4af37;
+    border-radius: 2px;
+    transition: all 0.3s;
+    transform-origin: 1px;
+}
+
+/* ===========================
+    PAGE LAYOUT & REPORT HEADER
+    =========================== */
+.admin-page {
+    min-height: 100vh;
+    padding: 48px 24px;
+    background-color: #000000;
+}
+
+.admin-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 48px;
+    gap: 24px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 16px;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+.page-title {
+    color: #d4af37;
+    font-size: 2.5rem;
+}
+
+.report-date {
+    color: #a0a0a0;
+    margin-top: -24px; 
+    margin-bottom: 32px;
+    font-size: 1.1rem;
+}
+
+.btn {
+    padding: 16px 32px;
+    font-weight: 600;
+    border: 2px solid #d4af37;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: #d4af37;
+    color: #000000;
+}
+
+/* Table title specific */
+.plan-table-title {
+    color: #d4af37;
+    font-size: 1.5rem;
+    margin-top: 32px;
+    margin-bottom: 16px;
+}
+
+.plan-table-title span {
+    font-size: 1.1em;
+    font-weight: 700;
+    display: inline-block;
+    line-height: 1.1;
+}
+
+/* ===========================
+    FULL REPORT TABLE STYLES (COMPACT)
+    =========================== */
+.table-responsive {
+    overflow-x: auto; 
+    margin-bottom: 24px;
+    border-radius: 8px;
+}
+
+.full-report-table {
+    width: 100%;
+    min-width: 1800px; /* Required to show 32 columns */
+    border-collapse: collapse;
+    background-color: #0f0f0f;
+    border: 1px solid #333333;
+    table-layout: fixed; /* Ensures column widths are respected */
+}
+
+.full-report-table thead {
+    background-color: #0a0a0a; 
+    border-bottom: 2px solid #d4af37;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.full-report-table th,
+.full-report-table td {
+    padding: 8px; 
+    border: 1px solid #333333; 
+    white-space: nowrap;
+    text-align: center; /* Center all cell content */
+}
+
+/* Header Text Styling */
+.full-report-table th {
+    font-weight: 600;
+    color: #d4af37;
+    font-size: 0.8rem; /* Smaller font for many columns */
+    text-transform: uppercase;
+}
+.full-report-table thead th:nth-child(1),
+.full-report-table thead th:nth-child(2) {
+    text-align: left; /* Keep text columns left-aligned */
+}
+
+/* Sticky Column Styles */
+.full-report-table th:nth-child(1), .full-report-table td:nth-child(1) {
+    width: 60px; min-width: 60px; max-width: 60px;
+    position: sticky; left: 0; background-color: #0a0a0a; z-index: 10;
+}
+
+.full-report-table th:nth-child(2), .full-report-table td:nth-child(2) {
+    width: 180px; min-width: 180px; max-width: 180px;
+    position: sticky; left: 60px; background-color: #0a0a0a; z-index: 10;
+}
+
+/* Date Cell Sizing */
+.full-report-table .date-cell {
+    width: 40px; 
+    min-width: 40px; 
+    max-width: 40px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Highlight hover row */
+.full-report-table tbody tr:hover {
+    background-color: #1c1c1c;
+}
+
+/* Fix sticky hover background */
+.full-report-table tbody tr:hover td:nth-child(1),
+.full-report-table tbody tr:hover td:nth-child(2) {
+    background-color: #1c1c1c;
+}
+
+
+/* ===========================
+    FOOTER
+    =========================== */
+.report-actions {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-top: 48px;
+}
+
+.footer {
+    background-color: #0a0a0a;
+    border-top: 2px solid #d4af37;
+    padding: 32px 24px;
+    text-align: center;
+    color: #a0a0a0;
+    margin-top: 48px;
+}
+
+/* ===========================
+    RESPONSIVE DESIGN 
+    =========================== */
+
+@media (max-width: 768px) {
+    .hamburger { display: flex; }
+
+    .navbar-nav {
+        position: absolute; top: 60px; left: 0; right: 0; background-color: #0a0a0a;
+        flex-direction: column; width: 100%; max-height: 0; overflow: hidden;
+    }
+
+    .navbar-nav.active { max-height: 250px; border-bottom: 2px solid #d4af37; }
+    .nav-link { padding: 24px 24px; border-bottom: 1px solid #333333; }
+    .report-header { flex-direction: column; align-items: stretch; gap: 16px; }
+    .btn { flex: 1; }
+    .header-actions { width: 100%; justify-content: stretch; }
+    
+    /* Tables on Mobile: Remove fixed/sticky positions and shrink the min-width to ensure horizontal scrolling works */
+    .full-report-table {
+        min-width: 1000px; /* Reduced minimum width to allow more columns to fit without being invisible */
+        table-layout: auto;
+    }
+    
+    .full-report-table th, .full-report-table td {
+        padding: 6px 4px; 
+        font-size: 0.7rem;
+        /* Disable sticky columns in mobile view */
+        position: static !important;
+        background-color: #0f0f0f !important;
+    }
+
+    .full-report-table th:nth-child(1), .full-report-table td:nth-child(1),
+    .full-report-table th:nth-child(2), .full-report-table td:nth-child(2) {
+        width: 100px; /* Allow dynamic width, still large enough to read */
+        min-width: 100px;
+        max-width: none;
+    }
+    
+    /* Adjust height of header rows */
+    .full-report-table thead tr:first-child th {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+}

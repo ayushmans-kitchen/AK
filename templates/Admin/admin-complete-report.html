@@ -1,0 +1,368 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Historical Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Note: CSS file styles-admin-complete-report.css is required for layout -->
+    <link rel="stylesheet" href="{% static 'Admin/styles-admin-complete-report.css' %}"> 
+    
+    <style>
+        /* ADDED INLINE CSS FOR INACTIVE DATE STATUS */
+        .status-inactive-date {
+            color: #555555 !important; /* Dark gray for inactive dates */
+            font-weight: 400 !important;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <img src="logo.png" alt="Hotel Logo" class="logo-image">
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="navbar-nav" id="navbarNav">
+                 <a href="{% url 'admin_dashboard' %}" class="nav-link ">Dashboard</a>
+                <a href="{% url 'daily_report'%}" class="nav-link">Daily Reports</a>
+                <a href="{% url 'complete_report' %}" class="nav-link active">Complete Report</a>
+                <a href="{% url 'admin_user_management'%}" class="nav-link">User Management</a>
+                <a href="login.html" class="nav-link">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-page">
+        <div class="admin-container">
+            <div class="report-header">
+                <div>
+                    <h1 class="page-title">Complete Historical Meal Report</h1>
+                    <!-- Static Date Range -->
+                    <p class="report-date" id="reportDateDisplay">Coverage: 30 Days (Nov 01, 2025 - Nov 30, 2025)</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary print-button" onclick="downloadCsvReport()">Download Report (CSV)</button>
+                </div>
+            </div>
+
+            <section class="report-section">
+                <p style="color:#d4af37; margin-bottom: 20px;">Scroll horizontally to view 30 days of data. This report is categorized by Meal Plan. Dashes (-) indicate a date before the user joined the plan.</p>
+                
+                <!-- START: STATIC TABLE CONTAINER -->
+                <div id="planReportContainer">
+                    
+                    <!-- 1. Premium 2 (₹4200) - 2 Meals/Day -->
+                    <h2 class="plan-table-title">Plan: <span class="status-premium2">Premium 2<br>(₹4200 - 2 Meals/Day)</span> (Users: 6)</h2>
+                    <div class="table-responsive-wrapper">
+                        <div class="table-responsive">
+                            <table class="data-table full-report-table two-meal-per-day" id="table-Premium_2_4200">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">UID</th>
+                                        <th rowspan="2">Name</th>
+                                        <th colspan="2">Nov 1</th><th colspan="2">Nov 2</th><th colspan="2">Nov 3</th><th colspan="2">Nov 4</th><th colspan="2">Nov 5</th><th colspan="2">Nov 6</th><th colspan="2">Nov 7</th><th colspan="2">Nov 8</th><th colspan="2">Nov 9</th><th colspan="2">Nov 10</th><th colspan="2">Nov 11</th><th colspan="2">Nov 12</th><th colspan="2">Nov 13</th><th colspan="2">Nov 14</th><th colspan="2">Nov 15</th><th colspan="2">Nov 16</th><th colspan="2">Nov 17</th><th colspan="2">Nov 18</th><th colspan="2">Nov 19</th><th colspan="2">Nov 20</th><th colspan="2">Nov 21</th><th colspan="2">Nov 22</th><th colspan="2">Nov 23</th><th colspan="2">Nov 24</th><th colspan="2">Nov 25</th><th colspan="2">Nov 26</th><th colspan="2">Nov 27</th><th colspan="2">Nov 28</th><th colspan="2">Nov 29</th><th colspan="2">Nov 30</th>
+                                    </tr>
+                                    <tr>
+                                        <th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-uid="101" data-name="Anil Sharma">
+                                        <td data-label="UID">101</td><td data-label="Name">Anil Sharma</td>
+                                        <td data-label="Nov 1 L" class="status-completed date-cell">✓</td><td data-label="Nov 1 D" class="status-completed date-cell">✓</td><td data-label="Nov 2 L" class="status-completed date-cell">✓</td><td data-label="Nov 2 D" class="status-completed date-cell">✓</td><td data-label="Nov 3 L" class="status-completed date-cell">✓</td><td data-label="Nov 3 D" class="status-completed date-cell">✓</td><td data-label="Nov 4 L" class="status-canceled date-cell">x</td><td data-label="Nov 4 D" class="status-canceled date-cell">x</td><td data-label="Nov 5 L" class="status-completed date-cell">✓</td><td data-label="Nov 5 D" class="status-completed date-cell">✓</td><td data-label="Nov 6 L" class="status-completed date-cell">✓</td><td data-label="Nov 6 D" class="status-completed date-cell">✓</td><td data-label="Nov 7 L" class="status-canceled date-cell">x</td><td data-label="Nov 7 D" class="status-canceled date-cell">x</td><td data-label="Nov 8 L" class="status-completed date-cell">✓</td><td data-label="Nov 8 D" class="status-completed date-cell">✓</td><td data-label="Nov 9 L" class="status-completed date-cell">✓</td><td data-label="Nov 9 D" class="status-completed date-cell">✓</td><td data-label="Nov 10 L" class="status-canceled date-cell">x</td><td data-label="Nov 10 D" class="status-canceled date-cell">x</td><td data-label="Nov 11 L" class="status-completed date-cell">✓</td><td data-label="Nov 11 D" class="status-completed date-cell">✓</td><td data-label="Nov 12 L" class="status-completed date-cell">✓</td><td data-label="Nov 12 D" class="status-completed date-cell">✓</td><td data-label="Nov 13 L" class="status-canceled date-cell">x</td><td data-label="Nov 13 D" class="status-canceled date-cell">x</td><td data-label="Nov 14 L" class="status-completed date-cell">✓</td><td data-label="Nov 14 D" class="status-completed date-cell">✓</td><td data-label="Nov 15 L" class="status-completed date-cell">✓</td><td data-label="Nov 15 D" class="status-completed date-cell">✓</td><td data-label="Nov 16 L" class="status-completed date-cell">✓</td><td data-label="Nov 16 D" class="status-completed date-cell">✓</td><td data-label="Nov 17 L" class="status-canceled date-cell">x</td><td data-label="Nov 17 D" class="status-canceled date-cell">x</td><td data-label="Nov 18 L" class="status-completed date-cell">✓</td><td data-label="Nov 18 D" class="status-completed date-cell">✓</td><td data-label="Nov 19 L" class="status-completed date-cell">✓</td><td data-label="Nov 19 D" class="status-completed date-cell">✓</td><td data-label="Nov 20 L" class="status-completed date-cell">✓</td><td data-label="Nov 20 D" class="status-completed date-cell">✓</td><td data-label="Nov 21 L" class="status-canceled date-cell">x</td><td data-label="Nov 21 D" class="status-canceled date-cell">x</td><td data-label="Nov 22 L" class="status-completed date-cell">✓</td><td data-label="Nov 22 D" class="status-completed date-cell">✓</td><td data-label="Nov 23 L" class="status-completed date-cell">✓</td><td data-label="Nov 23 D" class="status-completed date-cell">✓</td><td data-label="Nov 24 L" class="status-completed date-cell">✓</td><td data-label="Nov 24 D" class="status-completed date-cell">✓</td><td data-label="Nov 25 L" class="status-canceled date-cell">x</td><td data-label="Nov 25 D" class="status-canceled date-cell">x</td><td data-label="Nov 26 L" class="status-completed date-cell">✓</td><td data-label="Nov 26 D" class="status-completed date-cell">✓</td><td data-label="Nov 27 L" class="status-completed date-cell">✓</td><td data-label="Nov 27 D" class="status-completed date-cell">✓</td><td data-label="Nov 28 L" class="status-completed date-cell">✓</td><td data-label="Nov 28 D" class="status-completed date-cell">✓</td><td data-label="Nov 29 L" class="status-canceled date-cell">x</td><td data-label="Nov 29 D" class="status-canceled date-cell">x</td><td data-label="Nov 30 L" class="status-completed date-cell">✓</td><td data-label="Nov 30 D" class="status-completed date-cell">✓</td>
+                                    </tr>
+                                    <!-- NEW USER: Joined Nov 15th -->
+                                    <tr data-uid="201" data-name="New User Jane">
+                                        <td data-label="UID">201</td><td data-label="Name">New User Jane</td>
+                                        <td data-label="Nov 1 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 1 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 2 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 2 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 3 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 3 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 4 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 4 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 5 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 5 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 6 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 6 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 7 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 7 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 8 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 8 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 9 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 9 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 10 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 10 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 11 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 11 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 12 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 12 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 13 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 13 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 14 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 14 D" class="status-inactive-date date-cell">-</td>
+                                        <td data-label="Nov 15 L" class="status-completed date-cell">✓</td><td data-label="Nov 15 D" class="status-completed date-cell">✓</td><td data-label="Nov 16 L" class="status-canceled date-cell">x</td><td data-label="Nov 16 D" class="status-canceled date-cell">x</td><td data-label="Nov 17 L" class="status-completed date-cell">✓</td><td data-label="Nov 17 D" class="status-completed date-cell">✓</td><td data-label="Nov 18 L" class="status-completed date-cell">✓</td><td data-label="Nov 18 D" class="status-completed date-cell">✓</td><td data-label="Nov 19 L" class="status-completed date-cell">✓</td><td data-label="Nov 19 D" class="status-completed date-cell">✓</td><td data-label="Nov 20 L" class="status-canceled date-cell">x</td><td data-label="Nov 20 D" class="status-canceled date-cell">x</td><td data-label="Nov 21 L" class="status-completed date-cell">✓</td><td data-label="Nov 21 D" class="status-completed date-cell">✓</td><td data-label="Nov 22 L" class="status-completed date-cell">✓</td><td data-label="Nov 22 D" class="status-completed date-cell">✓</td><td data-label="Nov 23 L" class="status-completed date-cell">✓</td><td data-label="Nov 23 D" class="status-completed date-cell">✓</td><td data-label="Nov 24 L" class="status-canceled date-cell">x</td><td data-label="Nov 24 D" class="status-canceled date-cell">x</td><td data-label="Nov 25 L" class="status-completed date-cell">✓</td><td data-label="Nov 25 D" class="status-completed date-cell">✓</td><td data-label="Nov 26 L" class="status-completed date-cell">✓</td><td data-label="Nov 26 D" class="status-completed date-cell">✓</td><td data-label="Nov 27 L" class="status-completed date-cell">✓</td><td data-label="Nov 27 D" class="status-completed date-cell">✓</td><td data-label="Nov 28 L" class="status-canceled date-cell">x</td><td data-label="Nov 28 D" class="status-canceled date-cell">x</td><td data-label="Nov 29 L" class="status-completed date-cell">✓</td><td data-label="Nov 29 D" class="status-completed date-cell">✓</td><td data-label="Nov 30 L" class="status-completed date-cell">✓</td><td data-label="Nov 30 D" class="status-completed date-cell">✓</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- 2. Premium 2 (₹2200) - 1 Meal/Day -->
+                    <h2 class="plan-table-title">Plan: <span class="status-premium2">Premium 2<br>(₹2200 - 1 Meal/Day)</span> (Users: 3)</h2>
+                    <div class="table-responsive-wrapper">
+                        <div class="table-responsive">
+                            <table class="data-table full-report-table one-meal-per-day" id="table-Premium_2_2200">
+                                <thead>
+                                    <tr>
+                                        <th>UID</th>
+                                        <th>Name</th>
+                                        <th>Nov 1</th><th>Nov 2</th><th>Nov 3</th><th>Nov 4</th><th>Nov 5</th><th>Nov 6</th><th>Nov 7</th><th>Nov 8</th><th>Nov 9</th><th>Nov 10</th><th>Nov 11</th><th>Nov 12</th><th>Nov 13</th><th>Nov 14</th><th>Nov 15</th><th>Nov 16</th><th>Nov 17</th><th>Nov 18</th><th>Nov 19</th><th>Nov 20</th><th>Nov 21</th><th>Nov 22</th><th>Nov 23</th><th>Nov 24</th><th>Nov 25</th><th>Nov 26</th><th>Nov 27</th><th>Nov 28</th><th>Nov 29</th><th>Nov 30</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-uid="107" data-name="Rahul Kumar">
+                                        <td data-label="UID">107</td><td data-label="Name">Rahul Kumar</td>
+                                        <td data-label="Nov 1" class="status-completed date-cell">✓</td><td data-label="Nov 2" class="status-completed date-cell">✓</td><td data-label="Nov 3" class="status-canceled date-cell">x</td><td data-label="Nov 4" class="status-completed date-cell">✓</td><td data-label="Nov 5" class="status-completed date-cell">✓</td><td data-label="Nov 6" class="status-completed date-cell">✓</td><td data-label="Nov 7" class="status-completed date-cell">✓</td><td data-label="Nov 8" class="status-completed date-cell">✓</td><td data-label="Nov 9" class="status-canceled date-cell">x</td><td data-label="Nov 10" class="status-completed date-cell">✓</td><td data-label="Nov 11" class="status-completed date-cell">✓</td><td data-label="Nov 12" class="status-canceled date-cell">x</td><td data-label="Nov 13" class="status-completed date-cell">✓</td><td data-label="Nov 14" class="status-completed date-cell">✓</td><td data-label="Nov 15" class="status-completed date-cell">✓</td><td data-label="Nov 16" class="status-completed date-cell">✓</td><td data-label="Nov 17" class="status-canceled date-cell">x</td><td data-label="Nov 18" class="status-completed date-cell">✓</td><td data-label="Nov 19" class="status-completed date-cell">✓</td><td data-label="Nov 20" class="status-completed date-cell">✓</td><td data-label="Nov 21" class="status-canceled date-cell">x</td><td data-label="Nov 22" class="status-completed date-cell">✓</td><td data-label="Nov 23" class="status-completed date-cell">✓</td><td data-label="Nov 24" class="status-completed date-cell">✓</td><td data-label="Nov 25" class="status-canceled date-cell">x</td><td data-label="Nov 26" class="status-completed date-cell">✓</td><td data-label="Nov 27" class="status-completed date-cell">✓</td><td data-label="Nov 28" class="status-completed date-cell">✓</td><td data-label="Nov 29" class="status-canceled date-cell">x</td><td data-label="Nov 30" class="status-completed date-cell">✓</td>
+                                    </tr>
+                                    <!-- NEW USER: Joined Nov 10th -->
+                                    <tr data-uid="202" data-name="New User Ali">
+                                        <td data-label="UID">202</td><td data-label="Name">New User Ali</td>
+                                        <td data-label="Nov 1" class="status-inactive-date date-cell">-</td><td data-label="Nov 2" class="status-inactive-date date-cell">-</td><td data-label="Nov 3" class="status-inactive-date date-cell">-</td><td data-label="Nov 4" class="status-inactive-date date-cell">-</td><td data-label="Nov 5" class="status-inactive-date date-cell">-</td><td data-label="Nov 6" class="status-inactive-date date-cell">-</td><td data-label="Nov 7" class="status-inactive-date date-cell">-</td><td data-label="Nov 8" class="status-inactive-date date-cell">-</td><td data-label="Nov 9" class="status-inactive-date date-cell">-</td>
+                                        <td data-label="Nov 10" class="status-completed date-cell">✓</td><td data-label="Nov 11" class="status-canceled date-cell">x</td><td data-label="Nov 12" class="status-canceled date-cell">x</td><td data-label="Nov 13" class="status-completed date-cell">✓</td><td data-label="Nov 14" class="status-completed date-cell">✓</td><td data-label="Nov 15" class="status-completed date-cell">✓</td><td data-label="Nov 16" class="status-canceled date-cell">x</td><td data-label="Nov 17" class="status-completed date-cell">✓</td><td data-label="Nov 18" class="status-completed date-cell">✓</td><td data-label="Nov 19" class="status-completed date-cell">✓</td><td data-label="Nov 20" class="status-completed date-cell">✓</td><td data-label="Nov 21" class="status-canceled date-cell">x</td><td data-label="Nov 22" class="status-completed date-cell">✓</td><td data-label="Nov 23" class="status-completed date-cell">✓</td><td data-label="Nov 24" class="status-completed date-cell">✓</td><td data-label="Nov 25" class="status-canceled date-cell">x</td><td data-label="Nov 26" class="status-completed date-cell">✓</td><td data-label="Nov 27" class="status-completed date-cell">✓</td><td data-label="Nov 28" class="status-completed date-cell">✓</td><td data-label="Nov 29" class="status-canceled date-cell">x</td><td data-label="Nov 30" class="status-completed date-cell">✓</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 3. Premium 1 (₹3400) - 2 Meals/Day -->
+                    <h2 class="plan-table-title">Plan: <span class="status-premium1">Premium 1<br>(₹3400 - 2 Meals/Day)</span> (Users: 4)</h2>
+                    <div class="table-responsive-wrapper">
+                        <div class="table-responsive">
+                            <table class="data-table full-report-table two-meal-per-day" id="table-Premium_1_3400">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">UID</th>
+                                        <th rowspan="2">Name</th>
+                                        <th colspan="2">Nov 1</th><th colspan="2">Nov 2</th><th colspan="2">Nov 3</th><th colspan="2">Nov 4</th><th colspan="2">Nov 5</th><th colspan="2">Nov 6</th><th colspan="2">Nov 7</th><th colspan="2">Nov 8</th><th colspan="2">Nov 9</th><th colspan="2">Nov 10</th><th colspan="2">Nov 11</th><th colspan="2">Nov 12</th><th colspan="2">Nov 13</th><th colspan="2">Nov 14</th><th colspan="2">Nov 15</th><th colspan="2">Nov 16</th><th colspan="2">Nov 17</th><th colspan="2">Nov 18</th><th colspan="2">Nov 19</th><th colspan="2">Nov 20</th><th colspan="2">Nov 21</th><th colspan="2">Nov 22</th><th colspan="2">Nov 23</th><th colspan="2">Nov 24</th><th colspan="2">Nov 25</th><th colspan="2">Nov 26</th><th colspan="2">Nov 27</th><th colspan="2">Nov 28</th><th colspan="2">Nov 29</th><th colspan="2">Nov 30</th>
+                                    </tr>
+                                    <tr>
+                                        <th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-uid="106" data-name="Tanya Singh">
+                                        <td data-label="UID">106</td><td data-label="Name">Tanya Singh</td>
+                                        <td data-label="Nov 1 L" class="status-completed date-cell">✓</td><td data-label="Nov 1 D" class="status-completed date-cell">✓</td><td data-label="Nov 2 L" class="status-completed date-cell">✓</td><td data-label="Nov 2 D" class="status-completed date-cell">✓</td><td data-label="Nov 3 L" class="status-completed date-cell">✓</td><td data-label="Nov 3 D" class="status-completed date-cell">✓</td><td data-label="Nov 4 L" class="status-completed date-cell">✓</td><td data-label="Nov 4 D" class="status-completed date-cell">✓</td><td data-label="Nov 5 L" class="status-canceled date-cell">x</td><td data-label="Nov 5 D" class="status-canceled date-cell">x</td><td data-label="Nov 6 L" class="status-completed date-cell">✓</td><td data-label="Nov 6 D" class="status-completed date-cell">✓</td><td data-label="Nov 7 L" class="status-canceled date-cell">x</td><td data-label="Nov 7 D" class="status-canceled date-cell">x</td><td data-label="Nov 8 L" class="status-completed date-cell">✓</td><td data-label="Nov 8 D" class="status-completed date-cell">✓</td><td data-label="Nov 9 L" class="status-completed date-cell">✓</td><td data-label="Nov 9 D" class="status-completed date-cell">✓</td><td data-label="Nov 10 L" class="status-completed date-cell">✓</td><td data-label="Nov 10 D" class="status-completed date-cell">✓</td><td data-label="Nov 11 L" class="status-canceled date-cell">x</td><td data-label="Nov 11 D" class="status-canceled date-cell">x</td><td data-label="Nov 12 L" class="status-completed date-cell">✓</td><td data-label="Nov 12 D" class="status-completed date-cell">✓</td><td data-label="Nov 13 L" class="status-completed date-cell">✓</td><td data-label="Nov 13 D" class="status-completed date-cell">✓</td><td data-label="Nov 14 L" class="status-canceled date-cell">x</td><td data-label="Nov 14 D" class="status-canceled date-cell">x</td><td data-label="Nov 15 L" class="status-completed date-cell">✓</td><td data-label="Nov 15 D" class="status-completed date-cell">✓</td><td data-label="Nov 16 L" class="status-completed date-cell">✓</td><td data-label="Nov 16 D" class="status-completed date-cell">✓</td><td data-label="Nov 17 L" class="status-completed date-cell">✓</td><td data-label="Nov 17 D" class="status-completed date-cell">✓</td><td data-label="Nov 18 L" class="status-completed date-cell">✓</td><td data-label="Nov 18 D" class="status-completed date-cell">✓</td><td data-label="Nov 19 L" class="status-completed date-cell">✓</td><td data-label="Nov 19 D" class="status-completed date-cell">✓</td><td data-label="Nov 20 L" class="status-canceled date-cell">x</td><td data-label="Nov 20 D" class="status-canceled date-cell">x</td><td data-label="Nov 21 L" class="status-completed date-cell">✓</td><td data-label="Nov 21 D" class="status-completed date-cell">✓</td><td data-label="Nov 22 L" class="status-completed date-cell">✓</td><td data-label="Nov 22 D" class="status-completed date-cell">✓</td><td data-label="Nov 23 L" class="status-canceled date-cell">x</td><td data-label="Nov 23 D" class="status-canceled date-cell">x</td><td data-label="Nov 24 L" class="status-completed date-cell">✓</td><td data-label="Nov 24 D" class="status-completed date-cell">✓</td><td data-label="Nov 25 L" class="status-completed date-cell">✓</td><td data-label="Nov 25 D" class="status-completed date-cell">✓</td><td data-label="Nov 26 L" class="status-completed date-cell">✓</td><td data-label="Nov 26 D" class="status-completed date-cell">✓</td><td data-label="Nov 27 L" class="status-canceled date-cell">x</td><td data-label="Nov 27 D" class="status-canceled date-cell">x</td><td data-label="Nov 28 L" class="status-completed date-cell">✓</td><td data-label="Nov 28 D" class="status-completed date-cell">✓</td><td data-label="Nov 29 L" class="status-completed date-cell">✓</td><td data-label="Nov 29 D" class="status-completed date-cell">✓</td><td data-label="Nov 30 L" class="status-completed date-cell">✓</td><td data-label="Nov 30 D" class="status-completed date-cell">✓</td>
+                                    </tr>
+                                    <!-- NEW USER: Joined Nov 5th -->
+                                    <tr data-uid="203" data-name="New User Mia">
+                                        <td data-label="UID">203</td><td data-label="Name">New User Mia</td>
+                                        <td data-label="Nov 1 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 1 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 2 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 2 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 3 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 3 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 4 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 4 D" class="status-inactive-date date-cell">-</td>
+                                        <td data-label="Nov 5 L" class="status-completed date-cell">✓</td><td data-label="Nov 5 D" class="status-completed date-cell">✓</td><td data-label="Nov 6 L" class="status-canceled date-cell">x</td><td data-label="Nov 6 D" class="status-canceled date-cell">x</td><td data-label="Nov 7 L" class="status-completed date-cell">✓</td><td data-label="Nov 7 D" class="status-completed date-cell">✓</td><td data-label="Nov 8 L" class="status-completed date-cell">✓</td><td data-label="Nov 8 D" class="status-completed date-cell">✓</td><td data-label="Nov 9 L" class="status-completed date-cell">✓</td><td data-label="Nov 9 D" class="status-completed date-cell">✓</td><td data-label="Nov 10 L" class="status-completed date-cell">✓</td><td data-label="Nov 10 D" class="status-completed date-cell">✓</td><td data-label="Nov 11 L" class="status-canceled date-cell">x</td><td data-label="Nov 11 D" class="status-canceled date-cell">x</td><td data-label="Nov 12 L" class="status-completed date-cell">✓</td><td data-label="Nov 12 D" class="status-completed date-cell">✓</td><td data-label="Nov 13 L" class="status-completed date-cell">✓</td><td data-label="Nov 13 D" class="status-completed date-cell">✓</td><td data-label="Nov 14 L" class="status-canceled date-cell">x</td><td data-label="Nov 14 D" class="status-canceled date-cell">x</td><td data-label="Nov 15 L" class="status-completed date-cell">✓</td><td data-label="Nov 15 D" class="status-completed date-cell">✓</td><td data-label="Nov 16 L" class="status-completed date-cell">✓</td><td data-label="Nov 16 D" class="status-completed date-cell">✓</td><td data-label="Nov 17 L" class="status-completed date-cell">✓</td><td data-label="Nov 17 D" class="status-completed date-cell">✓</td><td data-label="Nov 18 L" class="status-completed date-cell">✓</td><td data-label="Nov 18 D" class="status-completed date-cell">✓</td><td data-label="Nov 19 L" class="status-completed date-cell">✓</td><td data-label="Nov 19 D" class="status-completed date-cell">✓</td><td data-label="Nov 20 L" class="status-canceled date-cell">x</td><td data-label="Nov 20 D" class="status-canceled date-cell">x</td><td data-label="Nov 21 L" class="status-completed date-cell">✓</td><td data-label="Nov 21 D" class="status-completed date-cell">✓</td><td data-label="Nov 22 L" class="status-completed date-cell">✓</td><td data-label="Nov 22 D" class="status-completed date-cell">✓</td><td data-label="Nov 23 L" class="status-canceled date-cell">x</td><td data-label="Nov 23 D" class="status-canceled date-cell">x</td><td data-label="Nov 24 L" class="status-completed date-cell">✓</td><td data-label="Nov 24 D" class="status-completed date-cell">✓</td><td data-label="Nov 25 L" class="status-completed date-cell">✓</td><td data-label="Nov 25 D" class="status-completed date-cell">✓</td><td data-label="Nov 26 L" class="status-completed date-cell">✓</td><td data-label="Nov 26 D" class="status-completed date-cell">✓</td><td data-label="Nov 27 L" class="status-canceled date-cell">x</td><td data-label="Nov 27 D" class="status-canceled date-cell">x</td><td data-label="Nov 28 L" class="status-completed date-cell">✓</td><td data-label="Nov 28 D" class="status-completed date-cell">✓</td><td data-label="Nov 29 L" class="status-completed date-cell">✓</td><td data-label="Nov 29 D" class="status-completed date-cell">✓</td><td data-label="Nov 30 L" class="status-completed date-cell">✓</td><td data-label="Nov 30 D" class="status-completed date-cell">✓</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 4. Premium 1 (₹1800) - 1 Meal/Day -->
+                    <h2 class="plan-table-title">Plan: <span class="status-premium1">Premium 1<br>(₹1800 - 1 Meal/Day)</span> (Users: 3)</h2>
+                    <div class="table-responsive-wrapper">
+                        <div class="table-responsive">
+                            <table class="data-table full-report-table one-meal-per-day" id="table-Premium_1_1800">
+                                <thead>
+                                    <tr>
+                                        <th>UID</th>
+                                        <th>Name</th>
+                                        <th>Nov 1</th><th>Nov 2</th><th>Nov 3</th><th>Nov 4</th><th>Nov 5</th><th>Nov 6</th><th>Nov 7</th><th>Nov 8</th><th>Nov 9</th><th>Nov 10</th><th>Nov 11</th><th>Nov 12</th><th>Nov 13</th><th>Nov 14</th><th>Nov 15</th><th>Nov 16</th><th>Nov 17</th><th>Nov 18</th><th>Nov 19</th><th>Nov 20</th><th>Nov 21</th><th>Nov 22</th><th>Nov 23</th><th>Nov 24</th><th>Nov 25</th><th>Nov 26</th><th>Nov 27</th><th>Nov 28</th><th>Nov 29</th><th>Nov 30</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-uid="103" data-name="Rohan Gupta">
+                                        <td data-label="UID">103</td><td data-label="Name">Rohan Gupta</td>
+                                        <td data-label="Nov 1" class="status-completed date-cell">✓</td><td data-label="Nov 2" class="status-canceled date-cell">x</td><td data-label="Nov 3" class="status-completed date-cell">✓</td><td data-label="Nov 4" class="status-completed date-cell">✓</td><td data-label="Nov 5" class="status-completed date-cell">✓</td><td data-label="Nov 6" class="status-completed date-cell">✓</td><td data-label="Nov 7" class="status-canceled date-cell">x</td><td data-label="Nov 8" class="status-completed date-cell">✓</td><td data-label="Nov 9" class="status-completed date-cell">✓</td><td data-label="Nov 10" class="status-completed date-cell">✓</td><td data-label="Nov 11" class="status-completed date-cell">✓</td><td data-label="Nov 12" class="status-canceled date-cell">x</td><td data-label="Nov 13" class="status-completed date-cell">✓</td><td data-label="Nov 14" class="status-completed date-cell">✓</td><td data-label="Nov 15" class="status-canceled date-cell">x</td><td data-label="Nov 16" class="status-completed date-cell">✓</td><td data-label="Nov 17" class="status-completed date-cell">✓</td><td data-label="Nov 18" class="status-canceled date-cell">x</td><td data-label="Nov 19" class="status-completed date-cell">✓</td><td data-label="Nov 20" class="status-completed date-cell">✓</td><td data-label="Nov 21" class="status-completed date-cell">✓</td><td data-label="Nov 22" class="status-canceled date-cell">x</td><td data-label="Nov 23" class="status-completed date-cell">✓</td><td data-label="Nov 24" class="status-completed date-cell">✓</td><td data-label="Nov 25" class="status-completed date-cell">✓</td><td data-label="Nov 26" class="status-canceled date-cell">x</td><td data-label="Nov 27" class="status-completed date-cell">✓</td><td data-label="Nov 28" class="status-completed date-cell">✓</td><td data-label="Nov 29" class="status-completed date-cell">✓</td><td data-label="Nov 30" class="status-canceled date-cell">x</td>
+                                    </tr>
+                                    <!-- NEW USER: Joined Nov 15th -->
+                                    <tr data-uid="204" data-name="New User Ben">
+                                        <td data-label="UID">204</td><td data-label="Name">New User Ben</td>
+                                        <td data-label="Nov 1" class="status-inactive-date date-cell">-</td><td data-label="Nov 2" class="status-inactive-date date-cell">-</td><td data-label="Nov 3" class="status-inactive-date date-cell">-</td><td data-label="Nov 4" class="status-inactive-date date-cell">-</td><td data-label="Nov 5" class="status-inactive-date date-cell">-</td><td data-label="Nov 6" class="status-inactive-date date-cell">-</td><td data-label="Nov 7" class="status-inactive-date date-cell">-</td><td data-label="Nov 8" class="status-inactive-date date-cell">-</td><td data-label="Nov 9" class="status-inactive-date date-cell">-</td><td data-label="Nov 10" class="status-inactive-date date-cell">-</td><td data-label="Nov 11" class="status-inactive-date date-cell">-</td><td data-label="Nov 12" class="status-inactive-date date-cell">-</td><td data-label="Nov 13" class="status-inactive-date date-cell">-</td><td data-label="Nov 14" class="status-inactive-date date-cell">-</td>
+                                        <td data-label="Nov 15" class="status-completed date-cell">✓</td><td data-label="Nov 16" class="status-completed date-cell">✓</td><td data-label="Nov 17" class="status-canceled date-cell">x</td><td data-label="Nov 18" class="status-completed date-cell">✓</td><td data-label="Nov 19" class="status-completed date-cell">✓</td><td data-label="Nov 20" class="status-completed date-cell">✓</td><td data-label="Nov 21" class="status-canceled date-cell">x</td><td data-label="Nov 22" class="status-completed date-cell">✓</td><td data-label="Nov 23" class="status-completed date-cell">✓</td><td data-label="Nov 24" class="status-completed date-cell">✓</td><td data-label="Nov 25" class="status-canceled date-cell">x</td><td data-label="Nov 26" class="status-completed date-cell">✓</td><td data-label="Nov 27" class="status-completed date-cell">✓</td><td data-label="Nov 28" class="status-completed date-cell">✓</td><td data-label="Nov 29" class="status-canceled date-cell">x</td><td data-label="Nov 30" class="status-completed date-cell">✓</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 5. Normal (₹3000) - 2 Meals/Day -->
+                    <h2 class="plan-table-title">Plan: <span class="status-normal">Normal<br>(₹3000 - 2 Meals/Day)</span> (Users: 3)</h2>
+                    <div class="table-responsive-wrapper">
+                        <div class="table-responsive">
+                            <table class="data-table full-report-table two-meal-per-day" id="table-Normal_3000">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">UID</th>
+                                        <th rowspan="2">Name</th>
+                                        <th colspan="2">Nov 1</th><th colspan="2">Nov 2</th><th colspan="2">Nov 3</th><th colspan="2">Nov 4</th><th colspan="2">Nov 5</th><th colspan="2">Nov 6</th><th colspan="2">Nov 7</th><th colspan="2">Nov 8</th><th colspan="2">Nov 9</th><th colspan="2">Nov 10</th><th colspan="2">Nov 11</th><th colspan="2">Nov 12</th><th colspan="2">Nov 13</th><th colspan="2">Nov 14</th><th colspan="2">Nov 15</th><th colspan="2">Nov 16</th><th colspan="2">Nov 17</th><th colspan="2">Nov 18</th><th colspan="2">Nov 19</th><th colspan="2">Nov 20</th><th colspan="2">Nov 21</th><th colspan="2">Nov 22</th><th colspan="2">Nov 23</th><th colspan="2">Nov 24</th><th colspan="2">Nov 25</th><th colspan="2">Nov 26</th><th colspan="2">Nov 27</th><th colspan="2">Nov 28</th><th colspan="2">Nov 29</th><th colspan="2">Nov 30</th>
+                                    </tr>
+                                    <tr>
+                                        <th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th><th>L</th><th>D</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-uid="102" data-name="Priya Verma">
+                                        <td data-label="UID">102</td><td data-label="Name">Priya Verma</td>
+                                        <td data-label="Nov 1 L" class="status-completed date-cell">✓</td><td data-label="Nov 1 D" class="status-completed date-cell">✓</td><td data-label="Nov 2 L" class="status-canceled date-cell">x</td><td data-label="Nov 2 D" class="status-canceled date-cell">x</td><td data-label="Nov 3 L" class="status-completed date-cell">✓</td><td data-label="Nov 3 D" class="status-completed date-cell">✓</td><td data-label="Nov 4 L" class="status-completed date-cell">✓</td><td data-label="Nov 4 D" class="status-completed date-cell">✓</td><td data-label="Nov 5 L" class="status-canceled date-cell">x</td><td data-label="Nov 5 D" class="status-canceled date-cell">x</td><td data-label="Nov 6 L" class="status-canceled date-cell">x</td><td data-label="Nov 6 D" class="status-canceled date-cell">x</td><td data-label="Nov 7 L" class="status-completed date-cell">✓</td><td data-label="Nov 7 D" class="status-completed date-cell">✓</td><td data-label="Nov 8 L" class="status-completed date-cell">✓</td><td data-label="Nov 8 D" class="status-completed date-cell">✓</td><td data-label="Nov 9 L" class="status-canceled date-cell">x</td><td data-label="Nov 9 D" class="status-canceled date-cell">x</td><td data-label="Nov 10 L" class="status-completed date-cell">✓</td><td data-label="Nov 10 D" class="status-completed date-cell">✓</td><td data-label="Nov 11 L" class="status-canceled date-cell">x</td><td data-label="Nov 11 D" class="status-canceled date-cell">x</td><td data-label="Nov 12 L" class="status-canceled date-cell">x</td><td data-label="Nov 12 D" class="status-canceled date-cell">x</td><td data-label="Nov 13 L" class="status-completed date-cell">✓</td><td data-label="Nov 13 D" class="status-completed date-cell">✓</td><td data-label="Nov 14 L" class="status-completed date-cell">✓</td><td data-label="Nov 14 D" class="status-completed date-cell">✓</td><td data-label="Nov 15 L" class="status-completed date-cell">✓</td><td data-label="Nov 15 D" class="status-completed date-cell">✓</td><td data-label="Nov 16 L" class="status-canceled date-cell">x</td><td data-label="Nov 16 D" class="status-canceled date-cell">x</td><td data-label="Nov 17 L" class="status-completed date-cell">✓</td><td data-label="Nov 17 D" class="status-completed date-cell">✓</td><td data-label="Nov 18 L" class="status-canceled date-cell">x</td><td data-label="Nov 18 D" class="status-canceled date-cell">x</td><td data-label="Nov 19 L" class="status-completed date-cell">✓</td><td data-label="Nov 19 D" class="status-completed date-cell">✓</td><td data-label="Nov 20 L" class="status-completed date-cell">✓</td><td data-label="Nov 20 D" class="status-completed date-cell">✓</td><td data-label="Nov 21 L" class="status-completed date-cell">✓</td><td data-label="Nov 21 D" class="status-completed date-cell">✓</td><td data-label="Nov 22 L" class="status-canceled date-cell">x</td><td data-label="Nov 22 D" class="status-canceled date-cell">x</td><td data-label="Nov 23 L" class="status-completed date-cell">✓</td><td data-label="Nov 23 D" class="status-completed date-cell">✓</td><td data-label="Nov 24 L" class="status-completed date-cell">✓</td><td data-label="Nov 24 D" class="status-completed date-cell">✓</td><td data-label="Nov 25 L" class="status-completed date-cell">✓</td><td data-label="Nov 25 D" class="status-completed date-cell">✓</td><td data-label="Nov 26 L" class="status-canceled date-cell">x</td><td data-label="Nov 26 D" class="status-canceled date-cell">x</td><td data-label="Nov 27 L" class="status-completed date-cell">✓</td><td data-label="Nov 27 D" class="status-completed date-cell">✓</td><td data-label="Nov 28 L" class="status-completed date-cell">✓</td><td data-label="Nov 28 D" class="status-completed date-cell">✓</td><td data-label="Nov 29 L" class="status-completed date-cell">✓</td><td data-label="Nov 29 D" class="status-completed date-cell">✓</td><td data-label="Nov 30 L" class="status-canceled date-cell">x</td><td data-label="Nov 30 D" class="status-canceled date-cell">x</td>
+                                    </tr>
+                                    <!-- NEW USER: Joined Nov 15th -->
+                                    <tr data-uid="205" data-name="New User Sam">
+                                        <td data-label="UID">205</td><td data-label="Name">New User Sam</td>
+                                        <td data-label="Nov 1 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 1 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 2 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 2 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 3 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 3 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 4 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 4 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 5 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 5 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 6 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 6 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 7 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 7 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 8 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 8 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 9 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 9 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 10 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 10 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 11 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 11 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 12 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 12 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 13 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 13 D" class="status-inactive-date date-cell">-</td><td data-label="Nov 14 L" class="status-inactive-date date-cell">-</td><td data-label="Nov 14 D" class="status-inactive-date date-cell">-</td>
+                                        <td data-label="Nov 15 L" class="status-completed date-cell">✓</td><td data-label="Nov 15 D" class="status-completed date-cell">✓</td><td data-label="Nov 16 L" class="status-canceled date-cell">x</td><td data-label="Nov 16 D" class="status-canceled date-cell">x</td><td data-label="Nov 17 L" class="status-completed date-cell">✓</td><td data-label="Nov 17 D" class="status-completed date-cell">✓</td><td data-label="Nov 18 L" class="status-canceled date-cell">x</td><td data-label="Nov 18 D" class="status-canceled date-cell">x</td><td data-label="Nov 19 L" class="status-completed date-cell">✓</td><td data-label="Nov 19 D" class="status-completed date-cell">✓</td><td data-label="Nov 20 L" class="status-completed date-cell">✓</td><td data-label="Nov 20 D" class="status-completed date-cell">✓</td><td data-label="Nov 21 L" class="status-completed date-cell">✓</td><td data-label="Nov 21 D" class="status-completed date-cell">✓</td><td data-label="Nov 22 L" class="status-canceled date-cell">x</td><td data-label="Nov 22 D" class="status-canceled date-cell">x</td><td data-label="Nov 23 L" class="status-completed date-cell">✓</td><td data-label="Nov 23 D" class="status-completed date-cell">✓</td><td data-label="Nov 24 L" class="status-completed date-cell">✓</td><td data-label="Nov 24 D" class="status-completed date-cell">✓</td><td data-label="Nov 25 L" class="status-completed date-cell">✓</td><td data-label="Nov 25 D" class="status-completed date-cell">✓</td><td data-label="Nov 26 L" class="status-canceled date-cell">x</td><td data-label="Nov 26 D" class="status-canceled date-cell">x</td><td data-label="Nov 27 L" class="status-completed date-cell">✓</td><td data-label="Nov 27 D" class="status-completed date-cell">✓</td><td data-label="Nov 28 L" class="status-completed date-cell">✓</td><td data-label="Nov 28 D" class="status-completed date-cell">✓</td><td data-label="Nov 29 L" class="status-completed date-cell">✓</td><td data-label="Nov 29 D" class="status-completed date-cell">✓</td><td data-label="Nov 30 L" class="status-canceled date-cell">x</td><td data-label="Nov 30 D" class="status-canceled date-cell">x</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+
+                    <!-- 6. Normal (₹1500) - 1 Meal/Day -->
+                    <h2 class="plan-table-title">Plan: <span class="status-normal">Normal<br>(₹1500 - 1 Meal/Day)</span> (Users: 3)</h2>
+                    <div class="table-responsive-wrapper">
+                        <div class="table-responsive">
+                            <table class="data-table full-report-table one-meal-per-day" id="table-Normal_1500">
+                                <thead>
+                                    <tr>
+                                        <th>UID</th>
+                                        <th>Name</th>
+                                        <th>Nov 1</th><th>Nov 2</th><th>Nov 3</th><th>Nov 4</th><th>Nov 5</th><th>Nov 6</th><th>Nov 7</th><th>Nov 8</th><th>Nov 9</th><th>Nov 10</th><th>Nov 11</th><th>Nov 12</th><th>Nov 13</th><th>Nov 14</th><th>Nov 15</th><th>Nov 16</th><th>Nov 17</th><th>Nov 18</th><th>Nov 19</th><th>Nov 20</th><th>Nov 21</th><th>Nov 22</th><th>Nov 23</th><th>Nov 24</th><th>Nov 25</th><th>Nov 26</th><th>Nov 27</th><th>Nov 28</th><th>Nov 29</th><th>Nov 30</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-uid="105" data-name="Vivek Jain">
+                                        <td data-label="UID">105</td><td data-label="Name">Vivek Jain</td>
+                                        <td data-label="Nov 1" class="status-completed date-cell">✓</td><td data-label="Nov 2" class="status-completed date-cell">✓</td><td data-label="Nov 3" class="status-completed date-cell">✓</td><td data-label="Nov 4" class="status-canceled date-cell">x</td><td data-label="Nov 5" class="status-completed date-cell">✓</td><td data-label="Nov 6" class="status-completed date-cell">✓</td><td data-label="Nov 7" class="status-completed date-cell">✓</td><td data-label="Nov 8" class="status-completed date-cell">✓</td><td data-label="Nov 9" class="status-completed date-cell">✓</td><td data-label="Nov 10" class="status-completed date-cell">✓</td><td data-label="Nov 11" class="status-completed date-cell">✓</td><td data-label="Nov 12" class="status-canceled date-cell">x</td><td data-label="Nov 13" class="status-completed date-cell">✓</td><td data-label="Nov 14" class="status-completed date-cell">✓</td><td data-label="Nov 15" class="status-completed date-cell">✓</td><td data-label="Nov 16" class="status-canceled date-cell">x</td><td data-label="Nov 17" class="status-completed date-cell">✓</td><td data-label="Nov 18" class="status-completed date-cell">✓</td><td data-label="Nov 19" class="status-completed date-cell">✓</td><td data-label="Nov 20" class="status-canceled date-cell">x</td><td data-label="Nov 21" class="status-completed date-cell">✓</td><td data-label="Nov 22" class="status-completed date-cell">✓</td><td data-label="Nov 23" class="status-completed date-cell">✓</td><td data-label="Nov 24" class="status-canceled date-cell">x</td><td data-label="Nov 25" class="status-completed date-cell">✓</td><td data-label="Nov 26" class="status-completed date-cell">✓</td><td data-label="Nov 27" class="status-completed date-cell">✓</td><td data-label="Nov 28" class="status-canceled date-cell">x</td><td data-label="Nov 29" class="status-completed date-cell">✓</td><td data-label="Nov 30" class="status-completed date-cell">✓</td>
+                                    </tr>
+                                    <!-- NEW USER: Joined Nov 5th -->
+                                    <tr data-uid="206" data-name="New User Eve">
+                                        <td data-label="UID">206</td><td data-label="Name">New User Eve</td>
+                                        <td data-label="Nov 1" class="status-inactive-date date-cell">-</td><td data-label="Nov 2" class="status-inactive-date date-cell">-</td><td data-label="Nov 3" class="status-inactive-date date-cell">-</td><td data-label="Nov 4" class="status-inactive-date date-cell">-</td>
+                                        <td data-label="Nov 5" class="status-completed date-cell">✓</td><td data-label="Nov 6" class="status-completed date-cell">✓</td><td data-label="Nov 7" class="status-completed date-cell">✓</td><td data-label="Nov 8" class="status-completed date-cell">✓</td><td data-label="Nov 9" class="status-completed date-cell">✓</td><td data-label="Nov 10" class="status-completed date-cell">✓</td><td data-label="Nov 11" class="status-completed date-cell">✓</td><td data-label="Nov 12" class="status-canceled date-cell">x</td><td data-label="Nov 13" class="status-completed date-cell">✓</td><td data-label="Nov 14" class="status-completed date-cell">✓</td><td data-label="Nov 15" class="status-completed date-cell">✓</td><td data-label="Nov 16" class="status-canceled date-cell">x</td><td data-label="Nov 17" class="status-completed date-cell">✓</td><td data-label="Nov 18" class="status-completed date-cell">✓</td><td data-label="Nov 19" class="status-completed date-cell">✓</td><td data-label="Nov 20" class="status-canceled date-cell">x</td><td data-label="Nov 21" class="status-completed date-cell">✓</td><td data-label="Nov 22" class="status-completed date-cell">✓</td><td data-label="Nov 23" class="status-completed date-cell">✓</td><td data-label="Nov 24" class="status-canceled date-cell">x</td><td data-label="Nov 25" class="status-completed date-cell">✓</td><td data-label="Nov 26" class="status-completed date-cell">✓</td><td data-label="Nov 27" class="status-completed date-cell">✓</td><td data-label="Nov 28" class="status-canceled date-cell">x</td><td data-label="Nov 29" class="status-completed date-cell">✓</td><td data-label="Nov 30" class="status-completed date-cell">✓</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </section>
+
+            <div class="report-actions">
+                <a href="admin-report.html" class="btn btn-secondary">Back to Daily Report</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Ayushman's Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // --- CSV DOWNLOAD FUNCTION (Reads static HTML tables) ---
+
+        function downloadCsvReport() {
+            const BOM = "\ufeff"; 
+            let csvContent = BOM;
+            const reportDate = document.getElementById('reportDateDisplay').textContent;
+            
+            // Collect all tables and loop through them
+            const tables = document.querySelectorAll('.full-report-table');
+            
+            tables.forEach(table => {
+                const planNameElement = table.closest('.table-responsive-wrapper').previousElementSibling; // Find the <h2> tag
+                const planTitle = planNameElement ? planNameElement.textContent.trim() : 'Unknown Plan';
+
+                // 1. Add Plan/Date Header - Clean up the title (remove newlines and excess spaces)
+                csvContent += `\n\n${planTitle.replace(/(\r\n|\n|\r)/gm, ' ').replace(/\s+/g, ' ')} (${reportDate})\n`;
+
+                // --- Handle Header Rows ---
+                if (table.classList.contains('two-meal-per-day')) {
+                    const headersRow1 = Array.from(table.querySelector('thead tr:first-child').querySelectorAll('th'));
+                    const headersRow2 = Array.from(table.querySelector('thead tr:last-child').querySelectorAll('th'));
+                    
+                    let combinedHeaders = [];
+                    let headerIndex = 0;
+                    
+                    // Manually combine "Date" and "L/D" headers for CSV clarity
+                    headersRow1.forEach(th1 => {
+                        const dateText = th1.textContent.trim();
+                        const colSpan = th1.colSpan || 1;
+
+                        if (colSpan === 2) {
+                             // This is a spanning Date header (Nov 1, Nov 2, etc.)
+                            combinedHeaders.push(`${dateText} L`);
+                            combinedHeaders.push(`${dateText} D`);
+                            headerIndex += 2;
+                        } else if (headerIndex < 2) {
+                            // UID and Name
+                            combinedHeaders.push(dateText);
+                            headerIndex++;
+                        }
+                    });
+
+                    csvContent += combinedHeaders.join(',') + '\n';
+                } else {
+                    // Standard 1-meal per day table (single header row)
+                    const headerRow = table.querySelector('thead tr:last-child');
+                    const headers = Array.from(headerRow.querySelectorAll('th')).map(th => th.textContent.trim());
+                    csvContent += headers.join(',') + '\n';
+                }
+                // --- End Header Handling ---
+
+                // 3. Get Body Data
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const rowData = [];
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    
+                    cells.forEach(cell => {
+                        let text = cell.textContent.trim();
+                        
+                        // Robust quoting: Convert newlines/spaces to a single space if quoted, then quote if necessary
+                        if (text.includes(',') || text.includes('"') || text.includes('\n') || text.includes(' ') || text.includes('₹')) {
+                            text = text.replace(/(\r\n|\n|\r)/gm, ' ').trim(); 
+                            // Quote and escape internal quotes
+                            text = `"${text.replace(/"/g, '""')}"`;
+                        }
+                        
+                        rowData.push(text);
+                    });
+                    csvContent += rowData.join(',') + '\n';
+                });
+            });
+
+
+            // 4. Trigger Download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            
+            if (link.download !== undefined) { 
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", `Historical_Report_By_Plan_${new Date().toISOString().slice(0, 10)}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("Your browser does not support automatic CSV download.");
+            }
+        }
+
+
+        // --- INITIALIZATION ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hamburger menu logic only (kept for basic navigation)
+            const hamburger = document.getElementById('hamburger');
+            const navbarNav = document.getElementById('navbarNav');
+
+            hamburger.addEventListener('click', function() {
+                navbarNav.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navbarNav.classList.remove('active');
+                    hamburger.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
