@@ -167,7 +167,7 @@
 
             <!-- ACTIVE CHECKBOXES -->
             <div class="checkbox-group-compact">
-                <label><input type="checkbox" name="user_status_active" checked> User Active</label>
+                <label><input type="checkbox" name="is_active" checked> User Active</label>
                 <label><input type="checkbox" name="lunch_status_active" id="lunch_status_active" checked> Lunch Active</label>
                 <label><input type="checkbox" name="dinner_status_active" id="dinner_status_active" checked> Dinner Active</label>
             </div>
@@ -230,7 +230,7 @@
                     </td>
 
                     <td>
-                        {% if u.user_status_active %}
+                        {% if u.is_active %}
                         <span class="badge badge-active">Active</span>
                         {% else %}
                         <span class="badge badge-inactive">Inactive</span>

@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.utils import timezone
 
 SUBSCRIPTION_TYPE = (
     ("NORMAL30", "NORMAL30"),
@@ -54,19 +56,39 @@ PREMIUM_MENU_DINNER=(
     ("VEG","VEG"),
 )
 
+class CustomerManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("Email is required")
 
-class Customer(models.Model):
-    name = models.CharField(max_length=150)
-    address = models.CharField(max_length=200)
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        return self.create_user(email, password, **extra_fields)
+
+
+class Customer(AbstractBaseUser, PermissionsMixin):
+    
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15)
-    meal_balance = models.IntegerField()
-    date_joined = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=150)
+    phone = models.CharField(max_length=15, blank=True)
+    address = models.CharField(max_length=200, blank=True)
+
+    
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    date_joined = models.DateTimeField(default=timezone.now)
     profile_updated_at = models.DateTimeField(auto_now=True)
 
-    password = models.CharField(max_length=128, blank=True, null=True)
-
-    user_status_active = models.BooleanField(default=True)
+    
+    meal_balance = models.IntegerField(default=0)
     lunch_status_active = models.BooleanField(default=True)
     dinner_status_active = models.BooleanField(default=True)
     low_balance_status_active = models.BooleanField(default=False)
@@ -74,19 +96,20 @@ class Customer(models.Model):
     subscription_choice = models.CharField(max_length=20, choices=SUBSCRIPTION_TYPE, default="NORMAL60")
     default_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE, default="DineIn")
     default_meal_choice = models.CharField(max_length=20, choices=MEAL_TYPE, default="VEG")
-    
-    
+
     FLAGSHIP_MENU_LUNCH_default_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_LUNCH, default="NONE")
     FLAGSHIP_MENU_DINNER_default_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_DINNER, default="NONE")
     PREMIUM_MENU_LUNCH_default_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_LUNCH, default="NONE")
     PREMIUM_MENU_DINNER_default_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_DINNER, default="NONE")
 
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["name"]
 
-
+    objects = CustomerManager()
 
     def __str__(self):
-        return f"{self.name} - {self.address} - remain({self.meal_balance})"
-
+        return f"{self.name} ({self.email}) - balance={self.meal_balance}"
 
 class LunchRecord(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="lunch_records")
