@@ -108,6 +108,13 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomerManager()
 
+    @property
+    def total_meals(self):
+        if self.subscription_choice in ["NORMAL30","FLAGSHIP30","PREMIUM30"]:
+            return 30 
+        else :
+            return 60
+
     def __str__(self):
         return f"{self.name} ({self.email}) - balance={self.meal_balance}"
 
