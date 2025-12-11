@@ -20,7 +20,7 @@ def gen_Lunch_record(request=None):
     """
     today = timezone.localdate()
     customers_no_record = Customer.objects.filter(
-        is_active=True,
+        user_status_active=True,
         lunch_status_active=True
     ).exclude(lunch_records__for_date=today)
 
@@ -71,7 +71,7 @@ def gen_Lunch_record(request=None):
             # Update low-balance flags and active status
             Customer.objects.filter(meal_balance__lte=6).update(low_balance_status_active=True)
             # if balance <= 0 consider inactive
-            Customer.objects.filter(meal_balance__lte=0).update(is_active=False)
+            Customer.objects.filter(meal_balance__lte=0).update(user_status_active=False)
 
     except Exception as e:
         logger.exception("Unexpected error in gen_Lunch_record: %s", e)
@@ -86,7 +86,7 @@ def gen_Dinner_record(request=None):
     """
     today = timezone.localdate()
     customers_no_record = Customer.objects.filter(
-        is_active=True,
+        user_status_active=True,
         dinner_status_active=True
     ).exclude(dinner_records__for_date=today)
 
@@ -130,7 +130,7 @@ def gen_Dinner_record(request=None):
             ).update(decrement_done=True)
 
             Customer.objects.filter(meal_balance__lte=6).update(low_balance_status_active=True)
-            Customer.objects.filter(meal_balance__lte=0).update(is_active=False)
+            Customer.objects.filter(meal_balance__lte=0).update(user_status_active=False)
 
     except Exception as e:
         logger.exception("Unexpected error in gen_Dinner_record: %s", e)
@@ -410,7 +410,7 @@ def admin_user_management(request):
             dinner_status = False
 
         # ---------------- USER ACTIVE ----------------
-        user_status = (request.POST.get("is_active") == "on")
+        user_status = (request.POST.get("user_status_active") == "on")
 
         # ---------------- CREATE USER ----------------
         Customer.objects.create(
@@ -426,7 +426,7 @@ def admin_user_management(request):
             default_service_choice=default_service_choice,
             default_meal_choice=default_meal_choice,
 
-            is_active=user_status,
+            user_status_active=user_status,
             lunch_status_active=lunch_status,
             dinner_status_active=dinner_status,
 

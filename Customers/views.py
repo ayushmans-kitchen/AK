@@ -4,20 +4,29 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 import json
 
+from django.utils import timezone
+today=timezone.localdate()
+
+
 from .models import Customer,LunchRecord,DinnerRecord
 
 @login_required
 def user_dashboard(request):
     user=request.user
-    
     used_meals= user.total_meals - user.meal_balance
     cl_l=LunchRecord.objects.filter(service_choice="Cancel",customer=user).count()
     cl_d=DinnerRecord.objects.filter(service_choice="Cancel",customer=user).count()
     cancelled_meals=cl_l+cl_d
+
+    lunch_record = LunchRecord.objects.filter(customer=user,for_date=today).first()
+    dinner_record = DinnerRecord.objects.filter(customer=user,for_date=today).first()
+
     context={
         'user':user,
         'used_meals':used_meals,
-        'cancelled_meals':cancelled_meals
+        'cancelled_meals':cancelled_meals,
+        'lunch_record':lunch_record,
+        'dinner_record':dinner_record,
         }
     return render(request, 'Customer/user-dashboard.html',context)
 

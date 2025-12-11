@@ -89,6 +89,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
     
     meal_balance = models.IntegerField(default=0)
+    user_status_active = models.BooleanField(default=True)
     lunch_status_active = models.BooleanField(default=True)
     dinner_status_active = models.BooleanField(default=True)
     low_balance_status_active = models.BooleanField(default=False)
@@ -120,7 +121,6 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
 class LunchRecord(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="lunch_records")
-    # remove auto_now_add so we can explicitly set for_date
     for_date = models.DateField()
     meal_choice = models.CharField(max_length=20, choices=MEAL_TYPE)
     meal_num_used = models.IntegerField()
