@@ -122,7 +122,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 class LunchRecord(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="lunch_records")
     for_date = models.DateField()
-    meal_choice = models.CharField(max_length=20, choices=MEAL_TYPE)
+    meal_choice = models.CharField(max_length=20, choices=MEAL_TYPE) # Normal meal plan
     meal_num_used = models.IntegerField()
     service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
 

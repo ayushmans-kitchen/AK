@@ -11,6 +11,7 @@ from django.shortcuts import render,redirect
 
 logger = logging.getLogger(__name__)
 CONSUMING_SERVICES = ("DineIn", "PickUp", "Delivery")
+today = timezone.localdate()
 
 
 def gen_Lunch_record(request=None):
@@ -143,167 +144,55 @@ def gen_Dinner_record(request=None):
 
 
 
-# -------------------------------
-# GLOBAL PLAN DICTIONARIES
-# -------------------------------
-
-PLAN_MAP = {
-    "NORMAL30": "normal_1500",
-    "NORMAL60": "normal_3000",
-    "FLAGSHIP30": "flagship_1800",
-    "FLAGSHIP60": "flagship_3400",
-    "PREMIUM30": "premium_2200",
-    "PREMIUM60": "premium_4200",
-}
-
-PLAN_MAP_DISPLAY = {
-    "NORMAL30": "Normal (₹1500 — 30 meals)",
-    "NORMAL60": "Normal (₹3000 — 60 meals)",
-    "FLAGSHIP30": "Premium 1 (₹1800 — 30 meals)",
-    "FLAGSHIP60": "Premium 1 (₹3400 — 60 meals)",
-    "PREMIUM30": "Premium 2 (₹2200 — 30 meals)",
-    "PREMIUM60": "Premium 2 (₹4200 — 60 meals)",
-}
-
-PLAN_TOTAL_MEALS = {
-    "NORMAL30": 30,
-    "NORMAL60": 60,
-    "FLAGSHIP30": 30,
-    "FLAGSHIP60": 60,
-    "PREMIUM30": 30,
-    "PREMIUM60": 60,
-}
-
-#-------------------------------------------------------
+#----------------------------------------------------
 # Admin Dashboard section             
 #-------------------------------------------------------
 def admin_dashboard(request):
-    today = timezone.localdate()
 
-    print(today)
- 
-    # Fetch Today's Records
     lunch = LunchRecord.objects.filter(for_date=today)
     dinner = DinnerRecord.objects.filter(for_date=today)
 
     SERVICES = ["DineIn", "PickUp", "Delivery", "Cancel"]
 
-    # --------------------------
-    # INIT LUNCH DATA
-    # --------------------------
-    lunch_data = {
-        serv: {
-            "normal_1500": 0,
-            "normal_3000": 0,
-            "flagship_1800": 0,
-            "flagship_3400": 0,
-            "premium_2200": 0,
-            "premium_4200": 0,
-            "total": 0
-        }
-        for serv in SERVICES
+    LUNCH_REPORT = {
+        'VEG': 0, 'NON_VEG': 0, 'PANEER': 0, 'MUSHROOM': 0,
+        'CHICKEN': 0, 'EGG': 0, 'FISH': 0, 'PRAWN': 0, 'TOTAL_LUNCH': 0
+    }
+    DINNER_REPORT ={
+        'VEG': 0, 'NON_VEG': 0, 'PANEER': 0, 'MUSHROOM': 0,
+        'CHICKEN': 0, 'EGG': 0, 'TOTAL': 0
     }
 
-    # Fill lunch counts
-    for rec in lunch:
-        plan_key = PLAN_MAP.get(rec.customer.subscription_choice)
-        serv = rec.service_choice
-        lunch_data[serv][plan_key] += 1
-        lunch_data[serv]["total"] += 1
+    for i in lunch:
+        if i.meal_choice=="VEG":
+            LUNCH_REPORT['VEG']+=1
+        elif i.meal_choice=="NON-VEG":
+            LUNCH_REPORT['NON-VEG']+=1
+        elif i.meal_choice=="CHICKEN":
+            LUNCH_REPORT['CHICKEN']+=1
+        elif i.meal_choice=="PANEER":
+            LUNCH_REPORT['PANEER']+=1
+        elif i.meal_choice=="MUSHROOM":
+            LUNCH_REPORT['MUSHROOM']+=1
+        elif i.meal_choice=="EGG":
+            LUNCH_REPORT['EGG']+=1
+        elif i.meal_choice=="FISH":
+            LUNCH_REPORT['FISH']+=1
+        elif i.meal_choice=="PRAWN":
+            LUNCH_REPORT['PRAWN']+=1
+    
+    TOTAL_LUNCH= LUNCH_REPORT['VEG']+ LUNCH_REPORT['NON-VEG']+LUNCH_REPORT['CHICKEN']+LUNCH_REPORT['PANEER']+LUNCH_REPORT['MUSHROOM']+LUNCH_REPORT['EGG']+LUNCH_REPORT['FISH']+LUNCH_REPORT['PRAWN']
 
-    # Compute lunch totals row
-    lunch_totals = {
-        "normal_1500": 0,
-        "normal_3000": 0,
-        "flagship_1800": 0,
-        "flagship_3400": 0,
-        "premium_2200": 0,
-        "premium_4200": 0,
-        "total": 0
-    }
 
-    for serv in SERVICES:
-        for col in lunch_totals:
-            if col != "total":
-                lunch_totals[col] += lunch_data[serv][col]
 
-    lunch_totals["total"] = (
-        lunch_totals["normal_1500"] +
-        lunch_totals["normal_3000"] +
-        lunch_totals["flagship_1800"] +
-        lunch_totals["flagship_3400"] +
-        lunch_totals["premium_2200"] +
-        lunch_totals["premium_4200"]
-    )
-
-    # --------------------------
-    # INIT DINNER DATA
-    # --------------------------
-    dinner_data = {
-        serv: {
-            "normal_1500": 0,
-            "normal_3000": 0,
-            "flagship_1800": 0,
-            "flagship_3400": 0,
-            "premium_2200": 0,
-            "premium_4200": 0,
-            "total": 0
-        }
-        for serv in SERVICES
-    }
-
-    # Fill dinner counts
-    for rec in dinner:
-        plan_key = PLAN_MAP.get(rec.customer.subscription_choice)
-        serv = rec.service_choice
-        dinner_data[serv][plan_key] += 1
-        dinner_data[serv]["total"] += 1
-
-    # Compute dinner totals row
-    dinner_totals = {
-        "normal_1500": 0,
-        "normal_3000": 0,
-        "flagship_1800": 0,
-        "flagship_3400": 0,
-        "premium_2200": 0,
-        "premium_4200": 0,
-        "total": 0
-    }
-
-    for serv in SERVICES:
-        for col in dinner_totals:
-            if col != "total":
-                dinner_totals[col] += dinner_data[serv][col]
-
-    dinner_totals["total"] = (
-        dinner_totals["normal_1500"] +
-        dinner_totals["normal_3000"] +
-        dinner_totals["flagship_1800"] +
-        dinner_totals["flagship_3400"] +
-        dinner_totals["premium_2200"] +
-        dinner_totals["premium_4200"]
-    )
-
-    # --------------------------
-    # LOW BALANCE USERS
-    # --------------------------
-    low_balance_users = Customer.objects.filter(meal_balance__lt=6)
-    low_balance_count = low_balance_users.count()
-
-    # --------------------------
-    # SEND TO TEMPLATE
-    # --------------------------
+    
     context = {
-        "today": today,
+        "lunch":lunch,
+        "dinner":dinner,
+        "LUNCH_REPORT":LUNCH_REPORT,
+        "TOTAL_LUNCH":TOTAL_LUNCH,
 
-        "lunch": lunch_data,
-        "lunch_totals": lunch_totals,
-
-        "dinner": dinner_data,
-        "dinner_totals": dinner_totals,
-
-        "low_balance_users": low_balance_users,
-        "low_balance_count": low_balance_count,
+        
     }
 
     return render(request, "Admin/admin-dashboard.html", context)
@@ -461,7 +350,22 @@ def admin_user_management(request):
 
 
 def daily_report(request):
-    return render(request,"Admin/admin-daily-report.html")
+    today = timezone.localdate()
+    users = Customer.objects.all().order_by("-id")
+    lunch_records = LunchRecord.objects.filter(for_date=today)
+    dinner_records = DinnerRecord.objects.filter(for_date=today)
+
+
+    
+
+    context = {
+        "today": today,
+        "users": users,
+        "lunch_records": lunch_records,
+        "dinner_records":dinner_records,
+    }
+    return render(request, "Admin/admin-daily-report.html", context)
+
 
 
 
