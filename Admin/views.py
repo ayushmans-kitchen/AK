@@ -35,7 +35,7 @@ def gen_Lunch_record(request=None):
                 for_date=today,
                 meal_choice=c.default_meal_choice,
                 meal_num_used=c.meal_balance,
-                service_choice=c.default_service_choice,
+                service_choice=c.default_lunch_service_choice,
                 FLAGSHIP_choice=c.FLAGSHIP_MENU_LUNCH_default_choice,
                 PREMIUM_choice=c.PREMIUM_MENU_LUNCH_default_choice
             )
@@ -101,7 +101,7 @@ def gen_Dinner_record(request=None):
                 for_date=today,
                 meal_choice=c.default_meal_choice,
                 meal_num_used=c.meal_balance,
-                service_choice=c.default_service_choice,
+                service_choice=c.default_dinner_service_choice,
                 FLAGSHIP_choice=c.FLAGSHIP_MENU_DINNER_default_choice,
                 PREMIUM_choice=c.PREMIUM_MENU_DINNER_default_choice
             )

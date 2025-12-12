@@ -18,7 +18,7 @@ SERVICE_TYPE = (
     ("Cancel", "Cancel"),
 )
 
-MEAL_TYPE = (
+MEAL_MENU = (
     ("NONE","NONE"),
     ("VEG", "VEG"),
     ("NON-VEG", "NON-VEG"),
@@ -92,11 +92,12 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     user_status_active = models.BooleanField(default=True)
     lunch_status_active = models.BooleanField(default=True)
     dinner_status_active = models.BooleanField(default=True)
-    low_balance_status_active = models.BooleanField(default=False)
+    paused_subscription = models.BooleanField(default=False)
 
     subscription_choice = models.CharField(max_length=20, choices=SUBSCRIPTION_TYPE, default="NORMAL60")
-    default_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE, default="DineIn")
-    default_meal_choice = models.CharField(max_length=20, choices=MEAL_TYPE, default="VEG")
+    default_lunch_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE, default="DineIn")
+    default_dinner_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE, default="DineIn")
+    default_meal_choice = models.CharField(max_length=20, choices=MEAL_MENU, default="VEG")
 
     FLAGSHIP_MENU_LUNCH_default_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_LUNCH, default="NONE")
     FLAGSHIP_MENU_DINNER_default_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_DINNER, default="NONE")
@@ -122,10 +123,10 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 class LunchRecord(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="lunch_records")
     for_date = models.DateField()
-    meal_choice = models.CharField(max_length=20, choices=MEAL_TYPE)
     meal_num_used = models.IntegerField()
     service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
 
+    meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
     FLAGSHIP_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_LUNCH,null=True,blank=True)
     PREMIUM_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_LUNCH,null=True,blank=True)
     
@@ -143,10 +144,10 @@ class LunchRecord(models.Model):
 class DinnerRecord(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="dinner_records")
     for_date = models.DateField()
-    meal_choice = models.CharField(max_length=20, choices=MEAL_TYPE)
     meal_num_used = models.IntegerField()
     service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
 
+    meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
     FLAGSHIP_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_DINNER,null=True,blank=True)
     PREMIUM_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_DINNER,null=True,blank=True)
 
