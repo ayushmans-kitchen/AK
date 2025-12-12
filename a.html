@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Confirmation Logic Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Including necessary CSS variables and the confirmation styles */
+        :root {
+            --color-primary: #d4af37;
+            --color-background: #000000;
+            --color-background-secondary: #0a0a0a;
+            --color-background-tertiary: #1c1c1c;
+            --color-text: #ffffff;
+            --color-text-secondary: #e0e0e0;
+            --color-success: #4ade80;
+            --color-danger: #ef4444;
+            --color-border: #333333;
+            --color-card-bg: #1c1c1c;
+            --color-pickup: #00bcd4;
+            --color-cancel: #ef4444;
+            --color-delivery: #ff9800;
+
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --border-radius: 0.5rem;
+        }
+
+        /* Base Body and Grid Styles */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            padding: 2rem;
+        }
+
+        .meals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        /* Meal Card Base */
+        .meal-card {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+        }
+
+        .meal-time {
+            background-color: var(--color-primary);
+            color: var(--color-background);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .meal-course {
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: var(--spacing-xs);
+            text-transform: uppercase;
+        }
+
+        .meal-description {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.9rem;
+        }
+
+        .meal-time-slot {
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Input Styles (Editable State) */
+        .food-type-dropdown {
+            width: 100%;
+            padding: var(--spacing-md);
+            margin: var(--spacing-sm) 0;
+            background-color: var(--color-background-secondary);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+        }
+
+        .meal-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-sm);
+        }
+
+        .meal-actions input {
+            display: none;
+        }
+
+        .radio-label {
+            padding: var(--spacing-md);
+            border: 2px solid;
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        .radio-label.btn-dining {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .radio-label.btn-cancel {
+            border-color: var(--color-cancel);
+            color: var(--color-cancel);
+        }
+
+        .radio-label.btn-delivery {
+            border-color: var(--color-delivery);
+            color: var(--color-delivery);
+        }
+
+        .meal-actions input:checked+.radio-label.btn-dining {
+            background-color: var(--color-primary);
+            color: var(--color-background);
+        }
+
+        .meal-actions input:checked+.radio-label.btn-cancel {
+            background-color: var(--color-cancel);
+            color: var(--color-background);
+        }
+
+        .meal-actions input:checked+.radio-label.btn-delivery {
+            background-color: var(--color-delivery);
+            color: var(--color-background);
+        }
+
+        .btn-confirm {
+            background-color: var(--color-primary);
+            color: var(--color-background);
+            border: none;
+            padding: var(--spacing-md);
+            width: 100%;
+            border-radius: var(--border-radius);
+            margin-top: var(--spacing-lg);
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+            CONFIRMATION LOGIC STYLES (Focus of the Request)
+            ========================================= */
+
+        /* 1. Status Message Box */
+        .meal-status-message {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm);
+            border-left: 5px solid var(--color-success);
+            background-color: rgba(74, 203, 102, 0.1);
+            color: var(--color-success);
+            font-weight: 600;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            /* CRITICAL: Hidden by default in the structure */
+            display: none;
+        }
+
+        .meal-status-message.cancelled {
+            border-left: 5px solid var(--color-danger);
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--color-danger);
+        }
+
+        .meal-status-message p {
+            margin: 0;
+            font-size: 0.9rem;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        /* 2. Lock State Activation (Toggled by adding class="locked-card") */
+
+        /* Hide all editable controls when the card is locked */
+        .locked-card .food-type-dropdown,
+        .locked-card .meal-actions,
+        .locked-card .btn-confirm {
+            display: none !important;
+        }
+
+        /* Show the static confirmation message when the card is locked */
+        .locked-card .meal-status-message {
+            display: block;
+        }
+
+        /* Visually update the header details */
+        .locked-card .meal-course {
+            color: var(--color-success);
+        }
+
+        /* Set static text for demonstration in the locked state */
+        .locked-card .meal-details p:nth-child(1) {
+            content: "Order Confirmed";
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="meals-grid">
+
+        <!-- <div class="meal-card">
+            <div class="meal-time">Lunch</div>
+            <div class="meal-details">
+                <p class="meal-course">Select Meal Type</p>
+                <select class="food-type-dropdown">
+                    <option value="default" disabled selected>Choose food type (PANEER, CHICKEN...)</option>
+                </select>
+                <p class="meal-description">Meal details will appear here...</p>
+                <p class="meal-time-slot">Cutoff Time: 11:00 AM</p>
+            </div>
+            
+            <div class="meal-actions radio-group">
+                <input type="radio" id="lunch-dining-1" name="lunch_service_1" value="dining" checked>
+                <label for="lunch-dining-1" class="radio-label btn-dining">Dining</label>
+                <input type="radio" id="lunch-delivery-1" name="lunch_service_1" value="delivery">
+                <label for="lunch-delivery-1" class="radio-label btn-delivery">Delivery</label>
+                <input type="radio" id="lunch-cancel-1" name="lunch_service_1" value="cancel">
+                <label for="lunch-cancel-1" class="radio-label btn-cancel">Cancel</label>
+            </div>
+            
+            <button class="btn-confirm">Confirm Selection</button>
+            
+            <div class="meal-status-message">
+                <p>Order Confirmed! *Thank You*.</p>
+                <p>Food Chosen: *CHICKEN*</p>
+                <p>Service Chosen: *DELIVERY*</p>
+            </div>
+        </div> -->
+
+        <div class="meal-card locked-card">
+            <div class="meal-time">Dinner</div>
+            <div class="meal-details">
+                <p class="meal-course">Order Confirmed</p>
+                <select class="food-type-dropdown">
+                    <option value="paneer" selected>PANEER</option>
+                </select>
+                <p class="meal-description">PANEER - PICKUP</p>
+                <p class="meal-time-slot">Cutoff Time: 04:00 PM</p>
+            </div>
+
+
+
+            <div class="meal-status-message">
+                <p>Order Confirmed! *Thank You*.</p>
+                <p>Food Chosen: *PANEER*</p>
+                <p>Service Chosen: *PICKUP*</p>
+            </div>
+        </div>
+
+        <div class="meal-card locked-card">
+            <div class="meal-time">Dinner (Cancelled)</div>
+            <div class="meal-details">
+                <p class="meal-course">Meal Cancelled</p>
+                <select class="food-type-dropdown">
+                    <option value="default" disabled selected>Choose food type</option>
+                </select>
+                <p class="meal-description">Your meal has been removed from the schedule.</p>
+                <p class="meal-time-slot">Cutoff Time: 04:00 PM</p>
+            </div>
+
+
+            <div class="meal-status-message cancelled">
+                <p>Meal *Cancelled*.</p>
+                <p>Thank you for letting us know.</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

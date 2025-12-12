@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
+from django.db import transaction
 import json
 
 from django.utils import timezone
@@ -14,6 +15,9 @@ from .models import Customer,LunchRecord,DinnerRecord
 def user_dashboard(request):
     user=request.user
     used_meals= user.total_meals - user.meal_balance
+    print(used_meals)
+    print(user.total_meals)
+    print(user.meal_balance)
     cl_l=LunchRecord.objects.filter(service_choice="Cancel",customer=user).count()
     cl_d=DinnerRecord.objects.filter(service_choice="Cancel",customer=user).count()
     cancelled_meals=cl_l+cl_d
@@ -31,55 +35,113 @@ def user_dashboard(request):
     return render(request, 'Customer/user-dashboard.html',context)
 
 
+
+
 @login_required
-@require_POST
-def api_meal_selection(request):
+def user_lunch_form(request):
+    if request.method != "POST":
+        return redirect("user_dashboard")
 
-    try:
-        payload = json.loads(request.body.decode('utf-8'))
-    except Exception:
-        return HttpResponseBadRequest("Invalid JSON")
+    customer = request.user
+    service_choice = request.POST.get("lunch_service")
 
-    meal_type = payload.get('meal_type')
-    service = payload.get('service')
-    food = payload.get('food')  # can be None
+    meal_choice = None
+    FLAGSHIP_choice = None
+    PREMIUM_choice = None
 
-    if meal_type not in ('lunch', 'dinner') or service not in ('dining', 'pickup', 'delivery', 'cancel'):
-        return JsonResponse({'success': False, 'message': 'Invalid payload'}, status=400)
+    # Determine meal based on subscription
+    if customer.subscription_choice in ("NORMAL30", "NORMAL60"):
+        meal_choice = request.POST.get("meal_choice")
 
-    # TODO: Replace below with real DB logic.
-    # For demo: update the static MEAL_PLANS dict (not persistent).
-    plan_key = getattr(request.user, 'customer_plan_key', 'premium2_60')
-    plan = MEAL_PLANS.get(plan_key)
-    if not plan:
-        return JsonResponse({'success': False, 'message': 'Plan not found'}, status=404)
+    elif customer.subscription_choice in ("FLAGSHIP30", "FLAGSHIP60"):
+        FLAGSHIP_choice = request.POST.get("FLAGSHIP_choice")
 
-    # Simulate business logic:
-    # - If service == 'cancel' => increment cancelledMeals by 1 (and maybe decrement used)
-    # - Else => increment usedMeals by 1
-    if service == 'cancel':
-        plan['cancelledMeals'] = plan.get('cancelledMeals', 0) + 1
-    else:
-        # simple check: cannot use more than total (optional)
-        if plan.get('usedMeals', 0) + 1 > plan.get('totalMeals', 0):
-            return JsonResponse({'success': False, 'message': 'Not enough meals available'}, status=400)
-        plan['usedMeals'] = plan.get('usedMeals', 0) + 1
+    elif customer.subscription_choice in ("PREMIUM30", "PREMIUM60"):
+        PREMIUM_choice = request.POST.get("PREMIUM_choice")
 
-    # recompute available using same formula (total - used + cancelled)
-    available = plan['totalMeals'] - plan['usedMeals'] + plan['cancelledMeals']
+    with transaction.atomic():
+        lr = LunchRecord.objects.create(
+            customer=customer,
+            for_date=today,
+            meal_choice=meal_choice,
+            FLAGSHIP_choice=FLAGSHIP_choice,
+            PREMIUM_choice=PREMIUM_choice,
+            meal_num_used=customer.meal_balance,
+            service_choice=service_choice,
+        )
 
-    # In real app: create a LunchRecord/DinnerRecord instance with user, meal_type, service, food, for_date=timezone.localdate()
-    # and persist in DB. Use transactions to ensure consistency.
+        # Decrement meal balance only if service is not Cancel
+        if service_choice != "Cancel":
+            customer.meal_balance -= 1
 
-    return JsonResponse({
-        'success': True,
-        'message': f"{meal_type.title()} processed: {service}{' - ' + food if food else ''}",
-        'updated_counters': {
-            'used': plan['usedMeals'],
-            'cancelled': plan['cancelledMeals'],
-            'available': available,
-        }
-    })
+            if customer.meal_balance <= 0:
+                customer.meal_balance = 0
+                customer.paused_subscription = True
+                customer.user_status_active = False
+
+            customer.save(update_fields=["meal_balance", "paused_subscription","user_status_active"])
+
+            lr.decrement_done = True
+            lr.save(update_fields=["decrement_done"])
+
+    return redirect("user_dashboard")
+
+
+@login_required
+def user_dinner_form(request):
+    if request.method != "POST":
+        return redirect("user_dashboard")
+
+    customer = request.user
+    service_choice = request.POST.get("dinner_service")
+
+    meal_choice = None
+    FLAGSHIP_choice = None
+    PREMIUM_choice = None
+
+    # Determine meal based on subscription
+    if customer.subscription_choice in ("NORMAL30", "NORMAL60"):
+        meal_choice = request.POST.get("meal_choice")
+
+    elif customer.subscription_choice in ("FLAGSHIP30", "FLAGSHIP60"):
+        FLAGSHIP_choice = request.POST.get("FLAGSHIP_choice")
+
+    elif customer.subscription_choice in ("PREMIUM30", "PREMIUM60"):
+        PREMIUM_choice = request.POST.get("PREMIUM_choice")
+
+    with transaction.atomic():
+        # Prevent duplicate dinner entry for the same day
+        if DinnerRecord.objects.filter(customer=customer, for_date=today).exists():
+            return redirect("user_dashboard")
+
+        dr = DinnerRecord.objects.create(
+            customer=customer,
+            for_date=today,
+            meal_choice=meal_choice,
+            FLAGSHIP_choice=FLAGSHIP_choice,
+            PREMIUM_choice=PREMIUM_choice,
+            meal_num_used=customer.meal_balance,
+            service_choice=service_choice,
+        )
+
+        # Decrement meal balance only if service is not Cancel
+        if service_choice != "Cancel":
+            customer.meal_balance -= 1
+
+            if customer.meal_balance <= 0:
+                customer.meal_balance = 0
+                customer.paused_subscription = True
+                customer.user_status_active = False
+
+            customer.save(update_fields=["meal_balance", "paused_subscription","user_status_active"])
+
+            dr.decrement_done = True
+            dr.save(update_fields=["decrement_done"])
+
+    return redirect("user_dashboard")
+
+        
+            
 
 def user_history(request):
     return render(request,"Customer/user-history.html")
