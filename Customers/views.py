@@ -86,8 +86,6 @@ def user_profile(request):
             user.save()
 
         return redirect("user_profile")
-
-
     return render(request,'Customer/user-profile.html')
 
 @login_required

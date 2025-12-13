@@ -33,9 +33,9 @@ def gen_Lunch_record(request=None):
             LunchRecord(
                 customer=c,
                 for_date=today,
-                meal_choice=c.default_meal_choice,
                 meal_num_used=c.meal_balance,
                 service_choice=c.default_lunch_service_choice,
+                meal_choice=c.default_meal_choice,
                 FLAGSHIP_choice=c.FLAGSHIP_MENU_LUNCH_default_choice,
                 PREMIUM_choice=c.PREMIUM_MENU_LUNCH_default_choice
             )
@@ -64,14 +64,12 @@ def gen_Lunch_record(request=None):
             # Mark related LunchRecord(s) as decremented
             LunchRecord.objects.filter(
                 for_date=today,
-                service_choice__in=CONSUMING_SERVICES,
+                service_choice__in=("DineIn", "PickUp", "Delivery"),
                 decrement_done=False
             ).update(decrement_done=True)
 
-            # Update low-balance flags and active status
-            Customer.objects.filter(meal_balance__lte=6).update(low_balance_status_active=True)
             # if balance <= 0 consider inactive
-            Customer.objects.filter(meal_balance__lte=0).update(user_status_active=False)
+            Customer.objects.filter(meal_balance__lte=0).update(user_status_active=False,paused_subscription=True)
 
     except Exception as e:
         logger.exception("Unexpected error in gen_Lunch_record: %s", e)
@@ -99,9 +97,9 @@ def gen_Dinner_record(request=None):
             DinnerRecord(
                 customer=c,
                 for_date=today,
-                meal_choice=c.default_meal_choice,
                 meal_num_used=c.meal_balance,
                 service_choice=c.default_dinner_service_choice,
+                meal_choice=c.default_meal_choice,
                 FLAGSHIP_choice=c.FLAGSHIP_MENU_DINNER_default_choice,
                 PREMIUM_choice=c.PREMIUM_MENU_DINNER_default_choice
             )
@@ -125,12 +123,11 @@ def gen_Dinner_record(request=None):
 
             DinnerRecord.objects.filter(
                 for_date=today,
-                service_choice__in=CONSUMING_SERVICES,
+                service_choice__in=("DineIn", "PickUp", "Delivery"),
                 decrement_done=False
             ).update(decrement_done=True)
 
-            Customer.objects.filter(meal_balance__lte=6).update(low_balance_status_active=True)
-            Customer.objects.filter(meal_balance__lte=0).update(user_status_active=False)
+            Customer.objects.filter(meal_balance__lte=0).update(user_status_active=False,paused_subscription=True)
 
     except Exception as e:
         logger.exception("Unexpected error in gen_Dinner_record: %s", e)
