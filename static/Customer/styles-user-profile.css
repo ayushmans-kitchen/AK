@@ -11,13 +11,15 @@
     --color-text-secondary: #e0e0e0;
     --color-text-muted: #a0a0a0;
     --color-border: #333333;
-    --color-success: #4ade80;
-    --color-danger: #ef4444;
+    --color-success: #4ade80; /* Green */
+    --color-danger: #ef4444; /* Red */
     
-    /* Specific Action Colors */
+    /* Specific Action Colors (Used in Dashboard and Profile radios) */
     --color-pickup: #00bcd4; /* Cyan */
     --color-delivery: #ff9800; /* Orange */
     --color-cancel: #ef4444; /* Red */
+    
+    --color-card-bg: var(--color-background-tertiary); 
 
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
@@ -51,7 +53,7 @@ body {
     background-color: var(--color-background);
     color: var(--color-text);
     line-height: 1.6;
-    font-size: 16px; /* Base size for large screens */
+    font-size: 16px;
 }
 
 h1, h2, h3 {
@@ -137,16 +139,16 @@ p {
     font-size: 2.5rem;
 }
 
-.user-plan-display {
+.user-plan-display,
+.user-greeting { 
     color: var(--color-primary);
     font-weight: 600;
     font-size: 1.25rem;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
 }
 
 .user-greeting {
     color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-xl);
     font-size: 1.1rem;
 }
 
@@ -157,7 +159,7 @@ p {
 }
 
 /* ===========================
-    MEAL COUNTERS & ICON SIZE
+    MEAL COUNTERS (Dashboard)
     =========================== */
 .meal-counters {
     display: grid;
@@ -177,7 +179,6 @@ p {
     transition: all var(--transition);
 }
 
-/* Default icon size */
 .counter-icon {
     font-size: 2.5rem; 
     flex-shrink: 0;
@@ -197,7 +198,7 @@ p {
 }
 
 /* ===========================
-    MEALS GRID & CARDS
+    MEALS GRID & CARDS (Dashboard)
     =========================== */
 .meals-grid {
     display: grid;
@@ -247,9 +248,49 @@ p {
 }
 
 /* ===========================
-    DROPDOWN STYLES
+    MEAL STATUS MESSAGE (Dashboard Locked State)
     =========================== */
-.food-type-dropdown {
+.meal-status-message {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
+    border-left: 5px solid var(--color-success);
+    background-color: rgba(74, 203, 102, 0.1);
+    color: var(--color-success);
+    font-weight: 600;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.meal-status-message.cancelled {
+    border-left: 5px solid var(--color-danger);
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-danger);
+}
+.meal-status-message p {
+    margin: 0;
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-xs);
+}
+.meal-status-message p:last-child {
+    margin-bottom: 0;
+}
+
+/* Styles for locked meal cards (Dashboard) */
+.locked-card .food-type-dropdown,
+.locked-card .meal-actions,
+.locked-card .btn-confirm {
+    display: none !important;
+}
+
+.locked-card .meal-course {
+    color: var(--color-success); 
+}
+
+
+/* ===========================
+    DROPDOWN & INPUT STYLES (General)
+    =========================== */
+.food-type-dropdown,
+.select-field {
     width: 100%;
     padding: var(--spacing-md);
     margin-top: var(--spacing-sm);
@@ -269,22 +310,22 @@ p {
     transition: border-color var(--transition);
 }
 
-.food-type-dropdown:focus {
+.food-type-dropdown:focus,
+.select-field:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.5);
 }
 
-.food-type-dropdown option {
+.food-type-dropdown option,
+.select-field option {
     background-color: var(--color-background-tertiary);
     color: var(--color-text-secondary);
 }
 
 /* ===========================
-   ACTION BUTTONS (Radio Group & Confirm)
-   =========================== */
-
-/* Base button for Confirm */
+    ACTION BUTTONS (General Radio Group & Confirm)
+    =========================== */
 .btn {
     display: inline-block;
     padding: var(--spacing-md) var(--spacing-xl);
@@ -311,17 +352,15 @@ p {
     transform: translateY(-2px);
 }
 
-/* Style for the Confirm Button */
 .btn-confirm {
     width: 100%;
     margin-top: var(--spacing-lg);
     display: block;
 }
 
-/* Segmented Radio Button Group */
-.meal-actions.radio-group {
+.meal-actions.radio-group { /* Dashboard radio layout */
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2x2 layout by default */
+    grid-template-columns: repeat(2, 1fr); 
     gap: var(--spacing-sm);
     user-select: none;
 }
@@ -342,15 +381,13 @@ p {
     background-color: transparent;
 }
 
-/* --- Label Colors --- */
-
+/* --- Radio Label Colors --- */
 .radio-label.btn-dining { border-color: var(--color-primary); color: var(--color-primary); }
 .radio-label.btn-pickup { border-color: var(--color-pickup); color: var(--color-pickup); }
 .radio-label.btn-delivery { border-color: var(--color-delivery); color: var(--color-delivery); }
 .radio-label.btn-cancel { border-color: var(--color-cancel); color: var(--color-cancel); }
 
 /* --- Checked/Selected State --- */
-
 .radio-group input[type="radio"]:checked + .radio-label {
     color: var(--color-background);
 }
@@ -362,155 +399,89 @@ p {
 
 
 /* ===========================
-    FOOTER
+    PROFILE PAGE SPECIFIC STYLES
     =========================== */
-.footer {
-    background-color: var(--color-background-secondary);
-    border-top: 2px solid var(--color-primary);
-    padding: var(--spacing-xl) var(--spacing-lg);
-    text-align: center;
-    color: var(--color-text-muted);
-    margin-top: var(--spacing-2xl);
+
+.profile-card {
+    background-color: var(--color-background-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-2xl);
+    margin-bottom: var(--spacing-2xl);
 }
-/* Core Styling Variables */
-        :root {
-            --gold: #d4af37;
-            --dark-bg: #000000;
-            --dark-card: #0a0a0a;
-            --dark-mid: #1c1c1c;
-            --white: #ffffff;
-            --gray-text: #e0e0e0;
-            --border-color: #333333;
-            --blue-info: #3b82f6;
-            --amber-warning: #fbbf24;
-        }
 
-        /* Base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--white);
-            line-height: 1.6;
-            padding: 2rem 1rem; /* Added padding for overall visibility */
-        }
+.profile-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: var(--spacing-xl);
+}
 
-        h2 {
-            font-family: 'Playfair Display', serif;
-            color: var(--gold);
-            margin-bottom: 1rem;
-        }
+.info-group {
+    margin-bottom: var(--spacing-md);
+}
 
-        a {
-            text-decoration: none;
-        }
-        
-        /* Utility container to simulate dashboard width */
-        .content-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+.info-label {
+    display: block;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+    text-transform: uppercase;
+}
 
-        /* --- Message Banners --- */
-        .message-banner {
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            font-weight: 500;
-            border-left: 5px solid;
-        }
+.info-value {
+    color: var(--color-text);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+    display: block;
+    width: 100%;
+}
 
-        .message-banner p { margin: 0; color: var(--gray-text); }
-        .message-banner p strong { font-weight: bold; }
+.input-field {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    font-weight: 400;
+    background-color: var(--color-background-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+    display: block;
+    width: 100%;
+    transition: border-color var(--transition);
+}
 
-        .message-banner.info {
-            background-color: rgba(59, 130, 246, 0.1);
-            border-left-color: var(--blue-info);
-        }
+.input-field[readonly] {
+    opacity: 0.7;
+    cursor: default;
+    background-color: var(--color-background-tertiary);
+}
 
-        .message-banner.warning {
-            background-color: rgba(251, 191, 36, 0.1);
-            border-left-color: var(--amber-warning);
-        }
+/* Service Radio Groups in Profile (Flex layout) */
+.default-service-options {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
 
-        /* --- Last Meal Details Section --- */
-        .last-meal-details {
-            margin-bottom: 2rem;
-            padding: 0 1rem;
-        }
+.default-service-options .radio-label {
+    flex-grow: 1;
+    padding: var(--spacing-sm);
+    font-size: 0.85rem; 
+}
 
-        .section-title { font-size: 1.5rem; }
-
-        .last-meal-card {
-            background-color: var(--dark-mid);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .last-meal-type {
-            color: var(--gold);
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .last-meal-choice,
-        .last-meal-service {
-            font-size: 0.95rem;
-            color: var(--gray-text);
-            margin: 0;
-        }
-
-        /* --- Button Styling --- */
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            border: 2px solid;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.3s;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            border-color: var(--gray-text);
-            color: var(--gray-text);
-            padding: 0.5rem 1rem;
-            align-self: flex-end;
-        }
-        .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
-
-
-        /* --- Basic Responsiveness (for Mobile) --- */
-        @media (max-width: 768px) {
-            .message-banner {
-                margin: 1rem 0;
-            }
-            .last-meal-details {
-                padding: 0;
-            }
-            .last-meal-card .btn-secondary {
-                align-self: stretch; /* Make button full width on small screens */
-            }
-        }
+.profile-actions {
+    margin-top: var(--spacing-2xl);
+    text-align: right;
+}
 
 /* =================================
     RESPONSIVE DESIGN (Media Queries)
     ================================= */
 
-/* Hamburger menu setup (Hidden on large screens) */
+/* Hamburger menu setup */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -533,117 +504,54 @@ p {
 
 /* Tablet and Smaller Devices (max-width: 768px) */
 @media (max-width: 768px) {
-    body {
-        font-size: 15px;
-    }
-
-    .hamburger {
-        display: flex; /* Show hamburger */
-    }
+    body { font-size: 15px; }
+    .hamburger { display: flex; }
 
     .navbar-nav {
-        /* Mobile menu overlay styles */
-        position: absolute;
-        top: 60px;
-        left: 0;
-        right: 0;
+        position: absolute; top: 60px; left: 0; right: 0;
         background-color: var(--color-background-secondary);
-        flex-direction: column;
-        width: 100%;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height var(--transition);
+        flex-direction: column; width: 100%; max-height: 0;
+        overflow: hidden; transition: max-height var(--transition);
         border: none;
     }
+    .navbar-nav.active { max-height: 500px; border-bottom: 2px solid var(--color-primary); }
+    .nav-link { padding: var(--spacing-lg) var(--spacing-lg); border-bottom: 1px solid var(--color-border); display: block; width: 100%; text-align: left; }
 
-    .navbar-nav.active {
-        max-height: 500px;
-        border-bottom: 2px solid var(--color-primary);
-    }
-
-    .nav-link {
-        padding: var(--spacing-lg) var(--spacing-lg);
-        border-bottom: 1px solid var(--color-border);
-        display: block;
-        width: 100%;
-        text-align: left;
-    }
-
-    /* Counter card adjustments */
-    .meal-counters {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: var(--spacing-md);
-    }
+    /* Dashboard adjustments */
+    .meal-counters { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--spacing-md); }
+    .counter-icon { font-size: 2rem; }
+    .counter-number { font-size: 1.5rem; }
+    .meals-grid { grid-template-columns: 1fr; }
     
-    .counter-icon {
-        font-size: 2rem; /* Reduce icon size on tablet */
-    }
-
-    .counter-number {
-        font-size: 1.5rem; /* Reduce number size on tablet */
-    }
-
-    .food-type-dropdown,
-    .radio-group .radio-label {
-        font-size: 0.9rem;
-    }
-
-    .meals-grid {
-        grid-template-columns: 1fr; /* Stack meal cards vertically */
+    /* Profile adjustments */
+    .profile-info-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 }
 
 /* Mobile Devices (max-width: 480px) */
 @media (max-width: 480px) {
-    body {
-        font-size: 14px;
-    }
+    body { font-size: 14px; }
+    .page-title { font-size: 2rem; }
+    .user-plan-display, .user-greeting { font-size: 1rem; }
+    .user-page { padding: var(--spacing-lg) var(--spacing-md); }
 
-    .page-title {
-        font-size: 2rem;
-    }
+    /* Dashboard adjustments */
+    .meal-counters { grid-template-columns: 1fr; gap: var(--spacing-lg); }
+    .counter-card { flex-direction: column; text-align: center; padding: var(--spacing-lg); }
+    .counter-icon { font-size: 1.75rem; }
+    .counter-number { font-size: 1.25rem; }
 
-    .user-plan-display {
-        font-size: 1rem;
-    }
+    .meal-actions.radio-group { grid-template-columns: 1fr; gap: var(--spacing-xs); }
+    .radio-group .radio-label { font-size: 0.8rem; padding: var(--spacing-sm); }
+    .btn-confirm { padding: var(--spacing-md); font-size: 0.875rem; }
     
-    .user-page {
-        padding: var(--spacing-lg) var(--spacing-md);
-    }
-
-    /* Stack counter cards */
-    .meal-counters {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-    
-    .counter-card {
-        flex-direction: column;
-        text-align: center;
-        padding: var(--spacing-lg);
-    }
-    
-    .counter-icon {
-        font-size: 1.75rem; /* Further reduce icon size on small mobile */
-    }
-
-    .counter-number {
-        font-size: 1.25rem;
-    }
-
-    /* Stack radio buttons vertically for easier tapping */
-    .meal-actions.radio-group {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-xs);
-    }
-
-    .radio-group .radio-label {
-        font-size: 0.8rem;
-        padding: var(--spacing-sm);
-    }
-    
-    .btn-confirm {
-        padding: var(--spacing-md);
-        font-size: 0.875rem;
+    /* Profile adjustments */
+    .profile-card { padding: var(--spacing-lg); }
+    .profile-info-grid { grid-template-columns: 1fr; }
+    .default-service-options { flex-wrap: wrap; }
+    .default-service-options .radio-label {
+        width: calc(50% - var(--spacing-xs)); 
+        font-size: 0.75rem;
     }
 }

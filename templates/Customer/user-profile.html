@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Hotel Meal Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href={% static "Customer/styles-user-profile.css" %}>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <img src="logo.PNG" alt="Ayushman's Kitchen Logo" class="logo-image">
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="navbar-nav" id="navbarNav">
+                <a href="user-dashboard.html" class="nav-link">My Meals</a>
+                <a href="user-history.html" class="nav-link">History</a>
+                <a href="user-profile.html" class="nav-link active">Profile</a>
+                <a href="login.html" class="nav-link">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="user-page">
+        <div class="user-container">
+
+            <h1 class="page-title">Your Profile Settings</h1>
+            <p class="user-greeting">Welcome back, User on the Premium 2 (₹4200 for 60 meals) Plan</p>
+
+            <section class="profile-card">
+                <form method="POST" action="{% url 'user_profile' %}">
+                    {% csrf_token %}
+                    <h2 class="section-title">Personal Information & Meal Preferences</h2>
+                    <div class="profile-info-grid">
+
+                        <div class="info-group">
+                            <label for="userName" class="info-label">Name</label>
+                            <label type="text" id="userName">{{request.user.name}}</label>
+                        </div>
+
+                        <div class="info-group">
+                            <label for="userEmail" class="info-label">Email</label>
+                            <label type="text" id="userName">{{request.user.email}}</label>
+                        </div>
+
+                        <div class="info-group">
+                            <label for="userPhone" class="info-label">Phone</label>
+                            <label type="text" id="userName">{{request.user.phone}}</label>
+                        </div>
+
+                        <div class="info-group">
+                            <span class="info-label">Current Meal Plan</span>
+                            <label type="text" id="userName">{{request.user.subscription_choice}}</label>
+                        </div>
+                        {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %} 
+                            <div class="info-group">
+                                <label for="defaultLunchFood" class="info-label">Default Lunch Food Type</label>
+                                <select id="defaultLunchFood" class="select-field" name="default_meal_choice">
+                                    <option value="default" disabled>Choose your food</option>
+                                    <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                    <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
+                                </select>
+                            </div>
+                        {% endif %}
+                        {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %} 
+                            {% if request.user.lunch_status_active %}
+                                <div class="info-group">
+                                    <label for="defaultLunchFood" class="info-label">Default Lunch Food Type</label>
+                                    <select id="defaultLunchFood" class="select-field" name="default_flagship_lunch">
+                                        <option value="default" disabled>Choose your food</option>
+                                        <option value="PANEER" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                        <option value="MUSHROOM" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                        <option value="CHICKEN" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                    </select>
+                                </div>
+                            {% endif %}
+                            {% if request.user.dinner_status_active %}
+                                <div class="info-group">
+                                    <label for="defaultDinnerFood" class="info-label">Default Dinner Food Type</label>
+                                    <select id="defaultDinnerFood" class="select-field" name="default_flagship_dinner">
+                                        <option value="default" disabled>Choose your food</option>
+                                        <option value="PANEER" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                        <option value="MUSHROOM" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                        <option value="CHICKEN" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                    </select>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60" %} 
+                            {% if request.user.lunch_status_active %}
+                                <div class="info-group">
+                                    <label for="defaultLunchFood" class="info-label">Default Lunch Food Type</label>
+                                    <select id="defaultLunchFood" class="select-field" name="default_premium_lunch">
+                                        <option value="default" disabled>Choose your food</option>
+                                        <option value="PANEER" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                        <option value="MUSHROOM" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                        <option value="CHICKEN" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                        <option value="EGG" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "EGG" %}selected{% endif %}>EGG</option>
+                                        <option value="VEG" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                        <option value="PRAWN" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "PRAWN" %}selected{% endif %}>PRAWN</option>
+                                        <option value="FISH" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "FISH" %}selected{% endif %}>FISH</option>
+                                    </select>
+                                </div>
+                            {% endif %}
+                            {% if request.user.dinner_status_active %}
+                                <div class="info-group">
+                                    <label for="defaultDinnerFood" class="info-label">Default Dinner Food Type</label>
+                                    <select id="defaultDinnerFood" class="select-field" name="default_premium_dinner">
+                                        <option value="default" disabled>Choose your food</option>
+                                        <option value="PANEER" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                        <option value="MUSHROOM" {% if request.user.PRErequest.user.PREMIUM_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                        <option value="CHICKEN" {% if request.user.PRErequest.user.PREMIUM_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                        <option value="EGG" {% if request.user.PRErequest.user.PREMIUM_MENU_DINNER_default_choice == "EGG" %}selected{% endif %}>EGG</option>
+                                        <option value="VEG" {% if request.user.PRErequest.user.PREMIUM_MENU_DINNER_default_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                    </select>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+
+                        <div class="info-group">
+                            <span class="info-label">Default Lunch Service</span>
+                            <div class="default-service-options radio-group">
+                                <input type="radio" id="def-lunch-dining" name="default_lunch_service" value="DineIn"
+                                {% if request.user.default_lunch_service_choice == "DineIn" %}checked{% endif %}>
+                                <label for="def-lunch-dining" class="radio-label btn-dining">Dining</label>
+
+                                <input type="radio" id="def-lunch-pickup" name="default_lunch_service" value="PickUp"
+                                {% if request.user.default_lunch_service_choice == "PickUp" %}checked{% endif %}>
+                                <label for="def-lunch-pickup" class="radio-label btn-pickup">Pickup</label>
+
+                                <input type="radio" id="def-lunch-delivery" name="default_lunch_service" value="Delivery"
+                                {% if request.user.default_lunch_service_choice == "Delivery" %}checked{% endif %}>
+                                <label for="def-lunch-delivery" class="radio-label btn-delivery">Delivery</label>
+                            </div>
+                        </div>
+
+                        <div class="info-group">
+                            <span class="info-label">Default Dinner Service</span>
+                            <div class="default-service-options radio-group">
+                                <input type="radio" id="def-dinner-dining" name="default_dinner_service" value="DineIn"{% if request.user.default_dinner_service_choice == "DineIn" %}checked{% endif %}>
+                                <label for="def-dinner-dining" class="radio-label btn-dining">Dining</label>
+
+                                <input type="radio" id="def-dinner-pickup" name="default_dinner_service" value="PickUp" {% if request.user.default_dinner_service_choice == "PickUp" %}checked{% endif %}>
+                                <label for="def-dinner-pickup" class="radio-label btn-pickup">Pickup</label>
+
+                                <input type="radio" id="def-dinner-delivery" name="default_dinner_service" value="Delivery" {% if request.user.default_dinner_service_choice == "Delivery" %}checked{% endif %}>
+                                <label for="def-dinner-delivery" class="radio-label btn-delivery">Delivery</label>
+                            </div>
+                        </div>
+                        {% if request.user.paused_subscription %}
+                            <div class="message-banner warning" role="alert">
+                                <p>
+                                    ⚠️ <strong>Plan Ended Alert!</strong>
+                                    You have <strong>0</strong> meals left.
+                                    Please renew your plan soon to resume services.
+                                </p>
+                            </div>
+                        {% else %}
+                            <div class="info-group">
+                                <span class="info-label">Current Meals Status :</span>
+                                <div class="default-service-options radio-group">
+                                    <input type="radio" id="status-available" name="status_availability" value="True"
+                                    {% if request.user.user_status_active  %} checked {% endif %}>
+                                    <label for="status-available" class="radio-label btn-dining">Running</label> 
+                                    <input type="radio" id="status-not-available" name="status_availability" value="False"
+                                    {% if request.user.user_status_active == False %}checked{% endif %}>
+                                    <label for="status-not-available" class="radio-label btn-cancel">Paused</label>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn btn-primary">Save Profile Changes</button>
+                    </div>
+                </form>    
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Ayushman's Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Hamburger menu toggle (The only JS needed for a static layout)
+        const hamburger = document.querySelector('.hamburger');
+        const navbarNav = document.querySelector('.navbar-nav');
+        hamburger.addEventListener('click', function () {
+            navbarNav.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>
