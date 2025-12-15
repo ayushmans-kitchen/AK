@@ -119,7 +119,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
             return 60
 
     def __str__(self):
-        return f"{self.name} ({self.email}) - balance={self.meal_balance}"
+        return f"{self.name} ({self.subscription_choice}):balance={self.meal_balance}  - {self.email}"
 
 class LunchRecord(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="lunch_records")
