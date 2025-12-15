@@ -191,4 +191,42 @@ def user_dinner_form(request):
             
 @login_required
 def user_history(request):
-    return render(request,"Customer/user-history.html")
+    user = request.user
+
+    # Order by date (latest first)
+    lunch_records = LunchRecord.objects.filter(
+        customer=user
+    ).order_by("-for_date")
+
+    dinner_records = DinnerRecord.objects.filter(
+        customer=user
+    ).order_by("-for_date")
+
+    history = []
+
+    # Add lunch records
+    for record in lunch_records:
+        history.append({
+            "date": record.for_date,
+            "meal_type": "Lunch",
+            "service": record.service_choice,
+            "status": "Cancelled" if record.service_choice == "Cancel" else "Completed",
+            "meal_no": record.meal_num_used,
+        })
+
+    # Add dinner records
+    for record in dinner_records:
+        history.append({
+            "date": record.for_date,
+            "meal_type": "Dinner",
+            "service": record.service_choice,
+            "status": "Cancelled" if record.service_choice == "Cancel" else "Completed",
+            "meal_no": record.meal_num_used,
+        })
+
+    context = {
+        "history": history,
+    }
+
+    return render(request, "Customer/user-history.html", context)
+

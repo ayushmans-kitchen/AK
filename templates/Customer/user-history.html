@@ -31,91 +31,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td data-label="Date">24 Nov 2024</td>
-                                <td data-label="Meal Type">Lunch</td>
-                                <td data-label="Service">Dining In</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">24 Nov 2024</td>
-                                <td data-label="Meal Type">Dinner</td>
-                                <td data-label="Service">Parcel</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">23 Nov 2024</td>
-                                <td data-label="Meal Type">Lunch</td>
-                                <td data-label="Service">Dining In</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">23 Nov 2024</td>
-                                <td data-label="Meal Type">Dinner</td>
-                                <td data-label="Service">Dining In</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">22 Nov 2024</td>
-                                <td data-label="Meal Type">Lunch</td>
-                                <td data-label="Service">Dining In</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">22 Nov 2024</td>
-                                <td data-label="Meal Type">Dinner</td>
-                                <td data-label="Service">Cancelled</td>
-                                <td data-label="Status"><span class="badge badge-cancelled">Cancelled</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">21 Nov 2024</td>
-                                <td data-label="Meal Type">Lunch</td>
-                                <td data-label="Service">Parcel</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">21 Nov 2024</td>
-                                <td data-label="Meal Type">Dinner</td>
-                                <td data-label="Service">Dining In</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">20 Nov 2024</td>
-                                <td data-label="Meal Type">Lunch</td>
-                                <td data-label="Service">Dining In</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">20 Nov 2024</td>
-                                <td data-label="Meal Type">Dinner</td>
-                                <td data-label="Service">Parcel</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">19 Nov 2024</td>
-                                <td data-label="Meal Type">Lunch</td>
-                                <td data-label="Service">Dining In</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">19 Nov 2024</td>
-                                <td data-label="Meal Type">Dinner</td>
-                                <td data-label="Service">Dining In</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">18 Nov 2024</td>
-                                <td data-label="Meal Type">Lunch</td>
-                                <td data-label="Service">Dining In</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td data-label="Date">18 Nov 2024</td>
-                                <td data-label="Meal Type">Dinner</td>
-                                <td data-label="Service">Parcel</td>
-                                <td data-label="Status"><span class="badge badge-completed">Completed</span></td>
-                            </tr>
-                        </tbody>
+    {% for row in history %}
+    <tr>
+        <td data-label="Date">{{ row.date|date:"d M Y" }}</td>
+        <td data-label="Meal Type">{{ row.meal_type }}</td>
+        <td data-label="Service">{{ row.service }}</td>
+        <td data-label="Status">
+            {% if row.status == "Cancelled" %}
+                <span class="badge badge-cancelled">Cancelled</span>
+            {% else %}
+                <span class="badge badge-completed">Completed</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4" class="text-center">No meal history found.</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
                     </table>
                 </div>
             </section>
