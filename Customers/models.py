@@ -86,6 +86,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
     date_joined = models.DateTimeField(default=timezone.now)
     profile_updated_at = models.DateTimeField(auto_now=True)
+    subscription_phase=models.IntegerField(default=1)
 
     
     meal_balance = models.IntegerField(default=0)

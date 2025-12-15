@@ -10,14 +10,12 @@ today=timezone.localdate()
 
 
 from .models import Customer,LunchRecord,DinnerRecord
+from Admin.models import AdminNotice
 
 @login_required
 def user_dashboard(request):
     user=request.user
     used_meals= user.total_meals - user.meal_balance
-    print(used_meals)
-    print(user.total_meals)
-    print(user.meal_balance)
     cl_l=LunchRecord.objects.filter(service_choice="Cancel",customer=user).count()
     cl_d=DinnerRecord.objects.filter(service_choice="Cancel",customer=user).count()
     cancelled_meals=cl_l+cl_d
@@ -25,17 +23,67 @@ def user_dashboard(request):
     lunch_record = LunchRecord.objects.filter(customer=user,for_date=today).first()
     dinner_record = DinnerRecord.objects.filter(customer=user,for_date=today).first()
 
+    admin_notice=AdminNotice.objects.all()
+
     context={
         'user':user,
         'used_meals':used_meals,
         'cancelled_meals':cancelled_meals,
         'lunch_record':lunch_record,
         'dinner_record':dinner_record,
+        'admin_notice':admin_notice,
+
         }
     return render(request, 'Customer/user-dashboard.html',context)
 
 
+@login_required
+def user_profile(request):
+    user=request.user
+    if request.method == "POST":
+        default_lunch_service=request.POST.get("default_lunch_service")
+        default_dinner_service=request.POST.get("default_dinner_service")
+        status_availability=request.POST.get("status_availability")
 
+        user.default_meal_choice="NONE"
+        user.FLAGSHIP_MENU_LUNCH_default_choice="NONE"
+        user.FLAGSHIP_MENU_DINNER_default_choice="NONE"
+        user.PREMIUM_MENU_LUNCH_default_choice="NONE"
+        user.PREMIUM_MENU_DINNER_default_choice="NONE"
+
+        if user.subscription_choice == "NORMAL30" or user.subscription_choice == "NORMAL60" :            
+            user.default_lunch_service_choice=default_lunch_service
+            user.default_dinner_service_choice=default_dinner_service
+            
+            user.default_meal_choice=request.POST.get("default_meal_choice")
+            
+            user.user_status_active=True if status_availability == "True" else False
+            user.save()
+
+        if user.subscription_choice == "FLAGSHIP30" or user.subscription_choice == "FLAGSHIP60" :
+            user.default_lunch_service_choice=default_lunch_service
+            user.default_dinner_service_choice=default_dinner_service
+
+            user.FLAGSHIP_MENU_LUNCH_default_choice=request.POST.get("default_flagship_lunch")
+            user.FLAGSHIP_MENU_DINNER_default_choice=request.POST.get("default_flagship_dinner")
+            
+            user.user_status_active=True if status_availability == "True" else False
+
+            user.save()
+        
+        if user.subscription_choice == "PREMIUM30" or user.subscription_choice == "PREMIUM60" :
+            user.default_lunch_service_choice=default_lunch_service
+            user.default_dinner_service_choice=default_dinner_service
+
+            user.PREMIUM_MENU_LUNCH_default_choice=request.POST.get("default_premium_lunch")
+            user.PREMIUM_MENU_DINNER_default_choice=request.POST.get("default_premium_dinner")
+            
+            user.user_status_active=True if status_availability == "True" else False
+
+            user.save()
+
+        return redirect("user_profile")
+    return render(request,'Customer/user-profile.html')
 
 @login_required
 def user_lunch_form(request):
@@ -139,9 +187,8 @@ def user_dinner_form(request):
             dr.save(update_fields=["decrement_done"])
 
     return redirect("user_dashboard")
-
-        
+    
             
-
+@login_required
 def user_history(request):
     return render(request,"Customer/user-history.html")

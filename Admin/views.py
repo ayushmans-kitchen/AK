@@ -9,6 +9,7 @@ from Customers.models import Customer, LunchRecord, DinnerRecord, SERVICE_TYPE,S
 
 from django.shortcuts import render,redirect
 
+<<<<<<< HEAD
 logger = logging.getLogger(__name__)
 CONSUMING_SERVICES = ("DineIn", "PickUp", "Delivery")
 today = timezone.localdate()
@@ -139,6 +140,8 @@ def gen_Dinner_record(request=None):
 
     return JsonResponse({"created_count": created_count})
 
+=======
+>>>>>>> 9d2092020acc9d66058f2504091c2c6549a7df86
 
 
 
