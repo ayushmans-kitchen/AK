@@ -1,3 +1,5 @@
+import logging
+from django.utils import timezone
 from django.db.models import F
 from django.db.models.functions import Greatest
 from django.db import transaction
@@ -7,7 +9,7 @@ from Customers.models import Customer, LunchRecord, DinnerRecord
 from .models import CustomerHistory
 from django.shortcuts import render,redirect
 
-
+today = timezone.localdate()
 
 logger = logging.getLogger(__name__)
 CONSUMING_SERVICES = ("DineIn", "PickUp", "Delivery")
@@ -18,7 +20,7 @@ def gen_Lunch_record(request=None):
     Create missing lunch records for active users and decrement balances exactly once
     for today's consuming records.
     """
-    today = timezone.localdate()
+
     customers_no_record = Customer.objects.filter(
         user_status_active=True,
         lunch_status_active=True

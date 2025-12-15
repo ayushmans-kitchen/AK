@@ -33,45 +33,7 @@ class CustomerHistory(models.Model):
             f"{self.customer.name} | "
             f"{self.subscription_phase}"
             f"{self.subscription_choice} | "
-            f"renewal_date - {created_at} | "
+            f"renewal_date - {self.created_at} | "
         )
 
 
-<<<<<<< HEAD
-# Create your models here.
-# class Lunch_Report(models.Model):
-#     Total_PANEER=models.IntegerField()
-#     Total_MUSHROOM=models.IntegerField()
-#     Total_CHICKEN=models.IntegerField()
-#     Total_EGG=models.IntegerField()
-#     Total_PRAWN=models.IntegerField()
-#     Total_FISH=models.IntegerField()
-#     Total_VEG=models.IntegerField()
-#     Total_NON-VEG=models.IntegerField()
-#     date=models.DateField()
-
-#     Total_DineIn=models.IntegerField()
-#     Total_PickUp=models.IntegerField()
-#     Total_Delivery=models.IntegerField()
-#     Total_Cancel=models.IntegerField()
-
-
-# class Dinner_Report(models.Model):
-#     Total_PANEER=models.IntegerField()
-#     Total_MUSHROOM=models.IntegerField()
-#     Total_CHICKEN=models.IntegerField()
-#     Total_EGG=models.IntegerField()
-#     Total_PRAWN=models.IntegerField()
-#     Total_FISH=models.IntegerField()
-#     Total_VEG=models.IntegerField()
-#     Total_NON-VEG=models.IntegerField()
-#     date=models.DateField()
-
-#     Total_DineIn=models.IntegerField()
-#     Total_PickUp=models.IntegerField()
-#     Total_Delivery=models.IntegerField()
-#     Total_Cancel=models.IntegerField()
-
-    
-=======
->>>>>>> 9d2092020acc9d66058f2504091c2c6549a7df86
