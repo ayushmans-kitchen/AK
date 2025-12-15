@@ -1,0 +1,33 @@
+{% load static %}
+<header class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            <img src="{% static 'assets/logo.png' %}" alt="Logo" class="logo-image"/>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="navbar-nav" id="navbarNav">
+            <a href="{% url 'user_dashboard' %}" class="nav-link active">My Meals</a>
+            <a href="{% url 'user_profile' %}" class="nav-link active">Profie</a>
+            <a href="{% url 'user_history' %}" class="nav-link">History</a>
+            <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+        </nav>
+    </div>
+</header>
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const navbarNav = document.getElementById('navbarNav');
+
+    hamburger.addEventListener('click', function() {
+        navbarNav.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            navbarNav.classList.remove('active');
+            hamburger.classList.remove('active');
+        });
+    });
+</script>

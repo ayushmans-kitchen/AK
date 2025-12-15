@@ -1,17 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from Admin.views import gen_Lunch_record,gen_Dinner_record, admin_dashboard, service_list, admin_user_management, daily_report, complete_report
+from Admin.views import admin_dashboard, service_list, admin_user_management, daily_report, complete_report
 from.views import home
 from Customers import urls as csurls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(csurls)),
-
-    
-    path('lun/',gen_Lunch_record,name="lun record"),
-    path('din/',gen_Dinner_record,name="din record"),
 
     path('admin-dashboard/',admin_dashboard,name='admin_dashboard'),
 

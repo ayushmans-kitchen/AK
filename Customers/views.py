@@ -45,9 +45,6 @@ def user_profile(request):
         default_dinner_service=request.POST.get("default_dinner_service")
         status_availability=request.POST.get("status_availability")
 
-        print(default_lunch_service)
-        print(default_dinner_service)
-        print(status_availability)
         user.default_meal_choice="NONE"
         user.FLAGSHIP_MENU_LUNCH_default_choice="NONE"
         user.FLAGSHIP_MENU_DINNER_default_choice="NONE"

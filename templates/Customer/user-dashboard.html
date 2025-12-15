@@ -11,24 +11,7 @@
     <link rel="stylesheet" href="{% static 'Customer/styles-user-dashboard.css' %}"/>
 </head>
 <body>
-    <header class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-logo">
-                <!-- use static tag for logo -->
-                <img src="{% static 'assets/logo.png' %}" alt="Logo" class="logo-image"/>
-            </div>
-            <button class="hamburger" id="hamburger" aria-label="Menu">
-                <span></span><span></span><span></span>
-            </button>
-            <nav class="navbar-nav" id="navbarNav">
-                <a href="{% url 'user_dashboard' %}" class="nav-link active">My Meals</a>
-                <a href="{% url 'user_profile' %}" class="nav-link active">Profie</a>
-                <a href="{% url 'user_history' %}" class="nav-link">History</a>
-                <a href="{% url 'logout' %}" class="nav-link">Logout</a>
-            </nav>
-        </div>
-    </header>
-
+    {% include "Customer/navbar.html" %}
     <main class="user-page">
         <div class="content-container">
             {% if admin_notice %}
@@ -42,7 +25,7 @@
             <div class="message-banner warning" role="alert">
                 <p>
                     ⚠️ <strong>Low Meal Alert!</strong>
-                    You only have <strong>{{ request.user.meal_balance }}</strong> meals remaining.
+                    You have <strong>{{ request.user.meal_balance }}</strong> meals left.
                     Please renew your plan soon to avoid interruption.
                 </p>
             </div>
