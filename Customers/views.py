@@ -92,7 +92,7 @@ def user_lunch_form(request):
 
     customer = request.user
     service_choice = request.POST.get("lunch_service")
-
+    print(service_choice)
     meal_choice = None
     FLAGSHIP_choice = None
     PREMIUM_choice = None
