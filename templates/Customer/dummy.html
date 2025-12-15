@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>User Dashboard - Hotel Meal Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href=/>
+<style>
+    /* Core Styling Variables */
+:root {
+    --gold: #d4af37;
+    --dark-bg: #000000;
+    --dark-card: #0a0a0a;
+    --dark-mid: #1c1c1c;
+    --white: #ffffff;
+    --gray-text: #e0e0e0;
+    --border-color: #333333;
+    --red: #ef4444;
+    --cyan: #00bcd4;
+    --orange: #ff9800;
+    --blue-info: #3b82f6;
+    --amber-warning: #fbbf24;
+}
+
+/* Base Reset & Typography */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif; /* Using a real font now */
+    background-color: var(--dark-bg);
+    color: var(--white);
+    line-height: 1.6;
+}
+
+h1, h2 {
+    font-family: 'Playfair Display', serif; /* Using a real font now */
+    color: var(--gold);
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+/* Layout */
+.user-page {
+    padding: 2rem 1rem;
+    min-height: 100vh;
+}
+
+.user-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: 2.5rem;
+}
+
+.user-plan-display {
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 2rem;
+    font-size: 1.25rem;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--dark-card);
+    border-bottom: 2px solid var(--gold);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+}
+.logo-image { height: 40px; }
+.hamburger { display: none; } /* Hide on desktop */
+.navbar-nav { display: flex; gap: 1rem; }
+.nav-link { color: var(--gray-text); padding: 0.5rem 1rem; border-bottom: 2px solid transparent; transition: color 0.3s; }
+.nav-link:hover, .nav-link.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+
+/* --- NEW FEATURES STYLING --- */
+
+/* Message Banners */
+.message-banner {
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    border-left: 5px solid;
+}
+
+.message-banner p { margin: 0; color: var(--gray-text); }
+.message-banner p strong { font-weight: bold; }
+
+.message-banner.info {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-left-color: var(--blue-info);
+}
+
+.message-banner.warning {
+    background-color: rgba(251, 191, 36, 0.1);
+    border-left-color: var(--amber-warning);
+}
+
+/* Last Meal Details */
+.last-meal-details {
+    margin-bottom: 2rem;
+}
+
+.last-meal-card {
+    background-color: var(--dark-mid);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.last-meal-type {
+    color: var(--gold);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.last-meal-choice,
+.last-meal-service {
+    font-size: 0.95rem;
+    color: var(--gray-text);
+    margin: 0;
+}
+
+/* Meal Counters */
+.meal-counters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.counter-card {
+    background-color: var(--dark-card);
+    border: 2px solid var(--gold);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.counter-icon { font-size: 2rem; flex-shrink: 0; }
+.counter-label { color: #a0a0a0; font-size: 0.8rem; margin: 0; }
+.counter-number { font-size: 2rem; color: var(--gold); font-weight: 700; margin: 0; font-family: 'Playfair Display', serif; }
+
+/* Meal Cards (Today's Meals) */
+.section-title { font-size: 1.5rem; }
+
+.meals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.meal-card {
+    background-color: var(--dark-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+}
+
+.meal-time {
+    display: inline-block;
+    background-color: var(--gold);
+    color: var(--dark-bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.meal-course {
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.meal-description {
+    color: var(--gray-text);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.food-type-dropdown {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0.5rem 0 1rem 0;
+    background-color: var(--dark-mid);
+    color: var(--gray-text);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23d4af37' d='M10 12.586l4.293-4.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 12.586z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+/* Buttons and Radio Group */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border: 2px solid;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.3s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-primary {
+    background-color: var(--gold);
+    color: var(--dark-bg);
+    border-color: var(--gold);
+}
+.btn-primary:hover { opacity: 0.9; }
+
+.btn-secondary {
+    background-color: transparent;
+    border-color: var(--gray-text);
+    color: var(--gray-text);
+    padding: 0.5rem 1rem;
+    align-self: flex-end;
+}
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+.btn-confirm {
+    width: 100%;
+    margin-top: 1rem;
+    display: block;
+}
+
+.meal-actions.radio-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    user-select: none;
+}
+
+.radio-group input[type="radio"] { display: none; }
+
+.radio-group .radio-label {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    border: 2px solid;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.radio-label.btn-dining { border-color: var(--gold); color: var(--gold); }
+.radio-label.btn-pickup { border-color: var(--cyan); color: var(--cyan); }
+.radio-label.btn-delivery { border-color: var(--orange); color: var(--orange); }
+.radio-label.btn-cancel { border-color: var(--red); color: var(--red); }
+
+.radio-group input[type="radio"]:checked + .radio-label {
+    color: var(--dark-bg);
+}
+
+.radio-group input[type="radio"]:checked + .radio-label.btn-dining { background-color: var(--gold); }
+.radio-group input[type="radio"]:checked + .radio-label.btn-pickup { background-color: var(--cyan); }
+.radio-group input[type="radio"]:checked + .radio-label.btn-delivery { background-color: var(--orange); }
+.radio-group input[type="radio"]:checked + .radio-label.btn-cancel { background-color: var(--red); }
+
+/* Footer */
+.footer {
+    background-color: var(--dark-card);
+    border-top: 2px solid var(--gold);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    color: #a0a0a0;
+    margin-top: 2rem;
+}
+
+
+/* --- Basic Responsiveness (for Mobile) --- */
+@media (max-width: 768px) {
+    .page-title { font-size: 2rem; }
+    .user-plan-display { font-size: 1rem; }
+    
+    .meal-counters {
+        grid-template-columns: 1fr; /* Stack counters vertically on small screens */
+    }
+
+    .counter-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .last-meal-card .btn-secondary {
+        align-self: stretch; /* Full width button on small screen */
+    }
+
+    .meals-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .meal-actions.radio-group {
+        grid-template-columns: 1fr; /* Stack radio buttons vertically for easier tap targets */
+    }
+}
+</style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <img src="assets/logo.png" alt="Logo" class="logo-image"/>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <nav class="navbar-nav" id="navbarNav">
+                <a href="#" class="nav-link active">My Meals</a>
+                <a href="#" class="nav-link">History</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="user-page">
+        <div class="user-container">
+            <h1 class="page-title" id="userGreeting">WELCOME JANE DOE</h1>
+            <p class="user-plan-display" id="userPlanDisplay">Your Current Plan: PREMIUM60</p>
+
+            <div class="message-banner info" role="alert">
+                <p>🌟 **Important:** Our premium menu for dinner has been updated! Check the new delicious options below.</p>
+            </div>
+            
+            <div class="message-banner warning" role="alert">
+                <p>⚠️ **Low Meal Alert!** You only have **3** meals remaining. Please renew your plan soon to avoid interruption.</p>
+            </div>
+
+            <section class="last-meal-details" aria-label="Last meal summary">
+                <h2 class="section-title">Your Last Meal 🍽️</h2>
+                <div class="last-meal-card">
+                    <p class="last-meal-type">**DINNER** (Dec 12)</p>
+                    <p class="last-meal-choice">Food: CHICKEN TIKKA</p>
+                    <p class="last-meal-service">Service: **DELIVERY**</p>
+                    <a href="#" class="btn btn-secondary">View History</a>
+                </div>
+            </section>
+            
+            
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Ayushman's Kitchen. All rights reserved.</p>
+    </footer>
+</body>
+</html>

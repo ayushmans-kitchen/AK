@@ -5,7 +5,7 @@ from django.db.models.functions import Greatest
 from django.db import transaction
 from django.http import JsonResponse
 
-from Customers.models import Customer, LunchRecord, DinnerRecord
+from Customers.models import Customer, LunchRecord, DinnerRecord, SERVICE_TYPE,SUBSCRIPTION_TYPE
 
 from django.shortcuts import render,redirect
 
@@ -154,44 +154,139 @@ def admin_dashboard(request):
 
     SERVICES = ["DineIn", "PickUp", "Delivery", "Cancel"]
 
-    LUNCH_REPORT = {
-        'VEG': 0, 'NON_VEG': 0, 'PANEER': 0, 'MUSHROOM': 0,
-        'CHICKEN': 0, 'EGG': 0, 'FISH': 0, 'PRAWN': 0, 'TOTAL_LUNCH': 0
-    }
-    DINNER_REPORT ={
-        'VEG': 0, 'NON_VEG': 0, 'PANEER': 0, 'MUSHROOM': 0,
-        'CHICKEN': 0, 'EGG': 0, 'TOTAL': 0
-    }
+    LUNCH_REPORT = {'VEG': 0, 'NON_VEG': 0, 'PANEER': 0, 'MUSHROOM': 0,'CHICKEN': 0, 'EGG': 0, 'FISH': 0, 'PRAWN': 0, 'TOTAL_LUNCH': 0}
+    DINNER_REPORT ={'VEG': 0, 'NON_VEG': 0, 'PANEER': 0, 'MUSHROOM': 0,'CHICKEN': 0, 'EGG': 0,  'FISH': 0, 'PRAWN': 0, 'TOTAL_DINNER': 0}
 
     for i in lunch:
-        if i.meal_choice=="VEG":
-            LUNCH_REPORT['VEG']+=1
-        elif i.meal_choice=="NON-VEG":
-            LUNCH_REPORT['NON-VEG']+=1
-        elif i.meal_choice=="CHICKEN":
-            LUNCH_REPORT['CHICKEN']+=1
-        elif i.meal_choice=="PANEER":
-            LUNCH_REPORT['PANEER']+=1
-        elif i.meal_choice=="MUSHROOM":
-            LUNCH_REPORT['MUSHROOM']+=1
-        elif i.meal_choice=="EGG":
-            LUNCH_REPORT['EGG']+=1
-        elif i.meal_choice=="FISH":
-            LUNCH_REPORT['FISH']+=1
-        elif i.meal_choice=="PRAWN":
-            LUNCH_REPORT['PRAWN']+=1
+        if i.meal_choice == "VEG" or i.FLAGSHIP_choice == "VEG"  or i.PREMIUM_choice=="VEG":
+            LUNCH_REPORT['VEG'] += 1
+        elif i.meal_choice == "NON-VEG" or i.FLAGSHIP_choice == "NON_VEG"  or i.PREMIUM_choice=="NON_VEG":
+            LUNCH_REPORT['NON_VEG'] += 1
+        elif i.FLAGSHIP_choice == "PANEER"  or i.PREMIUM_choice =="PANEER":
+            LUNCH_REPORT['PANEER'] += 1
+        elif i.FLAGSHIP_choice == "MUSHROOM"  or i.PREMIUM_choice =="MUSHROOM":
+            LUNCH_REPORT['MUSHROOM'] += 1
+        elif i.FLAGSHIP_choice == "CHICKEN"  or i.PREMIUM_choice=="CHICKEN":
+            LUNCH_REPORT['CHICKEN'] += 1
+        elif i.FLAGSHIP_choice == "EGG"  or i.PREMIUM_choice=="EGG":
+            LUNCH_REPORT['EGG'] += 1
+        elif i.FLAGSHIP_choice == "FISH"  or i.PREMIUM_choice=="FISH":
+            LUNCH_REPORT['FISH'] += 1
+        elif i.FLAGSHIP_choice == "PRAWN"  or i.PREMIUM_choice=="PRAWN":
+            LUNCH_REPORT['PRAWN'] += 1
+
+    LUNCH_REPORT["TOTAL_LUNCH"] = (LUNCH_REPORT["VEG"]+ LUNCH_REPORT["NON_VEG"]+ LUNCH_REPORT["PANEER"]+ LUNCH_REPORT["MUSHROOM"]+ LUNCH_REPORT["CHICKEN"]+ LUNCH_REPORT["EGG"]+ LUNCH_REPORT["FISH"]+ LUNCH_REPORT["PRAWN"])
+
+
+    for i in dinner:
+        if i.meal_choice == "VEG" or i.FLAGSHIP_choice == "VEG"  or i.PREMIUM_choice=="VEG":
+            DINNER_REPORT['VEG'] += 1
+        elif i.meal_choice == "NON-VEG" or i.FLAGSHIP_choice == "NON_VEG"  or i.PREMIUM_choice=="NON_VEG":
+            DINNER_REPORT['NON_VEG'] += 1
+        elif i.FLAGSHIP_choice == "PANEER"  or i.PREMIUM_choice=="PANEER":
+            DINNER_REPORT['PANEER'] += 1
+        elif i.FLAGSHIP_choice == "MUSHROOM"  or i.PREMIUM_choice=="MUSHROOM":
+            DINNER_REPORT['MUSHROOM'] += 1
+        elif i.FLAGSHIP_choice == "CHICKEN"  or i.PREMIUM_choice=="CHICKEN":
+            DINNER_REPORT['CHICKEN'] += 1
+        elif i.FLAGSHIP_choice == "EGG"  or i.PREMIUM_choice=="EGG":
+            DINNER_REPORT['EGG'] += 1
+        elif i.FLAGSHIP_choice == "FISH"  or i.PREMIUM_choice=="FISH":
+            DINNER_REPORT['FISH'] += 1
+        elif i.FLAGSHIP_choice == "PRAWN"  or i.PREMIUM_choice=="PRAWN":
+            DINNER_REPORT['PRAWN'] += 1
     
-    TOTAL_LUNCH= LUNCH_REPORT['VEG']+ LUNCH_REPORT['NON-VEG']+LUNCH_REPORT['CHICKEN']+LUNCH_REPORT['PANEER']+LUNCH_REPORT['MUSHROOM']+LUNCH_REPORT['EGG']+LUNCH_REPORT['FISH']+LUNCH_REPORT['PRAWN']
+
+    DINNER_REPORT["TOTAL_DINNER"] = (DINNER_REPORT["VEG"]+ DINNER_REPORT["NON_VEG"]+ DINNER_REPORT["PANEER"]+ DINNER_REPORT["MUSHROOM"]+ DINNER_REPORT["CHICKEN"]+ DINNER_REPORT["EGG"]+ DINNER_REPORT["FISH"]+ DINNER_REPORT["PRAWN"])
 
 
+
+    lunch_counts = {
+                    "DineIn": {
+                        "NORMAL30": 0, "NORMAL60": 0,
+                        "FLAGSHIP30": 0, "FLAGSHIP60": 0,
+                        "PREMIUM30": 0, "PREMIUM60": 0,
+                        "TOTAL": 0
+                    },
+                    "PickUp": {
+                        "NORMAL30": 0, "NORMAL60": 0,
+                        "FLAGSHIP30": 0, "FLAGSHIP60": 0,
+                        "PREMIUM30": 0, "PREMIUM60": 0,
+                        "TOTAL": 0
+                    },
+                    "Delivery": {
+                        "NORMAL30": 0, "NORMAL60": 0,
+                        "FLAGSHIP30": 0, "FLAGSHIP60": 0,
+                        "PREMIUM30": 0, "PREMIUM60": 0,
+                        "TOTAL": 0
+                    },
+                    "Cancel": {
+                        "NORMAL30": 0, "NORMAL60": 0,
+                        "FLAGSHIP30": 0, "FLAGSHIP60": 0,
+                        "PREMIUM30": 0, "PREMIUM60": 0,
+                        "TOTAL": 0
+                    }
+                }
+    for record in lunch:
+        service = record.service_choice
+        plan = record.customer.subscription_choice
+        lunch_counts[service][plan]+=1
+        lunch_counts[service]["TOTAL"]+=1
+
+
+    dinner_counts = {
+                    "DineIn": {
+                        "NORMAL30": 0, "NORMAL60": 0,
+                        "FLAGSHIP30": 0, "FLAGSHIP60": 0,
+                        "PREMIUM30": 0, "PREMIUM60": 0,
+                        "TOTAL": 0
+                    },
+                    "PickUp": {
+                        "NORMAL30": 0, "NORMAL60": 0,
+                        "FLAGSHIP30": 0, "FLAGSHIP60": 0,
+                        "PREMIUM30": 0, "PREMIUM60": 0,
+                        "TOTAL": 0
+                    },
+                    "Delivery": {
+                        "NORMAL30": 0, "NORMAL60": 0,
+                        "FLAGSHIP30": 0, "FLAGSHIP60": 0,
+                        "PREMIUM30": 0, "PREMIUM60": 0,
+                        "TOTAL": 0
+                    },
+                    "Cancel": {
+                        "NORMAL30": 0, "NORMAL60": 0,
+                        "FLAGSHIP30": 0, "FLAGSHIP60": 0,
+                        "PREMIUM30": 0, "PREMIUM60": 0,
+                        "TOTAL": 0
+                    }
+                }
+    for record in dinner:
+        service = record.service_choice
+        plan = record.customer.subscription_choice
+        dinner_counts[service]["TOTAL"]+=1
+        dinner_counts[service][plan]+=1
+
+
+
+
+
+    low_balance_users = Customer.objects.filter(
+        meal_balance__lt=6,
+        user_status_active=True
+        ).order_by("meal_balance")
+
+    low_balance_count = low_balance_users.count()
 
     
     context = {
         "lunch":lunch,
         "dinner":dinner,
         "LUNCH_REPORT":LUNCH_REPORT,
-        "TOTAL_LUNCH":TOTAL_LUNCH,
-
+        "DINNER_REPORT":DINNER_REPORT,
+        "lunch_counts": lunch_counts,
+        "dinner_counts":dinner_counts,
+        "low_balance_users":low_balance_users,
+        "low_balance_count":low_balance_count,
         
     }
 
@@ -212,19 +307,20 @@ def service_list(request, meal, service):
     # Attach final food choice dynamically
     final_records = []
     for r in records:
-        sub = r.customer.subscription_choice
+        food=(r.meal_choice or r.FLAGSHIP_choice or r.PREMIUM_choice or "UNKNOWN")
+        # sub = r.customer.subscription_choice
         
-        # NORMAL plan → use meal_choice
-        if sub in ["NORMAL30", "NORMAL60"]:
-            food = r.meal_choice
+        # # NORMAL plan → use meal_choice
+        # if sub in ["NORMAL30", "NORMAL60"]:
+        #     food = r.meal_choice
 
-        # FLAGSHIP plan → use flagship choice
-        elif sub in ["FLAGSHIP30", "FLAGSHIP60"]:
-            food = r.FLAGSHIP_choice
+        # # FLAGSHIP plan → use flagship choice
+        # elif sub in ["FLAGSHIP30", "FLAGSHIP60"]:
+        #     food = r.FLAGSHIP_choice
 
-        # PREMIUM plan → use premium choice
-        else:
-            food = r.PREMIUM_choice
+        # # PREMIUM plan → use premium choice
+        # else:
+        #     food = r.PREMIUM_choice
 
         # attach food choice to record
         r.final_food_choice = food
@@ -346,7 +442,7 @@ def admin_user_management(request):
 
 
 
-#---------------------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 
 
 def daily_report(request):

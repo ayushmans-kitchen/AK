@@ -1,13 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Hotel Meal Management</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{% static 'Admin/styles-admin-dashboard.css' %}">
     <style>
         /* Basic styling for the new table to fit the existing design */
@@ -15,24 +18,37 @@
             margin-top: 20px;
             margin-bottom: 30px;
         }
+
         .summary-tables-container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             justify-content: space-around;
         }
+
         .summary-table-wrapper {
-            flex: 1 1 45%; /* Allows two tables per row on wider screens */
+            flex: 1 1 45%;
+            /* Allows two tables per row on wider screens */
             min-width: 300px;
         }
+
         .summary-table-wrapper h3 {
             text-align: center;
             margin-bottom: 10px;
             color: #333;
         }
+
         /* Color for Non-Veg (Reddish) and Veg (Greenish) in the summary table */
-        .text-non-veg { color: #d9534f; font-weight: bold; }
-        .text-veg { color: #5cb85c; font-weight: bold; }
+        .text-non-veg {
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        .text-veg {
+            color: #5cb85c;
+            font-weight: bold;
+        }
+
         /* Style for the new Combined Aggregate Table */
         .combined-aggregate-table {
             width: 100%;
@@ -40,11 +56,13 @@
         }
     </style>
 </head>
+
 <body>
     <header class="navbar">
         <div class="navbar-container">
             <div class="navbar-logo">
-                <a href="{% url 'admin_dashboard' %}" ><img src="{% static 'assets/logo.PNG' %}" alt="Hotel Logo" class="logo-image"></a>
+                <a href="{% url 'admin_dashboard' %}"><img src="{% static 'assets/logo.PNG' %}" alt="Hotel Logo"
+                        class="logo-image"></a>
             </div>
             <button class="hamburger" id="hamburger">
                 <span></span>
@@ -63,12 +81,12 @@
 
     <main class="admin-page">
         <div class="admin-container">
-            <h1 class="page-title" style="text-align: center;" >Administrator Dashboard</h1>
+            <h1 class="page-title" style="text-align: center;">Administrator Dashboard</h1>
             <p class="dashboard-date">Today's Date: <span id="currentDateDisplay">{% now "d-m-Y" %}</span></p>
 
             <section class="meal-choice-summary">
                 <h2 class="meal-section-title">Aggregated Meal Item Demand (Today)</h2>
-                
+
                 <div class="table-responsive">
                     <table class="data-table combined-aggregate-table" id="combinedAggregateTable">
                         <thead>
@@ -86,45 +104,46 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+                            <!-- LUNCH -->
                             <tr>
                                 <td><b>LUNCH 🍽️</b></td>
-                                <td class="text-veg text-center">{{ aggregate_demand.LUNCH.VEG|default:0 }}</td>
-                                <td class="text-non-veg text-center">{{ aggregate_demand.LUNCH.NON_VEG|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.LUNCH.PANEER|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.LUNCH.MUSHROOM|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.LUNCH.CHICKEN|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.LUNCH.EGG|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.LUNCH.FISH|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.LUNCH.PRAWN|default:0 }}</td>
-                                <td class="text-center total-column"><b>{{ aggregate_demand.LUNCH.TOTAL|default:0 }}</b></td>
-                            </tr>
-                            
-                            <tr>
-                                <td><b>DINNER 🌙</b></td>
-                                <td class="text-veg text-center">{{ aggregate_demand.DINNER.VEG|default:0 }}</td>
-                                <td class="text-non-veg text-center">{{ aggregate_demand.DINNER.NON_VEG|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.DINNER.PANEER|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.DINNER.MUSHROOM|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.DINNER.CHICKEN|default:0 }}</td>
-                                <td class="text-center">{{ aggregate_demand.DINNER.EGG|default:0 }}</td>
-                                <td class="text-center">N/A</td> 
-                                <td class="text-center">N/A</td>
-                                <td class="text-center total-column"><b>{{ aggregate_demand.DINNER.TOTAL|default:0 }}</b></td>
+                                <td>{{ LUNCH_REPORT.VEG|default:0 }}</td>
+                                <td>{{ LUNCH_REPORT.NON_VEG|default:0 }}</td>
+                                <td>{{ LUNCH_REPORT.PANEER|default:0 }}</td>
+                                <td>{{ LUNCH_REPORT.MUSHROOM|default:0 }}</td>
+                                <td>{{ LUNCH_REPORT.CHICKEN|default:0 }}</td>
+                                <td>{{ LUNCH_REPORT.EGG|default:0 }}</td>
+                                <td>{{ LUNCH_REPORT.FISH|default:0 }}</td>
+                                <td>{{ LUNCH_REPORT.PRAWN|default:0 }}</td>
+                                <td><b>{{ LUNCH_REPORT.TOTAL_LUNCH|default:0 }}</b></td>
                             </tr>
 
+                            <!-- DINNER -->
+                            <tr>
+                                <td><b>DINNER 🌙</b></td>
+                                <td>{{ DINNER_REPORT.VEG|default:0 }}</td>
+                                <td>{{ DINNER_REPORT.NON_VEG|default:0 }}</td>
+                                <td>{{ DINNER_REPORT.PANEER|default:0 }}</td>
+                                <td>{{ DINNER_REPORT.MUSHROOM|default:0 }}</td>
+                                <td>{{ DINNER_REPORT.CHICKEN|default:0 }}</td>
+                                <td>{{ DINNER_REPORT.EGG|default:0 }}</td>
+                                <td>{{ DINNER_REPORT.FISH|default:0 }}</td>
+                                <td>{{ DINNER_REPORT.PRAWN|default:0 }}</td>
+                                <td><b>{{ DINNER_REPORT.TOTAL_DINNER|default:0 }}</b></td>
+                            </tr>
                         </tbody>
+
                     </table>
                 </div>
             </section>
-            
-            
-            
+
+
+
             <section class="plan-service-breakdown">
                 <h2 class="meal-section-title">Meal Plan Service Breakdown (Today)</h2>
-                
+
                 <div class="tables-container">
-                    
+
                     <div class="meal-breakdown-wrapper">
                         <h3>Lunch Demand</h3>
                         <div class="table-responsive">
@@ -132,31 +151,30 @@
                                 <thead>
                                     <tr>
                                         <th>Service Type</th>
-                                        <th>Normal (₹1500)</th>
-                                        <th>Normal (₹3000)</th>
-                                        <th>Premium 1 (₹1800)</th>
-                                        <th>Premium 1 (₹3400)</th>
-                                        <th>Premium 2 (₹2200)</th>
-                                        <th>Premium 2 (₹4200)</th>
+                                        <th>Normal30</th>
+                                        <th>Normal60</th>
+                                        <th>Flagship30</th>
+                                        <th>Flagship60</th>
+                                        <th>Premium30</th>
+                                        <th>Premium60</th>
                                         <th class="total-column" data-label="Total">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                     <tr>
                                         <td class="text-green">
                                             <b><a href="{% url 'service_list' 'lunch' 'DineIn' %}">Dining 🍽️</a></b>
                                         </td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'DineIn' %}"><b>{{ lunch.DineIn.normal_1500 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'DineIn' %}"><b>{{ lunch.DineIn.normal_3000 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'DineIn' %}"><b>{{ lunch.DineIn.flagship_1800 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'DineIn' %}"><b>{{ lunch.DineIn.flagship_3400 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'DineIn' %}"><b>{{ lunch.DineIn.premium_2200 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'DineIn' %}"><b>{{ lunch.DineIn.premium_4200 }}</b></a></td>
+                                        <td class="text-center"><b>{{ lunch_counts.DineIn.NORMAL30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.DineIn.NORMAL60 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.DineIn.FLAGSHIP30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.DineIn.FLAGSHIP60 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.DineIn.PREMIUM30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.DineIn.PREMIUM60 }}</b></td>
                                         <td class="text-center total-column">
-                                            <a href="{% url 'service_list' 'lunch' 'DineIn' %}">
-                                                <b>{{ lunch.DineIn.total }}</b>
-                                            </a>
+                                            <b>{{lunch_counts.DineIn.NORMAL30|add:lunch_counts.DineIn.NORMAL60|add:lunch_counts.DineIn.FLAGSHIP30|add:lunch_counts.DineIn.FLAGSHIP60|add:lunch_counts.DineIn.PREMIUM30|add:lunch_counts.DineIn.PREMIUM60}}
+                                            </b>
                                         </td>
                                     </tr>
 
@@ -164,16 +182,15 @@
                                         <td class="text-orange">
                                             <b><a href="{% url 'service_list' 'lunch' 'PickUp' %}">Pickup 📦</a></b>
                                         </td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'PickUp' %}"><b>{{ lunch.PickUp.normal_1500 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'PickUp' %}"><b>{{ lunch.PickUp.normal_3000 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'PickUp' %}"><b>{{ lunch.PickUp.flagship_1800 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'PickUp' %}"><b>{{ lunch.PickUp.flagship_3400 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'PickUp' %}"><b>{{ lunch.PickUp.premium_2200 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'PickUp' %}"><b>{{ lunch.PickUp.premium_4200 }}</b></a></td>
+                                        <td class="text-center"><b>{{ lunch_counts.PickUp.NORMAL30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.PickUp.NORMAL60 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.PickUp.FLAGSHIP30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.PickUp.FLAGSHIP60 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.PickUp.PREMIUM30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.PickUp.PREMIUM60 }}</b></td>
                                         <td class="text-center total-column">
-                                            <a href="{% url 'service_list' 'lunch' 'PickUp' %}">
-                                                <b>{{ lunch.PickUp.total }}</b>
-                                            </a>
+                                            <b>{{lunch_counts.PickUp.NORMAL30|add:lunch_counts.PickUp.NORMAL60|add:lunch_counts.PickUp.FLAGSHIP30|add:lunch_counts.PickUp.FLAGSHIP60|add:lunch_counts.PickUp.PREMIUM30|add:lunch_counts.PickUp.PREMIUM60}}
+                                            </b>
                                         </td>
                                     </tr>
 
@@ -181,16 +198,15 @@
                                         <td class="text-blue">
                                             <b><a href="{% url 'service_list' 'lunch' 'Delivery' %}">Delivery 🚚</a></b>
                                         </td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'Delivery' %}"><b>{{ lunch.Delivery.normal_1500 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'Delivery' %}"><b>{{ lunch.Delivery.normal_3000 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'Delivery' %}"><b>{{ lunch.Delivery.flagship_1800 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'Delivery' %}"><b>{{ lunch.Delivery.flagship_3400 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'Delivery' %}"><b>{{ lunch.Delivery.premium_2200 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'lunch' 'Delivery' %}"><b>{{ lunch.Delivery.premium_4200 }}</b></a></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Delivery.NORMAL30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Delivery.NORMAL60 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Delivery.FLAGSHIP30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Delivery.FLAGSHIP60 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Delivery.PREMIUM30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Delivery.PREMIUM60 }}</b></td>
                                         <td class="text-center total-column">
-                                            <a href="{% url 'service_list' 'lunch' 'Delivery' %}">
-                                                <b>{{ lunch.Delivery.total }}</b>
-                                            </a>
+                                            <b>{{lunch_counts.Delivery.NORMAL30|add:lunch_counts.Delivery.NORMAL60|add:lunch_counts.Delivery.FLAGSHIP30|add:lunch_counts.Delivery.FLAGSHIP60|add:lunch_counts.Delivery.PREMIUM30|add:lunch_counts.Delivery.PREMIUM60}}
+                                            </b>
                                         </td>
                                     </tr>
 
@@ -198,19 +214,18 @@
                                         <td class="text-red">
                                             <b><a href="{% url 'service_list' 'lunch' 'Cancel' %}">Cancelled ❌</a></b>
                                         </td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'lunch' 'Cancel' %}"><b>{{ lunch.Cancel.normal_1500 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'lunch' 'Cancel' %}"><b>{{ lunch.Cancel.normal_3000 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'lunch' 'Cancel' %}"><b>{{ lunch.Cancel.flagship_1800 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'lunch' 'Cancel' %}"><b>{{ lunch.Cancel.flagship_3400 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'lunch' 'Cancel' %}"><b>{{ lunch.Cancel.premium_2200 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'lunch' 'Cancel' %}"><b>{{ lunch.Cancel.premium_4200 }}</b></a></td>
-                                        <td class="text-center total-column text-red">
-                                            <a href="{% url 'service_list' 'lunch' 'Cancel' %}">
-                                                <b>{{ lunch.Cancel.total }}</b>
-                                            </a>
+                                        <td class="text-center"><b>{{ lunch_counts.Cancel.NORMAL30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Cancel.NORMAL60 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Cancel.FLAGSHIP30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Cancel.FLAGSHIP60 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Cancel.PREMIUM30 }}</b></td>
+                                        <td class="text-center"><b>{{ lunch_counts.Cancel.PREMIUM60 }}</b></td>
+                                        <td class="text-center total-column">
+                                            <b>{{lunch_counts.Cancel.NORMAL30|add:lunch_counts.Cancel.NORMAL60|add:lunch_counts.Cancel.FLAGSHIP30|add:lunch_counts.Cancel.FLAGSHIP60|add:lunch_counts.Cancel.PREMIUM30|add:lunch_counts.Cancel.PREMIUM60}}
+                                            </b>
                                         </td>
                                     </tr>
-                                    
+
                                 </tbody>
                             </table>
                         </div>
@@ -223,12 +238,12 @@
                                 <thead>
                                     <tr>
                                         <th>Service Type</th>
-                                        <th>Normal (₹1500)</th>
-                                        <th>Normal (₹3000)</th>
-                                        <th>Premium 1 (₹1800)</th>
-                                        <th>Premium 1 (₹3400)</th>
-                                        <th>Premium 2 (₹2200)</th>
-                                        <th>Premium 2 (₹4200)</th>
+                                        <th>Normal30</th>
+                                        <th>Normal60</th>
+                                        <th>Flagship30</th>
+                                        <th>Flagship60</th>
+                                        <th>Premium30</th>
+                                        <th>Premium60</th>
                                         <th class="total-column" data-label="Total">Total</th>
                                     </tr>
                                 </thead>
@@ -238,16 +253,16 @@
                                         <td class="text-green">
                                             <b><a href="{% url 'service_list' 'dinner' 'DineIn' %}">Dining 🍽️</a></b>
                                         </td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'DineIn' %}"><b>{{ dinner.DineIn.normal_1500 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'DineIn' %}"><b>{{ dinner.DineIn.normal_3000 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'DineIn' %}"><b>{{ dinner.DineIn.flagship_1800 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'DineIn' %}"><b>{{ dinner.DineIn.flagship_3400 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'DineIn' %}"><b>{{ dinner.DineIn.premium_2200 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'DineIn' %}"><b>{{ dinner.DineIn.premium_4200 }}</b></a></td>
+                                        <td class="text-center"><b>{{ dinner_counts.DineIn.NORMAL30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.DineIn.NORMAL60 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.DineIn.FLAGSHIP30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.DineIn.FLAGSHIP60 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.DineIn.PREMIUM30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.DineIn.PREMIUM60 }}</b></td>
+
                                         <td class="text-center total-column">
-                                            <a href="{% url 'service_list' 'dinner' 'DineIn' %}">
-                                                <b>{{ dinner.DineIn.total }}</b>
-                                            </a>
+                                            <b>{{dinner_counts.DineIn.NORMAL30|add:dinner_counts.DineIn.NORMAL60|add:dinner_counts.DineIn.FLAGSHIP30|add:dinner_counts.DineIn.FLAGSHIP60|add:dinner_counts.DineIn.PREMIUM30|add:dinner_counts.DineIn.PREMIUM60}}
+                                            </b>
                                         </td>
                                     </tr>
 
@@ -255,33 +270,34 @@
                                         <td class="text-orange">
                                             <b><a href="{% url 'service_list' 'dinner' 'PickUp' %}">Pickup 📦</a></b>
                                         </td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'PickUp' %}"><b>{{ dinner.PickUp.normal_1500 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'PickUp' %}"><b>{{ dinner.PickUp.normal_3000 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'PickUp' %}"><b>{{ dinner.PickUp.flagship_1800 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'PickUp' %}"><b>{{ dinner.PickUp.flagship_3400 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'PickUp' %}"><b>{{ dinner.PickUp.premium_2200 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'PickUp' %}"><b>{{ dinner.PickUp.premium_4200 }}</b></a></td>
+                                        <td class="text-center"><b>{{ dinner_counts.PickUp.NORMAL30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.PickUp.NORMAL60 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.PickUp.FLAGSHIP30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.PickUp.FLAGSHIP60 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.PickUp.PREMIUM30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.PickUp.PREMIUM60 }}</b></td>
+
                                         <td class="text-center total-column">
-                                            <a href="{% url 'service_list' 'dinner' 'PickUp' %}">
-                                                <b>{{ dinner.PickUp.total }}</b>
-                                            </a>
+                                            <b>{{dinner_counts.PickUp.NORMAL30|add:dinner_counts.PickUp.NORMAL60|add:dinner_counts.PickUp.FLAGSHIP30|add:dinner_counts.PickUp.FLAGSHIP60|add:dinner_counts.PickUp.PREMIUM30|add:dinner_counts.PickUp.PREMIUM60}}
+                                            </b>
                                         </td>
                                     </tr>
 
                                     <tr>
                                         <td class="text-blue">
-                                            <b><a href="{% url 'service_list' 'dinner' 'Delivery' %}">Delivery 🚚</a></b>
+                                            <b><a href="{% url 'service_list' 'dinner' 'Delivery' %}">Delivery
+                                                    🚚</a></b>
                                         </td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'Delivery' %}"><b>{{ dinner.Delivery.normal_1500 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'Delivery' %}"><b>{{ dinner.Delivery.normal_3000 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'Delivery' %}"><b>{{ dinner.Delivery.flagship_1800 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'Delivery' %}"><b>{{ dinner.Delivery.flagship_3400 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'Delivery' %}"><b>{{ dinner.Delivery.premium_2200 }}</b></a></td>
-                                        <td class="text-center"><a href="{% url 'service_list' 'dinner' 'Delivery' %}"><b>{{ dinner.Delivery.premium_4200 }}</b></a></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Delivery.NORMAL30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Delivery.NORMAL60 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Delivery.FLAGSHIP30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Delivery.FLAGSHIP60 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Delivery.PREMIUM30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Delivery.PREMIUM60 }}</b></td>
+
                                         <td class="text-center total-column">
-                                            <a href="{% url 'service_list' 'dinner' 'Delivery' %}">
-                                                <b>{{ dinner.Delivery.total }}</b>
-                                            </a>
+                                            <b>{{dinner_counts.Delivery.NORMAL30|add:dinner_counts.Delivery.NORMAL60|add:dinner_counts.Delivery.FLAGSHIP30|add:dinner_counts.Delivery.FLAGSHIP60|add:dinner_counts.Delivery.PREMIUM30|add:dinner_counts.Delivery.PREMIUM60}}
+                                            </b>
                                         </td>
                                     </tr>
 
@@ -289,20 +305,19 @@
                                         <td class="text-red">
                                             <b><a href="{% url 'service_list' 'dinner' 'Cancel' %}">Cancelled ❌</a></b>
                                         </td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'dinner' 'Cancel' %}"><b>{{ dinner.Cancel.normal_1500 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'dinner' 'Cancel' %}"><b>{{ dinner.Cancel.normal_3000 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'dinner' 'Cancel' %}"><b>{{ dinner.Cancel.flagship_1800 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'dinner' 'Cancel' %}"><b>{{ dinner.Cancel.flagship_3400 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'dinner' 'Cancel' %}"><b>{{ dinner.Cancel.premium_2200 }}</b></a></td>
-                                        <td class="text-center text-red"><a href="{% url 'service_list' 'dinner' 'Cancel' %}"><b>{{ dinner.Cancel.premium_4200 }}</b></a></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Cancel.NORMAL30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Cancel.NORMAL60 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Cancel.FLAGSHIP30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Cancel.FLAGSHIP60 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Cancel.PREMIUM30 }}</b></td>
+                                        <td class="text-center"><b>{{ dinner_counts.Cancel.PREMIUM60 }}</b></td>
 
-                                        <td class="text-center total-column text-red">
-                                            <a href="{% url 'service_list' 'dinner' 'Cancel' %}">
-                                                <b>{{ dinner.Cancel.total }}</b>
-                                            </a>
+                                        <td class="text-center total-column">
+                                            <b>{{dinner_counts.Cancel.NORMAL30|add:dinner_counts.Cancel.NORMAL60|add:dinner_counts.Cancel.FLAGSHIP30|add:dinner_counts.Cancel.FLAGSHIP60|add:dinner_counts.Cancel.PREMIUM30|add:dinner_counts.Cancel.PREMIUM60}}
+                                            </b>
                                         </td>
                                     </tr>
-                                    
+
                                 </tbody>
 
                             </table>
@@ -338,37 +353,37 @@
 
                                 <td data-label="Meal Plan">
                                     <span class="status-normal"> {% if user.subscription_choice == 'NORMAL30' %}
-                                        Normal (₹1500)
-                                    {% elif user.subscription_choice == 'NORMAL60' %}
-                                        Normal (₹3000)
-                                    {% elif user.subscription_choice == 'FLAGSHIP30' %}
-                                        Premium 1 (₹1800)
-                                    {% elif user.subscription_choice == 'FLAGSHIP60' %}
-                                        Premium 1 (₹3400)
-                                    {% elif user.subscription_choice == 'PREMIUM30' %}
-                                        Premium 2 (₹2200)
-                                    {% elif user.subscription_choice == 'PREMIUM60' %}
-                                        Premium 2 (₹4200)
-                                    {% else %}
+                                        Normal30
+                                        {% elif user.subscription_choice == 'NORMAL60' %}
+                                        Normal60
+                                        {% elif user.subscription_choice == 'FLAGSHIP30' %}
+                                        Flagship30
+                                        {% elif user.subscription_choice == 'FLAGSHIP60' %}
+                                        Flagship60
+                                        {% elif user.subscription_choice == 'PREMIUM30' %}
+                                        Premium30
+                                        {% elif user.subscription_choice == 'PREMIUM60' %}
+                                        Premium60
+                                        {% else %}
                                         -
-                                    {% endif %}</span>
+                                        {% endif %}</span>
                                 </td>
 
                                 <td data-label="Total Meals" class="text-center">
                                     {% if user.subscription_choice == 'NORMAL30' %}
-                                        30
+                                    30
                                     {% elif user.subscription_choice == 'NORMAL60' %}
-                                        60
+                                    60
                                     {% elif user.subscription_choice == 'FLAGSHIP30' %}
-                                        30
+                                    30
                                     {% elif user.subscription_choice == 'FLAGSHIP60' %}
-                                        60
+                                    60
                                     {% elif user.subscription_choice == 'PREMIUM30' %}
-                                        30
+                                    30
                                     {% elif user.subscription_choice == 'PREMIUM60' %}
-                                        60
+                                    60
                                     {% else %}
-                                        -
+                                    -
                                     {% endif %}
                                 </td>
 
@@ -399,7 +414,7 @@
         const hamburger = document.getElementById('hamburger');
         const navbarNav = document.getElementById('navbarNav');
 
-        hamburger.addEventListener('click', function() {
+        hamburger.addEventListener('click', function () {
             navbarNav.classList.toggle('active');
             hamburger.classList.toggle('active');
         });
@@ -412,4 +427,5 @@
         });
     </script>
 </body>
+
 </html>
