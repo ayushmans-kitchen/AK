@@ -98,7 +98,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     subscription_choice = models.CharField(max_length=20, choices=SUBSCRIPTION_TYPE, default="NORMAL60")
     default_lunch_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE, default="DineIn")
     default_dinner_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE, default="DineIn")
-    default_meal_choice = models.CharField(max_length=20, choices=MEAL_MENU, default="VEG")
+    default_meal_choice = models.CharField(max_length=20, choices=MEAL_MENU, default="NONE")
 
     FLAGSHIP_MENU_LUNCH_default_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_LUNCH, default="NONE")
     FLAGSHIP_MENU_DINNER_default_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_DINNER, default="NONE")
@@ -127,9 +127,9 @@ class LunchRecord(models.Model):
     meal_num_used = models.IntegerField()
     service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
 
-    meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
-    FLAGSHIP_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_LUNCH,null=True,blank=True)
-    PREMIUM_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_LUNCH,null=True,blank=True)
+    meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True,default="NONE")
+    FLAGSHIP_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_LUNCH,null=True,blank=True,default="NONE")
+    PREMIUM_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_LUNCH,null=True,blank=True,default="NONE")
     
     decrement_done = models.BooleanField(default=False)
 
@@ -148,9 +148,9 @@ class DinnerRecord(models.Model):
     meal_num_used = models.IntegerField()
     service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
 
-    meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
-    FLAGSHIP_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_DINNER,null=True,blank=True)
-    PREMIUM_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_DINNER,null=True,blank=True)
+    meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True,default="NONE")
+    FLAGSHIP_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_DINNER,null=True,blank=True,default="NONE")
+    PREMIUM_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_DINNER,null=True,blank=True,default="NONE")
 
     decrement_done = models.BooleanField(default=False)
 

@@ -136,6 +136,51 @@ def user_lunch_form(request):
 
 
 @login_required
+def user_sunday_lunch_form(request):
+    if request.method != "POST":
+        return redirect("user_dashboard")
+
+    customer = request.user
+    service_choice = request.POST.get("lunch_service")
+    FLAGSHIP_choice = None
+    PREMIUM_choice = None
+
+    
+    meal_choice = request.POST.get("meal_choice")
+
+
+    with transaction.atomic():
+        lr = LunchRecord.objects.create(
+            customer=customer,
+            for_date=today,
+            meal_choice=meal_choice,
+            FLAGSHIP_choice=FLAGSHIP_choice,
+            PREMIUM_choice=PREMIUM_choice,
+            meal_num_used=customer.meal_balance,
+            service_choice=service_choice,
+        )
+
+        # Decrement meal balance only if service is not Cancel
+        if service_choice != "Cancel":
+            customer.meal_balance -= 1
+
+            if customer.meal_balance <= 0:
+                customer.meal_balance = 0
+                customer.paused_subscription = True
+                customer.user_status_active = False
+
+            customer.save(update_fields=["meal_balance", "paused_subscription","user_status_active"])
+
+            lr.decrement_done = True
+            lr.save(update_fields=["decrement_done"])
+
+    return redirect("user_dashboard")
+
+
+
+
+
+@login_required
 def user_dinner_form(request):
     if request.method != "POST":
         return redirect("user_dashboard")
