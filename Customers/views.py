@@ -29,8 +29,8 @@ def user_dashboard(request):
     admin_notice=AdminNotice.objects.all()
     
     # tsunday= today.isoweekday() == 6  # for sunday use 6 
-    tsunday= today.isoweekday() == 3  # use present date for testing puropose sunday to satur 0-7
-    slunch_record = LunchRecord.objects.filter(customer=user,for_date=today  + timedelta(days=1)).first()
+    tsunday= today.isoweekday() == 4  # use present date for testing puropose sunday to satur 0-7
+    slunch_record = LunchRecord.objects.filter(customer=user,for_date= today  + timedelta(days=1)).first()
 
     # is_out_of_time_lunch = now.time() >= time(11, 0)
     # is_out_of_time_dinner = now.time() >= time(18, 0)

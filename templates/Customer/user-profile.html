@@ -56,16 +56,16 @@
                                 </p>
                             </div>
                         {% else %}
-                            {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %} 
+                            {% comment %} {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}  {% endcomment %}
                                 <div class="info-group">
-                                    <label for="defaultLunchFood" class="info-label">Default Lunch Food Type</label>
+                                    <label for="defaultLunchFood" class="info-label">Default Food Choice</label>
                                     <select id="defaultLunchFood" class="select-field" name="default_meal_choice">
                                         <option value="default" disabled>Choose your food</option>
                                         <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
                                         <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
                                     </select>
                                 </div>
-                            {% endif %}
+                            {% comment %} {% endif %} {% endcomment %}
                             {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %} 
                                 {% if request.user.lunch_status_active %}
                                     <div class="info-group">
