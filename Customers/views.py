@@ -7,6 +7,7 @@ import json
 
 from datetime import timedelta,time
 from django.utils import timezone
+
 today=timezone.localdate()
 now = timezone.localtime()
 
@@ -287,4 +288,3 @@ def user_history(request):
     }
 
     return render(request, "Customer/user-history.html", context)
-
