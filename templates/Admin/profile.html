@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | Ayushman's Kitchen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-gold: #d4af37;
+            --color-bg-deep: #000000;
+            --color-bg-card: #0f0f0f;
+            --color-bg-sidebar: #050505;
+            --color-text: #ffffff;
+            --color-text-muted: #a0a0a0;
+            --color-border: #222222;
+            --color-danger: #ff4444;
+            --transition: 0.3s ease;
+        }
+
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--color-bg-deep); color: var(--color-text); line-height: 1.5; }
+
+        /* LAYOUT */
+        .admin-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+        @media (min-width: 1024px) { .admin-wrapper { flex-direction: row; } }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 100%;
+            background-color: var(--color-bg-sidebar);
+            border-bottom: 1px solid var(--color-border);
+            padding: 1.5rem;
+        }
+        @media (min-width: 1024px) { 
+            .sidebar { width: 260px; height: 100vh; position: fixed; border-right: 1px solid var(--color-border); border-bottom: none; } 
+        }
+
+        .logo { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 2rem; }
+        .nav-links { list-style: none; display: flex; gap: 10px; justify-content: center; }
+        @media (min-width: 1024px) { .nav-links { flex-direction: column; justify-content: flex-start; } }
+        .nav-item { padding: 0.8rem 1.2rem; color: var(--color-text-muted); cursor: pointer; border-radius: 8px; transition: var(--transition); font-size: 0.9rem; text-decoration: none; }
+        .nav-item.active, .nav-item:hover { background: #1a1a1a; color: var(--color-gold); }
+
+        /* MAIN CONTENT */
+        .main-content { flex: 1; padding: 1.5rem; }
+        @media (min-width: 1024px) { .main-content { margin-left: 260px; padding: 2.5rem; } }
+
+        .header-main { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .header-main h1 { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: 2rem; }
+
+        /* PROFILE SECTION */
+        .profile-card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem; }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .input-group label { font-size: 0.75rem; color: var(--color-gold); text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
+        .input-group input, .input-group select {
+            background: #161616;
+            border: 1px solid var(--color-border);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--color-gold); }
+
+        .button-row { display: flex; gap: 1rem; }
+        .btn { padding: 10px 25px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; font-size: 0.9rem; transition: 0.3s; }
+        .btn-save { background: var(--color-gold); color: black; }
+        .btn-renew { background: transparent; border: 1px solid var(--color-gold); color: var(--color-gold); }
+        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
+
+        /* HISTORY TABLE (MATCHING IMAGE) */
+        .history-section h2 { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: 1.5rem; margin-bottom: 1.2rem; }
+        .table-wrapper { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; }
+        
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        thead th { 
+            color: var(--color-gold); 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            padding: 20px; 
+            border-bottom: 2px solid var(--color-gold); 
+            font-weight: 700;
+        }
+        tbody td { padding: 20px; font-size: 0.95rem; border-bottom: 1px solid #1a1a1a; }
+        
+        /* Cancelled Badge Style */
+        .badge-cancelled {
+            background: rgba(255, 68, 68, 0.15);
+            color: var(--color-danger);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        <aside class="sidebar">
+            <div class="logo">AK ADMIN</div>
+            <ul class="nav-links">
+                <a href="#" class="nav-item">Dashboard</a>
+                <a href="#" class="nav-item">Subscribers</a>
+                <a href="#" class="nav-item active">User Profile</a>
+                <a href="#" class="nav-item">Menu Manager</a>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header class="header-main">
+                <h1>USER PROFILE</h1>
+            </header>
+
+            <form class="profile-card">
+                <div class="details-grid">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" value="Amitabh Bachchan">
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="text" value="+91 98765 43210">
+                    </div>
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" value="amitabh@bigb.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Subscription Plan</label>
+                        <select>
+                            <option>Premium 60</option>
+                            <option>Premium 30</option>
+                            <option>Flagship 60</option>
+                            <option>Normal 30</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Total Meals</label>
+                        <input type="number" value="60">
+                    </div>
+                    <div class="input-group">
+                        <label>Meals Left</label>
+                        <input type="number" value="1" style="color: var(--color-danger); font-weight: bold;">
+                    </div>
+                    <div class="input-group">
+                        <label>Default Food</label>
+                        <select>
+                            <option>Chicken</option>
+                            <option>Paneer</option>
+                            <option>Fish</option>
+                            <option>Veg</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Default Service</label>
+                        <select>
+                            <option>Delivery</option>
+                            <option>Dine-In</option>
+                            <option>Self-Pickup</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="grid-column: span 2;">
+                        <label>Address / Room No.</label>
+                        <input type="text" value="Jalsa, Room 501, Mumbai">
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button type="submit" class="btn btn-save">Save Changes</button>
+                    <button type="button" class="btn btn-renew">Renew Subscription</button>
+                </div>
+            </form>
+
+            <div class="history-section">
+                <h2>Meal History</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Meal Type</th>
+                                <th>Service</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15 Dec 2025</td>
+                                <td>Dinner</td>
+                                <td>Cancel</td>
+                                <td><span class="badge-cancelled">Cancelled</span></td>
+                            </tr>
+                            <tr>
+                                <td>14 Dec 2025</td>
+                                <td>Lunch</td>
+                                <td>Delivery</td>
+                                <td style="color: #4ade80;">Delivered</td>
+                            </tr>
+                            <tr>
+                                <td>13 Dec 2025</td>
+                                <td>Dinner</td>
+                                <td>Dine-In</td>
+                                <td style="color: #4ade80;">Completed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
