@@ -68,10 +68,21 @@
             </section>
             
             <section class="today-meals">
+
+                {% if request.user.user_status_active %}
                 <h2 class="section-title"> {% now "Y-m-d" %} </h2>
                 <h2 class="section-title">Today's Meals  </h2>
-                <div class="meals-grid">
+                {% else %}
+                {% if request.user.paused_subscription   %}
+                <p class="section-title">0 Meals Left! Subscribe to restart services</p>
+                {% else %}
+                <p class="section-title">Resume meals in profile to resume services</p>
+                {% endif %}
+                {% endif %}
 
+                
+                
+                <div class="meals-grid">
                     {% if request.user.lunch_status_active %}
                         {% if lunch_record %}
                             <div class="meal-card locked-card">
@@ -321,53 +332,6 @@
                     {% endif %}
                 </div>
             </section>
-
-            {% if request.user.user_status_active == False %}
-                {% if lunch_record %}
-                    <div class="meal-card locked-card">
-                        <div class="meal-time">Lunch</div>
-                            {% if lunch_record.service_choice == "Cancel" %}
-                                <div class="meal-details">
-                                    <p class="meal-course">Meal Cancelled</p>
-                                </div>
-                                <div class="meal-status-message cancelled">
-                                    <p>Thank you for letting us know.</p>
-                                </div>
-                            {% else %}
-                                <div class="meal-details">
-                                    <p class="meal-course">Meal Confirmed! *Thank You* </p>
-                                </div>
-                                <div class="meal-status-message">  
-                                    <p>Food Chosen: *{% firstof lunch_record.meal_choice lunch_record.FLAGSHIP_choice lunch_record.PREMIUM_choice %}*</p>     
-                                    <p>Service Chosen: *PICKUP*</p>    
-                                </div> 
-                            {% endif %}            
-                        </div>      
-                    </div>
-                {% endif %}
-                {% if dinner_record  %}
-                    <div class="meal-card locked-card">
-                        <div class="meal-time">Dinner</div>
-                            {% if dinner_record.service_choice == "Cancel" %}
-                                <div class="meal-details">
-                                    <p class="meal-course">Meal Cancelled</p>
-                                </div>
-                                <div class="meal-status-message cancelled">
-                                    <p>Thank you for letting us know.</p>
-                                </div>
-                            {% else %}
-                                <div class="meal-details">
-                                    <p class="meal-course">Meal Confirmed! *Thank You* </p>
-                                </div>
-                                <div class="meal-status-message">       
-                                     <p>Food Chosen: *{% firstof dinner_record.meal_choice dinner_record.FLAGSHIP_choice dinner_record.PREMIUM_choice %}*</p>                                        
-                                    <p>Service Chosen: *PICKUP*</p>    
-                                </div> 
-                            {% endif %}            
-                        </div>      
-                    </div>
-                {% endif %}
-            {% endif %} 
         </div>
     </main>
 

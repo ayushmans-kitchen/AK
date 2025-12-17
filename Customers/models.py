@@ -74,20 +74,17 @@ class CustomerManager(BaseUserManager):
 
 
 class Customer(AbstractBaseUser, PermissionsMixin):
-    
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=150)
     phone = models.CharField(max_length=15, blank=True)
     address = models.CharField(max_length=200, blank=True)
 
-    
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
     date_joined = models.DateTimeField(default=timezone.now)
     profile_updated_at = models.DateTimeField(auto_now=True)
     subscription_phase=models.IntegerField(default=1)
-
     
     meal_balance = models.IntegerField(default=0)
     user_status_active = models.BooleanField(default=True)
@@ -105,7 +102,6 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     PREMIUM_MENU_LUNCH_default_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_LUNCH, default="NONE")
     PREMIUM_MENU_DINNER_default_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_DINNER, default="NONE")
 
-    
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name"]
 
