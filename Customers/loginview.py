@@ -12,6 +12,8 @@ def login_view(request):
         print(user)
         if user is not None:
             login(request, user)
+            if user.is_staff:
+                return redirect("admin_dashboard")
             return redirect('user_dashboard')
         else:
             messages.error(request, "Invalid email or password")

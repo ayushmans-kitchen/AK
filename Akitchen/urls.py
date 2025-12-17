@@ -7,6 +7,6 @@ from Admin import urls as adurls
 urlpatterns = [
     path('devspannel/', admin.site.urls),
     path('', include(csurls)),
-    path('ayushman/admin', include(adurls)),
+    path('ayushman/admin/', include(adurls)),
 ]
 

@@ -114,8 +114,8 @@
         <aside class="sidebar">
             <div class="logo">AK ADMIN</div>
             <ul class="nav-links">
-                <a href="dashboard.html" class="nav-item">Dashboard</a>
-                <a href="#" class="nav-item active">Subscribers</a>
+                 <a href="{% url 'dashboard'%}" class="nav-item"><li>Dashboard</li></a>
+                <a href="{% url 'subscribers' %}" class="nav-item active"><li>Subscribers</li></a>
                 <a href="#" class="nav-item">Menu Manager</a>
                 <a href="#" class="nav-item">History</a>
             </ul>
@@ -135,7 +135,7 @@
                         <span class="count-badge">12 Users</span>
                     </div>
                     <div class="scroll-area">
-                        <a href="profile.html"><div class="user-row">
+                        <a href="{% url 'profile' %}"><div class="user-row">
                             <div class="user-info"><h4>Sneha Kapoor</h4><p>Room 105</p></div>
                             <span class="meal-count low-stock">4</span>
                         </div></a>

@@ -322,3 +322,22 @@ def daily_report(request):
 
 def complete_report(request):
     return render(request,"Admin/admin-complete-report.html")
+
+
+
+
+
+#=================================syarted new admin============================================================================
+
+
+def dashboard(request):
+    return render(request,"Admin/dashboard.html")
+
+
+def subscribers(request):
+    return render(request,"Admin/subscribers.html")
+
+
+def profile(request):
+    return render(request,"Admin/profile.html")
+
