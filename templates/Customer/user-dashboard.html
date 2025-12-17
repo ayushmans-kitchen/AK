@@ -149,11 +149,11 @@
                                     </div>
 
                                     <div class="meal-actions radio-group" id="lunchServiceOptions">
-                                        <input type="radio" id="lunch-dining" name="lunch_service" value="Dining"
+                                        <input type="radio" id="lunch-dining" name="lunch_service" value="DineIn"
                                             {% if request.user.default_lunch_service_choice == "DineIn" %}checked{% endif %}>
                                         <label for="lunch-dining" class="radio-label btn-dining">DineIn</label>
 
-                                        <input type="radio" id="lunch-pickup" name="lunch_service" value="Pickup"
+                                        <input type="radio" id="lunch-pickup" name="lunch_service" value="PickUp"
                                             {% if request.user.default_lunch_service_choice == "PickUp" %}checked{% endif %}>
                                         <label for="lunch-pickup" class="radio-label btn-pickup">Pickup</label>
 
@@ -306,11 +306,11 @@
                                     </div>
 
                                     <div class="meal-actions radio-group" id="lunchServiceOptions">
-                                        <input type="radio" id="sundaylunch-dining" name="lunch_service" value="Dining"
+                                        <input type="radio" id="sundaylunch-dining" name="lunch_service" value="DineIn"
                                             {% if request.user.default_lunch_service_choice == "DineIn" %}checked{% endif %}>
                                         <label for="sundaylunch-dining" class="radio-label btn-dining">DineIn</label>
 
-                                        <input type="radio" id="sundaylunch-pickup" name="lunch_service" value="Pickup"
+                                        <input type="radio" id="sundaylunch-pickup" name="lunch_service" value="PickUp"
                                             {% if request.user.default_lunch_service_choice == "PickUp" %}checked{% endif %}>
                                         <label for="sundaylunch-pickup" class="radio-label btn-pickup">Pickup</label>
 
