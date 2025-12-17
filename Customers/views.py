@@ -58,8 +58,9 @@ def user_profile(request):
         default_lunch_service=request.POST.get("default_lunch_service")
         default_dinner_service=request.POST.get("default_dinner_service")
         status_availability=request.POST.get("status_availability")
+        
 
-        user.default_meal_choice="NONE"
+        # user.default_meal_choice="NONE"
         user.FLAGSHIP_MENU_LUNCH_default_choice="NONE"
         user.FLAGSHIP_MENU_DINNER_default_choice="NONE"
         user.PREMIUM_MENU_LUNCH_default_choice="NONE"
@@ -78,6 +79,7 @@ def user_profile(request):
             user.default_lunch_service_choice=default_lunch_service
             user.default_dinner_service_choice=default_dinner_service
 
+            user.default_meal_choice=request.POST.get("default_meal_choice")
             user.FLAGSHIP_MENU_LUNCH_default_choice=request.POST.get("default_flagship_lunch")
             user.FLAGSHIP_MENU_DINNER_default_choice=request.POST.get("default_flagship_dinner")
             
@@ -89,6 +91,7 @@ def user_profile(request):
             user.default_lunch_service_choice=default_lunch_service
             user.default_dinner_service_choice=default_dinner_service
 
+            user.default_meal_choice=request.POST.get("default_meal_choice")
             user.PREMIUM_MENU_LUNCH_default_choice=request.POST.get("default_premium_lunch")
             user.PREMIUM_MENU_DINNER_default_choice=request.POST.get("default_premium_dinner")
             

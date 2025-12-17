@@ -58,8 +58,8 @@
                         {% else %}
                             {% comment %} {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}  {% endcomment %}
                                 <div class="info-group">
-                                    <label for="defaultLunchFood" class="info-label">Default Food Choice</label>
-                                    <select id="defaultLunchFood" class="select-field" name="default_meal_choice">
+                                    <label for="defaultFood" class="info-label">Default Food Choice</label>
+                                    <select id="defaultFood" class="select-field" name="default_meal_choice">
                                         <option value="default" disabled>Choose your food</option>
                                         <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
                                         <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
@@ -112,10 +112,10 @@
                                         <select id="defaultDinnerFood" class="select-field" name="default_premium_dinner">
                                             <option value="default" disabled>Choose your food</option>
                                             <option value="PANEER" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
-                                            <option value="MUSHROOM" {% if request.user.PRErequest.user.PREMIUM_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
-                                            <option value="CHICKEN" {% if request.user.PRErequest.user.PREMIUM_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
-                                            <option value="EGG" {% if request.user.PRErequest.user.PREMIUM_MENU_DINNER_default_choice == "EGG" %}selected{% endif %}>EGG</option>
-                                            <option value="VEG" {% if request.user.PRErequest.user.PREMIUM_MENU_DINNER_default_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                            <option value="MUSHROOM" {% if request.user.request.user.PREMIUM_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                            <option value="CHICKEN" {% if request.user.request.user.PREMIUM_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                            <option value="EGG" {% if request.user.request.user.PREMIUM_MENU_DINNER_default_choice == "EGG" %}selected{% endif %}>EGG</option>
+                                            <option value="VEG" {% if request.user.request.user.PREMIUM_MENU_DINNER_default_choice == "VEG" %}selected{% endif %}>VEG</option>
                                         </select>
                                     </div>
                                 {% endif %}
