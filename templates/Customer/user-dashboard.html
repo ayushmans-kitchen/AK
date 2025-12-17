@@ -72,215 +72,257 @@
                 <h2 class="section-title">Today's Meals  </h2>
                 <div class="meals-grid">
 
-                {% if request.user.lunch_status_active %}
-                    {% if lunch_record %}
-                        <div class="meal-card locked-card">
-                            <div class="meal-time">Lunch</div>
-                                {% if lunch_record.service_choice == "Cancel" %}
+                    {% if request.user.lunch_status_active %}
+                        {% if lunch_record %}
+                            <div class="meal-card locked-card">
+                                <div class="meal-time">Lunch</div>
+                                    {% if lunch_record.service_choice == "Cancel" %}
+                                        <div class="meal-details">
+                                            <p class="meal-course">Meal Cancelled</p>
+                                        </div>
+                                        <div class="meal-status-message cancelled">
+                                            <p>Thank you for letting us know.</p>
+                                        </div>
+                                    {% else %}
+                                        <div class="meal-details">
+                                            <p class="meal-course">Meal Confirmed! *Thank You* </p>
+                                        </div>
+                                        <div class="meal-status-message">                    
+                                            <p>Food Chosen: *{% firstof lunch_record.meal_choice lunch_record.FLAGSHIP_choice lunch_record.PREMIUM_choice %}*</p>                                                                      
+                                                <p>Service Chosen: *{{lunch_record.service_choice}}*</p>    
+                                        </div> 
+                                    {% endif %}            
+                                </div>      
+                            </div>
+
+
+                        {% else %}
+                            {% if request.user.user_status_active %}
+                            <!-- Lunch Card -->
+                            <div class="meal-card" data-meal="lunch">
+                                <div class="meal-time">Lunch</div>
+                                <p class="meal-description" id="lunchDescription">Please update Meal details before 11.00 AM. </p>
+                                <form method="POST" action="{% url 'userlunch' %}">   
+                                    {% csrf_token %} 
                                     <div class="meal-details">
-                                        <p class="meal-course">Meal Cancelled</p>
+                                    
+                                        <p class="meal-course">Select Food</p>
+                                        {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}
+                                            <select id="lunchFoodType" class="food-type-dropdown" name="meal_choice">
+                                                <option value="default" disabled>Choose your food</option>
+                                                <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                                <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
+                                            </select>
+
+                                        {% endif %}
+                                        {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %}
+                                            <select id="lunchFoodType" class="food-type-dropdown" name="FLAGSHIP_choice">
+                                                <option value="default" disabled>Choose your food</option>
+                                                <option value="PANEER" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                                <option value="MUSHROOM" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                                <option value="CHICKEN" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                            </select>
+                                        {% endif %}
+                                        {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60" %}
+                                            <select id="lunchFoodType" class="food-type-dropdown" name="PREMIUM_choice">
+                                                <option value="default" disabled>Choose your food</option>
+                                                <option value="PANEER" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                                <option value="MUSHROOM" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                                <option value="CHICKEN" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                                <option value="EGG" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "EGG" %}selected{% endif %}>EGG</option>
+                                                <option value="PRAWN" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "PRAWN" %}selected{% endif %}>PRAWN</option>
+                                                <option value="FISH" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "FISH" %}selected{% endif %}>FISH</option>
+                                                <option value="VEG" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                            </select>
+                                        {% endif %}
                                     </div>
-                                    <div class="meal-status-message cancelled">
-                                        <p>Thank you for letting us know.</p>
+
+                                    <div class="meal-actions radio-group" id="lunchServiceOptions">
+                                        <input type="radio" id="lunch-dining" name="lunch_service" value="Dining"
+                                            {% if request.user.default_lunch_service_choice == "DineIn" %}checked{% endif %}>
+                                        <label for="lunch-dining" class="radio-label btn-dining">DineIn</label>
+
+                                        <input type="radio" id="lunch-pickup" name="lunch_service" value="Pickup"
+                                            {% if request.user.default_lunch_service_choice == "PickUp" %}checked{% endif %}>
+                                        <label for="lunch-pickup" class="radio-label btn-pickup">Pickup</label>
+
+                                        <input type="radio" id="lunch-delivery" name="lunch_service" value="Delivery"
+                                            {% if request.user.default_lunch_service_choice == "Delivery" %}checked{% endif %}>
+                                        <label for="lunch-delivery" class="radio-label btn-delivery">Delivery</label>
+
+                                        <input type="radio" id="lunch-cancel" name="lunch_service" value="Cancel"
+                                            {% if request.user.default_lunch_service_choice == "Cancel" %}checked{% endif %}>
+                                        <label for="lunch-cancel" class="radio-label btn-cancel">Cancel</label>
                                     </div>
-                                {% else %}
-                                    <div class="meal-details">
-                                        <p class="meal-course">Meal Confirmed! *Thank You* </p>
-                                    </div>
-                                    <div class="meal-status-message">                                          
-                                            {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}
-                                                <p>Food Chosen: *{{lunch_record.meal_choice}}*</p>
-                                            {% endif %}
-                                            
-                                            {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %}
-                                                <p>Food Chosen: *{{lunch_record.FLAGSHIP_choice}}*</p>
-                                            {% endif %} 
-        
-                                            {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60"%}
-                                                <p>Food Chosen: *{{lunch_record.PREMIUM_choice}}*</p>
-                                            {% endif %} 
-                                            
-                                            <p>Service Chosen: *{{lunch_record.service_choice}}*</p>    
-                                    </div> 
-                                {% endif %}            
-                            </div>      
-                        </div>
-
-
-                    {% else %}
-                        {% if request.user.user_status_active %}
-                        <!-- Lunch Card -->
-                        <div class="meal-card" data-meal="lunch">
-                            <p class="meal-description" id="lunchDescription">Please update Meal details before 11.00 AM. </p>
-                            <p class="meal-description" id="lunchDescription"></p>
-                            {% comment %} <p class="meal-time-slot">12:30 PM - 03:00 PM</p> {% endcomment %}
-                            <div class="meal-time">Lunch</div>
-                            <form method="POST" action="{% url 'userlunch' %}">   
-                                {% csrf_token %} 
-                                <div class="meal-details">
-                                
-                                    <p class="meal-course">Select Food</p>
-                                    {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}
-                                        <select id="lunchFoodType" class="food-type-dropdown" name="meal_choice">
-                                            <option value="default" disabled>Choose your food</option>
-                                            <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
-                                            <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
-                                        </select>
-
-                                    {% endif %}
-                                    {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %}
-                                        <select id="lunchFoodType" class="food-type-dropdown" name="FLAGSHIP_choice">
-                                            <option value="default" disabled>Choose your food</option>
-                                            <option value="PANEER" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
-                                            <option value="MUSHROOM" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
-                                            <option value="CHICKEN" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
-                                        </select>
-                                    {% endif %}
-                                    {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60" %}
-                                        <select id="lunchFoodType" class="food-type-dropdown" name="PREMIUM_choice">
-                                            <option value="default" disabled>Choose your food</option>
-                                            <option value="PANEER" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
-                                            <option value="MUSHROOM" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
-                                            <option value="CHICKEN" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
-                                            <option value="EGG" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "EGG" %}selected{% endif %}>EGG</option>
-                                            <option value="PRAWN" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "PRAWN" %}selected{% endif %}>PRAWN</option>
-                                            <option value="FISH" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "FISH" %}selected{% endif %}>FISH</option>
-                                            <option value="VEG" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "VEG" %}selected{% endif %}>VEG</option>
-                                        </select>
-                                    {% endif %}
-                                </div>
-
-                                <div class="meal-actions radio-group" id="lunchServiceOptions">
-                                    <input type="radio" id="lunch-dining" name="lunch_service" value="Dining"
-                                        {% if request.user.default_lunch_service_choice == "DineIn" %}checked{% endif %}>
-                                    <label for="lunch-dining" class="radio-label btn-dining">DineIn</label>
-
-                                    <input type="radio" id="lunch-pickup" name="lunch_service" value="Pickup"
-                                        {% if request.user.default_lunch_service_choice == "PickUp" %}checked{% endif %}>
-                                    <label for="lunch-pickup" class="radio-label btn-pickup">Pickup</label>
-
-                                    <input type="radio" id="lunch-delivery" name="lunch_service" value="Delivery"
-                                        {% if request.user.default_lunch_service_choice == "Delivery" %}checked{% endif %}>
-                                    <label for="lunch-delivery" class="radio-label btn-delivery">Delivery</label>
-
-                                    <input type="radio" id="lunch-cancel" name="lunch_service" value="Cancel"
-                                        {% if request.user.default_lunch_service_choice == "Cancel" %}checked{% endif %}>
-                                    <label for="lunch-cancel" class="radio-label btn-cancel">Cancel</label>
-                                </div>
-                                
-                                <button class="btn btn-primary btn-confirm" data-meal-type="Lunch" id="btnConfirmLunch">Confirm Selection</button>
-                            </form>
-                        </div>
+                                    
+                                    <button class="btn btn-primary btn-confirm" data-meal-type="Lunch" id="btnConfirmLunch">Confirm Selection</button>
+                                </form>
+                            </div>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
-                {% endif %}
-                    
-                {% if request.user.dinner_status_active %}
-                    {% if dinner_record  %}
-                        <div class="meal-card locked-card">
-                            <div class="meal-time">Dinner</div>
-                                {% if dinner_record.service_choice == "Cancel" %}
+                        
+                    {% if request.user.dinner_status_active %}
+                        {% if dinner_record  %}
+                            <div class="meal-card locked-card">
+                                <div class="meal-time">Dinner</div>
+                                    {% if dinner_record.service_choice == "Cancel" %}
+                                        <div class="meal-details">
+                                            <p class="meal-course">Meal Cancelled</p>
+                                        </div>
+                                        <div class="meal-status-message cancelled">
+                                            <p>Thank you for letting us know.</p>
+                                        </div>
+                                    {% else %}
+                                        <div class="meal-details">
+                                            <p class="meal-course">Meal Confirmed! *Thank You* </p>
+                                        </div>
+                                        <div class="meal-status-message">         
+                                            <p>Food Chosen: *{% firstof dinner_record.meal_choice dinner_record.FLAGSHIP_choice dinner_record.PREMIUM_choice %}*</p>                                                                                 <p>Service Chosen: *{{dinner_record.service_choice}}*</p>    
+                                        </div> 
+                                    {% endif %}            
+                                </div>      
+                            </div>
+
+
+                        {% else %}
+                            {% if request.user.user_status_active %}
+                            <!-- Dinner Card -->
+                            <div class="meal-card" data-meal="dinner">
+                                <div class="meal-time">Dinner</div>
+                                <p class="meal-description" id="dinnerDescription">Please update Meal details before 07.00 PM. </p>
+                                <form method="POST" action="{% url 'userdinner' %}">
+                                    {% csrf_token %}
+
                                     <div class="meal-details">
-                                        <p class="meal-course">Meal Cancelled</p>
+                                        <p class="meal-course">Select Food</p>
+
+                                        {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}
+                                            <select id="dinnerFoodType_normal" class="food-type-dropdown" name="meal_choice">
+                                                <option value="default" disabled {% if not request.user.default_meal_choice %}selected{% endif %}>Choose your food</option>
+                                                <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                                <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
+                                            </select>
+                                        {% endif %}
+
+                                        {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %}
+                                            <select id="dinnerFoodType_flagship" class="food-type-dropdown" name="FLAGSHIP_choice">
+                                                <option value="default" disabled >Choose your food</option>
+                                                <option value="PANEER" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                                <option value="MUSHROOM" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                                <option value="CHICKEN" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                            </select>
+                                        {% endif %}
+
+                                        {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60" %}
+                                            <select id="dinnerFoodType_premium" class="food-type-dropdown" name="PREMIUM_choice">
+                                                <option value="default" disabled >Choose your food</option>
+                                                <option value="PANEER" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                                <option value="MUSHROOM" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                                <option value="CHICKEN" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                                <option value="EGG" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "EGG" %}selected{% endif %}>EGG</option>
+                                                <option value="VEG" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                            </select>
+                                        {% endif %}
                                     </div>
-                                    <div class="meal-status-message cancelled">
-                                        <p>Thank you for letting us know.</p>
+
+                                    <div class="meal-actions radio-group" id="dinnerServiceOptions">
+                                        <input type="radio" id="dinner-dining" name="dinner_service" value="DineIn"
+                                            {% if request.user.default_dinner_service_choice == "DineIn" %}checked{% endif %}>
+                                        <label for="dinner-dining" class="radio-label btn-dining">DineIn</label>
+
+                                        <input type="radio" id="dinner-pickup" name="dinner_service" value="PickUp"
+                                            {% if request.user.default_dinner_service_choice == "PickUp" %}checked{% endif %}>
+                                        <label for="dinner-pickup" class="radio-label btn-pickup">Pickup</label>
+
+                                        <input type="radio" id="dinner-delivery" name="dinner_service" value="Delivery"
+                                            {% if request.user.default_dinner_service_choice == "Delivery" %}checked{% endif %}>
+                                        <label for="dinner-delivery" class="radio-label btn-delivery">Delivery</label>
+
+                                        <input type="radio" id="dinner-cancel" name="dinner_service" value="Cancel"
+                                            {% if request.user.default_dinner_service_choice == "Cancel" %}checked{% endif %}>
+                                        <label for="dinner-cancel" class="radio-label btn-cancel">Cancel</label>
                                     </div>
-                                {% else %}
-                                    <div class="meal-details">
-                                        <p class="meal-course">Meal Confirmed! *Thank You* </p>
-                                    </div>
-                                    <div class="meal-status-message">                                          
-                                            {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}
-                                                <p>Food Chosen: *{{dinner_record.meal_choice}}*</p>
-                                            {% endif %}
-                                            
-                                            {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %}
-                                                <p>Food Chosen: *{{dinner_record.FLAGSHIP_choice}}*</p>
-                                            {% endif %} 
-        
-                                            {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60"%}
-                                                <p>Food Chosen: *{{dinner_record.PREMIUM_choice}}*</p>
-                                            {% endif %} 
-                                            
-                                            <p>Service Chosen: *{{dinner_record.service_choice}}*</p>    
-                                    </div> 
-                                {% endif %}            
-                            </div>      
-                        </div>
 
+                                    <button class="btn btn-primary btn-confirm" data-meal-type="Dinner" id="btnConfirmDinner">Confirm Selection</button>
+                                </form>
 
-                    {% else %}
-                        {% if request.user.user_status_active %}
-                        <!-- Dinner Card -->
-                        <div class="meal-card" data-meal="dinner">
-                        <p class="meal-description" id="dinnerDescription">Please update Meal details before 07.00 PM. </p>
-                            {% comment %} <p class="meal-time-slot">08:00 PM - 10:30 PM</p> {% endcomment %}
-                            <div class="meal-time">Dinner</div>
-                            <form method="POST" action="{% url 'userdinner' %}">
-                                {% csrf_token %}
-
-                                <div class="meal-details">
-                                    <p class="meal-course">Select Food</p>
-
-                                    {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}
-                                        <select id="dinnerFoodType_normal" class="food-type-dropdown" name="meal_choice">
-                                            <option value="default" disabled {% if not request.user.default_meal_choice %}selected{% endif %}>Choose your food</option>
-                                            <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
-                                            <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
-                                        </select>
-                                    {% endif %}
-
-                                    {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %}
-                                        <select id="dinnerFoodType_flagship" class="food-type-dropdown" name="FLAGSHIP_choice">
-                                            <option value="default" disabled >Choose your food</option>
-                                            <option value="PANEER" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
-                                            <option value="MUSHROOM" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
-                                            <option value="CHICKEN" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
-                                        </select>
-                                    {% endif %}
-
-                                    {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60" %}
-                                        <select id="dinnerFoodType_premium" class="food-type-dropdown" name="PREMIUM_choice">
-                                            <option value="default" disabled >Choose your food</option>
-                                            <option value="PANEER" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
-                                            <option value="MUSHROOM" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
-                                            <option value="CHICKEN" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
-                                            <option value="EGG" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "EGG" %}selected{% endif %}>EGG</option>
-                                            <option value="VEG" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "VEG" %}selected{% endif %}>VEG</option>
-                                        </select>
-                                    {% endif %}
-                                </div>
-
-                                <div class="meal-actions radio-group" id="dinnerServiceOptions">
-                                    <input type="radio" id="dinner-dining" name="dinner_service" value="DineIn"
-                                        {% if request.user.default_dinner_service_choice == "DineIn" %}checked{% endif %}>
-                                    <label for="dinner-dining" class="radio-label btn-dining">DineIn</label>
-
-                                    <input type="radio" id="dinner-pickup" name="dinner_service" value="PickUp"
-                                        {% if request.user.default_dinner_service_choice == "PickUp" %}checked{% endif %}>
-                                    <label for="dinner-pickup" class="radio-label btn-pickup">Pickup</label>
-
-                                    <input type="radio" id="dinner-delivery" name="dinner_service" value="Delivery"
-                                        {% if request.user.default_dinner_service_choice == "Delivery" %}checked{% endif %}>
-                                    <label for="dinner-delivery" class="radio-label btn-delivery">Delivery</label>
-
-                                    <input type="radio" id="dinner-cancel" name="dinner_service" value="Cancel"
-                                        {% if request.user.default_dinner_service_choice == "Cancel" %}checked{% endif %}>
-                                    <label for="dinner-cancel" class="radio-label btn-cancel">Cancel</label>
-                                </div>
-
-                                <button class="btn btn-primary btn-confirm" data-meal-type="Dinner" id="btnConfirmDinner">Confirm Selection</button>
-                            </form>
-
-                        </div>
+                            </div>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
-                {% endif %}
+
+                    {% if tsunday %}
+                    {% if request.user.lunch_status_active %}
+                        {% if slunch_record %}
+                            <div class="meal-card locked-card">
+                                <div class="meal-time" style="background-color:Red;">Sunday Lunch</div>
+                                    {% if slunch_record.service_choice == "Cancel" %}
+                                        <div class="meal-details">
+                                            <p class="meal-course">Meal Cancelled</p>
+                                        </div>
+                                        <div class="meal-status-message cancelled">
+                                            <p>Thank you for letting us know.</p>
+                                        </div>
+                                    {% else %}
+                                        <div class="meal-details">
+                                            <p class="meal-course">Meal Confirmed! *Thank You* </p>
+                                        </div>
+                                        <div class="meal-status-message">               
+                                            <p>Food Chosen: *{{ slunch_record.meal_choice  }}*</p>                                                                       
+                                            <p>Service Chosen: *{{slunch_record.service_choice}}*</p>    
+                                        </div> 
+                                    {% endif %}            
+                                </div>      
+                            </div>
+
+
+                        {% else %}
+                            {% if request.user.user_status_active %}
+                            <!-- Lunch Card -->
+                            <div class="meal-card" data-meal="lunch">
+                                <div class="meal-time" style="background-color:Red;">Sunday Lunch</div>
+                                <p class="meal-description" id="lunchDescription">Please update Tommorow's Meal before 11.00 PM today. </p>
+                                <form method="POST" action="{% url 'usersundaylunch' %}">   
+                                    {% csrf_token %} 
+                                    <div class="meal-details">
+                                        <p class="meal-course">Select Food</p>
+                                            <select id="lunchFoodType" class="food-type-dropdown" name="meal_choice">
+                                                <option value="default" disabled>Choose your food</option>
+                                                <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                                <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
+                                            </select>
+                                    </div>
+
+                                    <div class="meal-actions radio-group" id="lunchServiceOptions">
+                                        <input type="radio" id="sundaylunch-dining" name="lunch_service" value="Dining"
+                                            {% if request.user.default_lunch_service_choice == "DineIn" %}checked{% endif %}>
+                                        <label for="sundaylunch-dining" class="radio-label btn-dining">DineIn</label>
+
+                                        <input type="radio" id="sundaylunch-pickup" name="lunch_service" value="Pickup"
+                                            {% if request.user.default_lunch_service_choice == "PickUp" %}checked{% endif %}>
+                                        <label for="sundaylunch-pickup" class="radio-label btn-pickup">Pickup</label>
+
+                                        <input type="radio" id="sundaylunch-delivery" name="lunch_service" value="Delivery"
+                                            {% if request.user.default_lunch_service_choice == "Delivery" %}checked{% endif %}>
+                                        <label for="sundaylunch-delivery" class="radio-label btn-delivery">Delivery</label>
+
+                                        <input type="radio" id="sundaylunch-cancel" name="lunch_service" value="Cancel"
+                                            {% if request.user.default_lunch_service_choice == "Cancel" %}checked{% endif %}>
+                                        <label for="sundaylunch-cancel" class="radio-label btn-cancel">Cancel</label>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary btn-confirm" data-meal-type="Lunch" id="btnConfirmLunch">Confirm Selection</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% endif %}
                 </div>
             </section>
 
-            {% comment %} {% if request.user.user_status_active == False %}
+            {% if request.user.user_status_active == False %}
                 {% if lunch_record %}
                     <div class="meal-card locked-card">
                         <div class="meal-time">Lunch</div>
@@ -295,20 +337,9 @@
                                 <div class="meal-details">
                                     <p class="meal-course">Meal Confirmed! *Thank You* </p>
                                 </div>
-                                <div class="meal-status-message">                                          
-                                        {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}
-                                            <p>Food Chosen: *{{lunch_record.meal_choice}}*</p>
-                                        {% endif %}
-                                        
-                                        {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %}
-                                            <p>Food Chosen: *{{lunch_record.FLAGSHIP_choice}}*</p>
-                                        {% endif %} 
-    
-                                        {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60"%}
-                                            <p>Food Chosen: *{{lunch_record.PREMIUM_choice}}*</p>
-                                        {% endif %} 
-                                        
-                                        <p>Service Chosen: *PICKUP*</p>    
+                                <div class="meal-status-message">  
+                                    <p>Food Chosen: *{% firstof lunch_record.meal_choice lunch_record.FLAGSHIP_choice lunch_record.PREMIUM_choice %}*</p>     
+                                    <p>Service Chosen: *PICKUP*</p>    
                                 </div> 
                             {% endif %}            
                         </div>      
@@ -328,26 +359,15 @@
                                 <div class="meal-details">
                                     <p class="meal-course">Meal Confirmed! *Thank You* </p>
                                 </div>
-                                <div class="meal-status-message">                                          
-                                    {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}
-                                        <p>Food Chosen: *{{dinner_record.meal_choice}}*</p>
-                                    {% endif %}
-                                    
-                                    {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %}
-                                        <p>Food Chosen: *{{dinner_record.FLAGSHIP_choice}}*</p>
-                                    {% endif %} 
-
-                                    {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60"%}
-                                        <p>Food Chosen: *{{dinner_record.PREMIUM_choice}}*</p>
-                                    {% endif %} 
-                                    
+                                <div class="meal-status-message">       
+                                     <p>Food Chosen: *{% firstof dinner_record.meal_choice dinner_record.FLAGSHIP_choice dinner_record.PREMIUM_choice %}*</p>                                        
                                     <p>Service Chosen: *PICKUP*</p>    
                                 </div> 
                             {% endif %}            
                         </div>      
                     </div>
                 {% endif %}
-            {% endif %} {% endcomment %}
+            {% endif %} 
         </div>
     </main>
 

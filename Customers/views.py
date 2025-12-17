@@ -5,8 +5,10 @@ from django.views.decorators.http import require_POST
 from django.db import transaction
 import json
 
+from datetime import timedelta,time
 from django.utils import timezone
 today=timezone.localdate()
+now = timezone.localtime()
 
 
 from .models import Customer,LunchRecord,DinnerRecord
@@ -24,6 +26,14 @@ def user_dashboard(request):
     dinner_record = DinnerRecord.objects.filter(customer=user,for_date=today).first()
 
     admin_notice=AdminNotice.objects.all()
+    
+    tsunday= today.isoweekday() == 3 
+    slunch_record = LunchRecord.objects.filter(customer=user,for_date=today  + timedelta(days=1)).first()
+
+    # is_out_of_time_lunch = now.time() >= time(11, 0)
+    # is_out_of_time_dinner = now.time() >= time(18, 0)
+    # is_out_of_time_sundaylunch = now.time() >= time(23, 59)
+
 
     context={
         'user':user,
@@ -32,6 +42,8 @@ def user_dashboard(request):
         'lunch_record':lunch_record,
         'dinner_record':dinner_record,
         'admin_notice':admin_notice,
+        'tsunday':tsunday,
+        'slunch_record':slunch_record,
 
         }
     return render(request, 'Customer/user-dashboard.html',context)
@@ -152,7 +164,7 @@ def user_sunday_lunch_form(request):
     with transaction.atomic():
         lr = LunchRecord.objects.create(
             customer=customer,
-            for_date=today,
+            for_date=today + timedelta(days=1),
             meal_choice=meal_choice,
             FLAGSHIP_choice=FLAGSHIP_choice,
             PREMIUM_choice=PREMIUM_choice,
