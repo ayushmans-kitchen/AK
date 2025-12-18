@@ -9,7 +9,7 @@ urlpatterns = [
 
 
 
-    path('dashboard/',dashboard,name='dashboard'),
+    path('dashboard/',dashboard,name='ayushman_dashboard'),
     path('subscribers/',subscribers,name='subscribers'),
     path('profile/',profile,name='profile'),
 

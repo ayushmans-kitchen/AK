@@ -5,39 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Hotel Meal Management</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'Customer/styles-login.css' %}">
 </head>
+
 <body>
     <div class="login-container">
         <div class="login-wrapper">
+
             <!-- Left Side - Branding -->
             <div class="login-brand">
                 <div class="brand-content">
-                    <img src="logo.PNG" alt="" class="logo-image">
-                    
-                    <p class="brand-subtitle">Premium Meal Management System</p>
-                    <p class="brand-description">Experience luxury dining with our state-of-the-art meal management platform</p>
+                    <img src="{% static 'assets/logo.PNG' %}" alt="Hotel Logo" class="logo-image">
+                    <p class="brand-subtitle" style="text-align: center;">"Aao Khao Jaao"<br> Meal Management System</p>
+                    <p class="brand-description">
+                            
+                    </p>
                 </div>
             </div>
 
             <!-- Right Side - Login Form -->
             <div class="login-form-section">
                 <div class="login-form-wrapper">
+
                     <h2 class="login-title">Welcome Back</h2>
-                    <p class="login-subtitle">Sign in to access your meal dashboard</p>
 
                     <form class="login-form" id="loginForm" method="POST" action="{% url 'login' %}">
                         {% csrf_token %}
+
                         <div class="form-group">
                             <label for="email" class="form-label">Email Address</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                class="form-input" 
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-input"
                                 placeholder="your@email.com"
                                 required
                             >
@@ -45,11 +51,11 @@
 
                         <div class="form-group">
                             <label for="password" class="form-label">Password</label>
-                            <input 
-                                type="password" 
-                                id="password" 
-                                name="password" 
-                                class="form-input" 
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-input"
                                 placeholder="••••••••"
                                 required
                             >
@@ -58,12 +64,22 @@
                         <button type="submit" class="btn-login">Sign In</button>
                     </form>
 
-
+                    <!-- 🔴 MESSAGE AREA -->
                     <div class="login-footer">
-                        <p>Don't have an account? <a href="#" class="signup-link">Create one</a></p>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-error">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <p>For any query please contact the Admin</p>
                     </div>
+
                 </div>
             </div>
+
         </div>
     </div>
 </body>
