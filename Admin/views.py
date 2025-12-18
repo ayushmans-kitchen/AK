@@ -333,7 +333,7 @@ def complete_report(request):
 @staff_member_required(login_url='/login/')
 def dashboard(request):
     return render(request,"Admin/dashboard.html")
-
+    
 
 @staff_member_required(login_url='/login/')
 def subscribers(request):
