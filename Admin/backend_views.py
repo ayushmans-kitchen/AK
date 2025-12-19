@@ -5,8 +5,10 @@ from django.db.models.functions import Greatest
 from django.db import transaction
 from django.http import JsonResponse
 
+from django.contrib.admin.views.decorators import staff_member_required
 from Customers.models import Customer, LunchRecord, DinnerRecord
-from .models import CustomerHistory
+
+from .models import CustomerHistory,AdminNotice
 from django.shortcuts import render,redirect
 
 today = timezone.localdate()
@@ -15,12 +17,9 @@ logger = logging.getLogger(__name__)
 CONSUMING_SERVICES = ("DineIn", "PickUp", "Delivery")
 
 
-def gen_Lunch_record(request=None):
-    """
-    Create missing lunch records for active users and decrement balances exactly once
-    for today's consuming records.
-    """
 
+@staff_member_required(login_url='/login/')
+def gen_Lunch_record(request=None):
     customers_no_record = Customer.objects.filter(
         user_status_active=True,
         lunch_status_active=True
@@ -42,44 +41,39 @@ def gen_Lunch_record(request=None):
                 PREMIUM_choice=c.PREMIUM_MENU_LUNCH_default_choice
             )
         )
-
+    print(lunch_records_to_create)    
     created_count = 0
 
     try:
         with transaction.atomic():
             if lunch_records_to_create:
-                # ignore_conflicts avoids race-duplicate errors if another worker created same record.
                 LunchRecord.objects.bulk_create(lunch_records_to_create, ignore_conflicts=True)
-                # Count how many were inserted - best effort:
                 created_count = len(lunch_records_to_create)
 
-            # Decrement customers who have today's lunch record with a consuming service and haven't been decremented yet.
             customers_to_decrement = Customer.objects.filter(
                 lunch_records__for_date=today,
                 lunch_records__service_choice__in=CONSUMING_SERVICES,
                 lunch_records__decrement_done=False
             ).distinct()
 
-            # Decrement meal_balance but not below 0
             customers_to_decrement.update(meal_balance=Greatest(F("meal_balance") - 1, 0))
 
-            # Mark related LunchRecord(s) as decremented
             LunchRecord.objects.filter(
                 for_date=today,
                 service_choice__in=("DineIn", "PickUp", "Delivery"),
                 decrement_done=False
             ).update(decrement_done=True)
 
-            # if balance <= 0 consider inactive
             Customer.objects.filter(meal_balance__lte=0).update(user_status_active=False,paused_subscription=True)
 
     except Exception as e:
         logger.exception("Unexpected error in gen_Lunch_record: %s", e)
         return JsonResponse({"error": str(e)}, status=500)
 
-    return JsonResponse({"created_count": created_count})
+    return redirect('ayushman_dashboard')
 
 
+@staff_member_required(login_url='/login/')
 def gen_Dinner_record(request=None):
 
     today = timezone.localdate()
@@ -133,10 +127,26 @@ def gen_Dinner_record(request=None):
         logger.exception("Unexpected error in gen_Dinner_record: %s", e)
         return JsonResponse({"error": str(e)}, status=500)
 
-    return JsonResponse({"created_count": created_count})
+    return redirect('ayushman_dashboard')
+
+
+@staff_member_required(login_url='/login/')
+def add_admin_message(request):
+    message=request.POST.get("message")
+    AdminNotice.objects.create(message=message)
+    return redirect("ayushman_dashboard")
+
+@staff_member_required(login_url='/login/')
+def delete_admin_notice(request,mid):
+    AdminNotice.objects.get(pk=mid).delete()
+    return redirect("ayushman_dashboard")
+    
 
 
 
+
+
+@staff_member_required(login_url='/login/')
 def create_customer_history(request, customer):
     lunches = LunchRecord.objects.filter(customer=customer)
     dinners = DinnerRecord.objects.filter(customer=customer)

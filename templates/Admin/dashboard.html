@@ -156,107 +156,121 @@
     <main class="main-content">
         <header class="top-bar">
             <h1>SERVICE DASHBOARD</h1>
-            <p>Wednesday, 17 December 2025</p>
+            <p> {% now "l d F Y" %}</p>
+
         </header>
 
         <div class="bento-grid">
             <div class="bento-card featured-card">
                 <span class="stat-label">Total Customers</span>
-                <div class="stat-value">248</div>
+                <div class="stat-value">{{total_customers}}</div>
             </div>
             <div class="bento-card">
                 <span class="stat-label">Inactive Customers</span>
-                <div class="stat-value">14</div>
+                <div class="stat-value">{{total_inactive_customers}}</div>
             </div>
             <div class="bento-card">
                 <span class="stat-label">Plan Ended</span>
-                <div class="stat-value" style="color:#ff4444">42</div>
+                <div class="stat-value" style="color:#ff4444">{{total_plan_end_customers}}</div>
             </div>
 
             <div class="group-title">Lunch Service</div>
-            <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">64</div></div>
-            <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">42</div></div>
-            <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">64</div></div>
+            <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">{{lunch_dinein}}</div></div>
+            <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{lunch_delivery}}</div></div>
+            <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{lunch_pickup}}</div></div>
             <div class="bento-card" style="background:rgba(212,175,55,0.05)">
                 <span class="stat-label">Total Lunch</span>
-                <div class="stat-value" style="color:var(--gold)">170</div>
+                <div class="stat-value" style="color:var(--gold)">{{total_lunch}}</div>
             </div>
-            <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">64</div></div>
-            <div class="bento-card"><span class="stat-label">Inactive</span><div class="stat-value">42</div></div>
-            <div class="bento-card"><span class="stat-label">Default Entries</span><div class="stat-value">42</div></div>
+            <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">{{lunch_cancelled}}</div></div>
+            <div class="bento-card"><span class="stat-label">Inactive</span><div class="stat-value">{{lunch_inactive}}</div></div>
+            <div class="bento-card"><span class="stat-label">Default Entries</span><div class="stat-value">{{lunch_default_need}}</div></div>
             <div class="bento-card">
                 <span class="stat-label">Generate Lunch Record</span>
-                <button class="bento-btn">Generate</button>
+                <button class="bento-btn"><a href="{% url "gen_Lunch_record" %}">Generate Defaults</a></button>
             </div>
 
             <div class="group-title">Dinner Service</div>
-            <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">64</div></div>
-            <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">42</div></div>
-            <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">64</div></div>
+            <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">{{dinner_dinein}}</div></div>
+            <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{dinner_delivery}}</div></div>
+            <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{dinner_pickup}}</div></div>
             <div class="bento-card" style="background:rgba(212,175,55,0.05)">
                 <span class="stat-label">Total Dinner</span>
-                <div class="stat-value" style="color:var(--gold)">170</div>
+                <div class="stat-value" style="color:var(--gold)">{{total_dinner}}</div>
             </div>
-            <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">64</div></div>
-            <div class="bento-card"><span class="stat-label">Inactive</span><div class="stat-value">42</div></div>
-            <div class="bento-card"><span class="stat-label">Default Entries</span><div class="stat-value">42</div></div>
+            <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">{{dinner_cancelled}}</div></div>
+            <div class="bento-card"><span class="stat-label">Inactive</span><div class="stat-value">{{dinner_inactive}}</div></div>
+            <div class="bento-card"><span class="stat-label">Default Entries</span><div class="stat-value">{{dinner_default_need}}</div></div>
             <div class="bento-card">
                 <span class="stat-label">Generate Dinner Record</span>
-                <button class="bento-btn">Generate</button>
+                <button class="bento-btn" ><a href="{% url "gen_Dinner_record" %}">Generate Defaults</a></button>
             </div>
         </div>
 
         <div class="dashboard-layout">
             <div class="left-col">
-                <div class="card">
-                    <div class="card-header"><h3>Lunch Kitchen Prep</h3></div>
-                    <div class="row"><span>Paneer Flagship</span><span class="qty">28</span></div>
-                    <div class="row"><span>Mushroom Flagship</span><span class="qty">14</span></div>
-                    <div class="row"><span>Chicken Flagship</span><span class="qty">42</span></div>
-                    <div class="row"><span>Prawns Premium</span><span class="qty">12</span></div>
-                    <div class="row"><span>Standard Veg</span><span class="qty">35</span></div>
-                </div>
-                <div class="card">
-                    <div class="card-header"><h3>Dinner Kitchen Prep</h3></div>
-                    <div class="row"><span>Paneer Flagship</span><span class="qty">22</span></div>
-                    <div class="row"><span>Mushroom Flagship</span><span class="qty">09</span></div>
-                    <div class="row"><span>Chicken Flagship</span><span class="qty">38</span></div>
-                    <div class="row"><span>Egg Premium</span><span class="qty">25</span></div>
-                    <div class="row"><span>Standard Veg</span><span class="qty">20</span></div>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-header"><h3>Lunch Kitchen Prep</h3></div>
+
+        <div class="row"><span>VEG</span><span class="qty">{{ l_food.VEG }}</span></div>
+        <div class="row"><span>NON VEG</span><span class="qty">{{ l_food.NON_VEG }}</span></div>
+        <div class="row"><span>PANEER</span><span class="qty">{{ l_food.PANEER }}</span></div>
+        <div class="row"><span>MUSHROOM</span><span class="qty">{{ l_food.MUSHROOM }}</span></div>
+        <div class="row"><span>CHICKEN</span><span class="qty">{{ l_food.CHICKEN }}</span></div>
+        <div class="row"><span>EGG</span><span class="qty">{{ l_food.EGG }}</span></div>
+        <div class="row"><span>PRAWN</span><span class="qty">{{ l_food.PRAWN }}</span></div>
+        <div class="row"><span>FISH</span><span class="qty">{{ l_food.FISH }}</span></div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3>Dinner Kitchen Prep</h3></div>
+
+        <div class="row"><span>VEG</span><span class="qty">{{ d_food.VEG }}</span></div>
+        <div class="row"><span>NON VEG</span><span class="qty">{{ d_food.NON_VEG }}</span></div>
+        <div class="row"><span>PANEER</span><span class="qty">{{ d_food.PANEER }}</span></div>
+        <div class="row"><span>MUSHROOM</span><span class="qty">{{ d_food.MUSHROOM }}</span></div>
+        <div class="row"><span>CHICKEN</span><span class="qty">{{ d_food.CHICKEN }}</span></div>
+        <div class="row"><span>EGG</span><span class="qty">{{ d_food.EGG }}</span></div>
+    </div>
+</div>
+
 
             <div class="right-col">
                 <div class="card">
                     <div class="card-header"><h3>Low Meals Alert</h3></div>
                     <div class="scroll-container alert-area">
+                        {% for c in low_balance_customer %}
                         <div class="alert-item">
-                            <div class="alert-info"><h4>Rahul Varma</h4><p>Room 302</p></div>
-                            <span class="badge-danger">2 Left</span>
+                            <div class="alert-info"><h4>{{c.name}}</h4><p>{{c.phone}}</p></div>
+                            <span class="badge-danger">{{c.meal_balance}} Left</span>
                         </div>
-                        <div class="alert-item">
-                            <div class="alert-info"><h4>Sneha Kapoor</h4><p>Room 105</p></div>
-                            <span class="badge-danger">4 Left</span>
-                        </div>
-                        <div class="alert-item">
-                            <div class="alert-info"><h4>Amit B.</h4><p>Room 202</p></div>
-                            <span class="badge-danger">1 Left</span>
-                        </div>
+                        {% endfor %}
+
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header"><h3>Broadcast Message</h3></div>
                     <div class="scroll-container chat-area">
+
+                        {% for m in admin_messgaes %}
+                        <form method='POST' action="{% url "admin_notice_delete" mid=m.pk %}">
+                            {% csrf_token %}
                         <div class="chat-msg admin">
-                            <div class="chat-meta"><span>ADMIN | 10:30 AM</span><button class="delete-btn">Delete</button></div>
-                            <p class="chat-text">Lunch service is live. Check prep lists.</p>
+                            <div class="chat-meta"><span>{{m.date}}</span><button class="delete-btn">Delete</button></div>
+                            <p class="chat-text">{{m.message}}</p>
                         </div>
+                        </form>
+                        {% endfor %}
+
                     </div>
-                    <div class="input-group">
-                        <input type="text" placeholder="Message all...">
-                        <button class="send-btn">SEND</button>
-                    </div>
+                    <form method='POST' action="{% url "admin_notice" %}">
+                        {% csrf_token %}
+                        <div class="input-group"> 
+                            <input type="text" placeholder="Message all..." name="message">
+                            <button class="send-btn">SEND</button>
+                        </div>
+                    </form>    
                 </div>
             </div>
         </div>

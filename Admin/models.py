@@ -37,3 +37,6 @@ class CustomerHistory(models.Model):
         )
 
 
+class MealHistory():
+    pass 
+#   will store day wise entire of meals... in json
