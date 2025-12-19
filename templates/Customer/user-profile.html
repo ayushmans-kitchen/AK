@@ -121,7 +121,7 @@
                                 {% endif %}
                             {% endif %}
 
-
+                            {% if request.user.lunch_status_active %}            
                             <div class="info-group">
                                 <span class="info-label">Default Lunch Service</span>
                                 <div class="default-service-options radio-group">
@@ -138,7 +138,9 @@
                                     <label for="def-lunch-delivery" class="radio-label btn-delivery">Delivery</label>
                                 </div>
                             </div>
+                            {% endif %}
 
+                            {% if request.user.dinner_status_active %}
                             <div class="info-group">
                                 <span class="info-label">Default Dinner Service</span>
                                 <div class="default-service-options radio-group">
@@ -152,7 +154,7 @@
                                     <label for="def-dinner-delivery" class="radio-label btn-delivery">Delivery</label>
                                 </div>
                             </div>
-                        
+                            {% endif %}
                
                             <div class="info-group">
                                 <span class="info-label">Current Meals Status :</span>

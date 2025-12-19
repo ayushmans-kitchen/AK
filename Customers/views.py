@@ -55,8 +55,9 @@ def user_dashboard(request):
 def user_profile(request):
     user=request.user
     if request.method == "POST":
-        default_lunch_service=request.POST.get("default_lunch_service")
-        default_dinner_service=request.POST.get("default_dinner_service")
+        default_lunch_service = request.POST.get("default_lunch_service", "NONE")
+        default_dinner_service = request.POST.get("default_dinner_service", "NONE")
+
         status_availability=request.POST.get("status_availability")
         
 
