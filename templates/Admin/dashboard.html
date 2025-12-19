@@ -1,630 +1,265 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Admin Dashboard | Ayushman's Kitchen</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap"
-        rel="stylesheet">
+    <title>Master Admin | Bento Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --gold: #d4af37;
             --bg-deep: #050505;
-            --bg-card: #0f0f0f;
-            --border: #1f1f1f;
-            --text-muted: #888888;
+            --bg-card: #0c0c0c;
+            --border: #1a1a1a;
+            --text-muted: #d6d6d6;
             --sb-width: 260px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- RESET & BASE --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* --- BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-deep); color: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-deep);
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        /* --- SIDEBAR TOGGLE LOGIC --- */
-        .nav-toggle {
-            display: none;
-        }
-
-        /* --- MOBILE HEADER (Top Left Logo, Top Right 3-Lines) --- */
+        /* --- MOBILE NAV LOGIC --- */
+        .nav-toggle { display: none; }
         .mobile-header {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 65px;
-            background: #000;
-            padding: 0 1.5rem;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 2100;
-            border-bottom: 1px solid var(--border);
+            display: none; position: fixed; top: 0; width: 100%; height: 60px;
+            background: #000; padding: 0 1.5rem; align-items: center; justify-content: space-between;
+            z-index: 2100; border-bottom: 1px solid var(--border);
         }
-
-        .hamburger {
-            width: 28px;
-            height: 18px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            height: 3px;
-            width: 100%;
-            background: var(--gold);
-            border-radius: 10px;
-            transition: var(--transition);
-        }
+        .hamburger { width: 25px; height: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
+        .hamburger span { height: 2px; width: 100%; background: var(--gold); border-radius: 10px; transition: var(--transition); }
 
         /* --- SIDEBAR --- */
         .sidebar {
-            width: var(--sb-width);
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            background: #000;
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 2rem 1.25rem;
-            z-index: 2000;
-            transition: var(--transition);
+            width: var(--sb-width); height: 100vh; position: fixed; left: 0; top: 0;
+            background: #000; border-right: 1px solid var(--border); display: flex; flex-direction: column;
+            padding: 2rem 1.2rem; z-index: 2000; transition: var(--transition);
         }
-
-        .sidebar-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin-bottom: 3rem;
-            color: #fff;
-        }
-
-        .gold-dot {
-            color: var(--gold);
-        }
-
-        .nav-links {
-            list-style: none;
-            flex-grow: 1;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            color: #666;
-            text-decoration: none;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
-
-        .nav-item.active {
-            background: var(--gold);
-            color: #000;
-            font-weight: 700;
-        }
-
-        .nav-item:hover:not(.active) {
-            color: #fff;
-            background: #111;
-        }
-
-        .sidebar-footer {
-            border-top: 1px solid var(--border);
-            padding-top: 1.5rem;
-        }
+        .sidebar-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 900; margin-bottom: 3rem; color: #fff; }
+        .nav-links { list-style: none; flex-grow: 1; }
+        .nav-item { display: flex; align-items: center; padding: 10px 14px; margin-bottom: 5px; color: #555; text-decoration: none; border-radius: 6px; font-size: 0.8rem; transition: 0.2s; }
+        .nav-item.active { background: var(--gold); color: #000; font-weight: 700; }
+        .nav-item:hover:not(.active) { color: #fff; background: #111; }
 
         /* --- MAIN CONTENT --- */
-        .main-content {
-            margin-left: var(--sb-width);
-            padding: 2.5rem;
-            transition: var(--transition);
-        }
+        .main-content { margin-left: var(--sb-width); padding: 1.5rem 2rem; transition: var(--transition); }
+        .top-bar { margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .top-bar h1 { font-family: 'Playfair Display'; font-size: 1.4rem; color: var(--gold); }
+        .top-bar p { color: var(--text-muted); font-size: 0.7rem; }
 
-        .top-bar {
-            margin-bottom: 2.5rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1.5rem;
-        }
+        /* --- BENTO STATS GRID --- */
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .bento-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; display: flex; flex-direction: column; justify-content: center; }
+        
+        .featured-card { grid-column: span 2; border-left: 3px solid var(--gold); background: linear-gradient(to right, #0f0f0f, #0c0c0c); }
+        .group-title { grid-column: span 4; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-top: 0.5rem; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
 
-        .top-bar h1 {
-            font-family: 'Playfair Display';
-            font-size: 1.8rem;
-            color: var(--gold);
-        }
+        .stat-label { font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 4px; }
+        .stat-value { font-size: 1.3rem; font-weight: 700; }
+        .featured-card .stat-value { font-size: 2rem; color: var(--gold); }
 
-        .top-bar p {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: 4px;
-        }
-
-        /* --- STATS GRID (4 Columns) --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.25rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            padding: 1.25rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--gold);
-        }
-
-        .stat-card.danger::after {
-            background: #ff4444;
-        }
-
-        .stat-label {
-            color: var(--text-muted);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-value {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-top: 5px;
-        }
-
-        /* --- DASHBOARD CONTENT GRID --- */
-        .dashboard-layout {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 2rem;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.25rem;
-        }
-
-        .card-header h3 {
-            font-size: 1rem;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .badge {
-            background: #222;
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.65rem;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.85rem 0;
-            border-bottom: 1px solid #1a1a1a;
-            font-size: 0.85rem;
-        }
-
-        .row:last-child {
-            border-bottom: none;
-        }
-
-        .row .label {
-            color: #ccc;
-        }
-
-        .row .qty {
-            color: var(--gold);
-            font-weight: 800;
-        }
-
-        /* --- ALERTS & MESSAGING --- */
-
-        /* Delete Button Styling */
-        .delete-btn {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #666;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .delete-btn svg {
-            opacity: 0.6;
-        }
-
-        .delete-btn:hover {
-            background: rgba(255, 68, 68, 0.1);
-            border-color: rgba(255, 68, 68, 0.3);
-            color: #ff4444;
-        }
-
-        .delete-btn:hover svg {
-            opacity: 1;
-        }
-
-        /* Refined Chat Layout */
-        .chat-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .chat-msg {
-            margin-bottom: 1.25rem;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
-            border-left: 3px solid #333;
-        }
-
-        .chat-msg.admin {
-            border-left-color: var(--gold);
-            background: rgba(212, 175, 55, 0.03);
-        }
-
-        .alert-item {
-            background: #0a0a0a;
-            border: 1px solid #222;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .alert-info h4 {
-            font-size: 0.85rem;
-            margin-bottom: 2px;
-        }
-
-        .alert-info p {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-
-        .badge-left {
-            background: #ff4444;
-            color: #fff;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: 700;
-        }
-
-        .remind-btn {
+        /* --- BUTTONS --- */
+        .bento-btn {
             background: transparent;
             border: 1px solid var(--gold);
             color: var(--gold);
-            font-size: 0.65rem;
-            padding: 4px 8px;
+            padding: 8px 12px;
             border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .chat-area {
-            height: 180px;
-            overflow-y: auto;
-            padding-right: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .chat-msg {
-            margin-bottom: 1rem;
-            border-left: 2px solid #333;
-            padding-left: 10px;
-            position: relative;
-        }
-
-        .chat-msg.admin {
-            border-left-color: var(--gold);
-        }
-
-        .chat-meta {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 4px;
+            font-size: 0.65rem;
             font-weight: 700;
-        }
-
-        .chat-text {
-            font-size: 0.8rem;
-            line-height: 1.4;
-            color: #bbb;
-        }
-
-        .msg-close {
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
-            color: #ff4444;
+            transition: var(--transition);
+            width: fit-content;
+            margin-top: 5px;
         }
 
-        .input-group {
-            display: flex;
-            gap: 8px;
-            border-top: 1px solid var(--border);
-            padding-top: 1rem;
-        }
-
-        .input-group input {
-            flex: 1;
-            background: #1a1a1a;
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 0.85rem;
-            outline: none;
-        }
-
-        .send-btn {
+        .bento-btn:hover {
             background: var(--gold);
-            border: none;
-            padding: 0 15px;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.8rem;
+            color: #000;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
         }
 
-        /* --- MEDIA QUERIES --- */
+        /* --- DASHBOARD LAYOUT --- */
+        .dashboard-layout { display: flex; gap: 1.5rem; align-items: stretch; }
+        .left-col { flex: 1.6; display: flex; flex-direction: column; gap: 1.5rem; }
+        .right-col { flex: 1; display: flex; flex-direction: column; gap: 1.5rem; }
+
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 1.2rem; display: flex; flex-direction: column; }
+        .left-col .card:last-child, .right-col .card:last-child { flex-grow: 1; }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .card-header h3 { font-size: 0.75rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+
+        .row { display: flex; justify-content: space-between; padding: 0.65rem 0; border-bottom: 1px solid #141414; font-size: 0.75rem; }
+        .row:last-child { border-bottom: none; }
+        .qty { color: var(--gold); font-weight: 700; }
+
+        .scroll-container { overflow-y: auto; padding-right: 8px; }
+        .alert-area { height: 180px; }
+        .chat-area { height: 180px; flex-grow: 1; }
+        .scroll-container::-webkit-scrollbar { width: 3px; }
+        .scroll-container::-webkit-scrollbar-thumb { background: #222; }
+
+        .alert-item { background: #0a0a0a; border: 1px solid #1a1a1a; padding: 0.7rem; border-radius: 4px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .alert-info h4 { font-size: 0.75rem; }
+        .alert-info p { font-size: 0.65rem; color: var(--text-muted); }
+        .badge-danger { color: #ff4444; font-size: 0.65rem; font-weight: 700; }
+
+        .chat-msg { margin-bottom: 1rem; padding: 8px; background: rgba(255,255,255,0.01); border-radius: 4px; border-left: 2px solid #222; }
+        .chat-msg.admin { border-left-color: var(--gold); }
+        .chat-meta { display: flex; justify-content: space-between; font-size: 0.6rem; margin-bottom: 4px; color: var(--text-muted); }
+        .delete-btn { background: none; border: none; color: #444; cursor: pointer; font-size: 0.6rem; text-transform: uppercase; font-weight: 600; }
+
+        .input-group { display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 1rem; margin-top: auto; }
+        .input-group input { flex: 1; background: #111; border: 1px solid var(--border); padding: 8px; border-radius: 4px; color: #fff; font-size: 0.75rem; outline: none; }
+        .send-btn { background: var(--gold); border: none; padding: 0 12px; border-radius: 4px; font-weight: 700; font-size: 0.7rem; cursor: pointer; }
+
+        /* --- RESPONSIVE --- */
         @media (max-width: 1024px) {
-            .mobile-header {
-                display: flex;
-            }
+            .mobile-header { display: flex; }
+            .sidebar { transform: translateX(-100%); padding-top: 5rem; }
+            .main-content { margin-left: 0; padding: 5rem 1rem 1rem 1rem; }
+            .nav-toggle:checked ~ .sidebar { transform: translateX(0); }
+            .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+            .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(2) { opacity: 0; }
+            .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(3) { transform: translateY(-8.5px) rotate(-45deg); }
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .group-title { grid-column: span 2; }
+            .dashboard-layout { flex-direction: column; }
+        }
 
-            .sidebar {
-                transform: translateX(-100%);
-                padding-top: 5rem;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 6rem 1.5rem 2rem 1.5rem;
-            }
-
-            .nav-toggle:checked~.sidebar {
-                transform: translateX(0);
-            }
-
-            .nav-toggle:checked~.mobile-header .hamburger span:nth-child(1) {
-                transform: translateY(7.5px) rotate(45deg);
-            }
-
-            .nav-toggle:checked~.mobile-header .hamburger span:nth-child(2) {
-                opacity: 0;
-            }
-
-            .nav-toggle:checked~.mobile-header .hamburger span:nth-child(3) {
-                transform: translateY(-7.5px) rotate(-45deg);
-            }
-
-            .dashboard-layout {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 600px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .group-title { grid-column: span 1; }
+            .featured-card { grid-column: span 1; }
         }
     </style>
 </head>
-
 <body>
 
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
 
-     {% include "Admin/sidebar.html" %}
+    <header class="mobile-header">
+        <div class="logo" style="font-family: 'Playfair Display'; color: var(--gold); font-weight: 900; font-size: 1rem;">AK ADMIN</div>
+        <label for="nav-toggle" class="hamburger">
+            <span></span><span></span><span></span>
+        </label>
+    </header>
+
+    {% include "Admin/sidebar.html" %}
 
     <main class="main-content">
         <header class="top-bar">
-            <h1>DASHBOARD</h1>
+            <h1>SERVICE DASHBOARD</h1>
             <p>Wednesday, 17 December 2025</p>
         </header>
 
-        <div class="stats-grid">
-            <div class="stat-card"><span class="stat-label">Total Meals</span>
+        <div class="bento-grid">
+            <div class="bento-card featured-card">
+                <span class="stat-label">Total Customers</span>
                 <div class="stat-value">248</div>
             </div>
-            <div class="stat-card"><span class="stat-label">Cancelled</span>
-                <div class="stat-value">42</div>
-            </div>
-            <div class="stat-card danger"><span class="stat-label">Low Balance</span>
+            <div class="bento-card">
+                <span class="stat-label">Inactive Customers</span>
                 <div class="stat-value">14</div>
             </div>
-        </div>
-        <div class="stats-grid">
-            <div class="stat-card"><span class="stat-label">Dine-In</span>
-                <div class="stat-value">64</div>
+            <div class="bento-card">
+                <span class="stat-label">Plan Ended</span>
+                <div class="stat-value" style="color:#ff4444">42</div>
             </div>
-            <div class="stat-card"><span class="stat-label">Deliveries</span>
-                <div class="stat-value">42</div>
+
+            <div class="group-title">Lunch Service</div>
+            <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">64</div></div>
+            <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">42</div></div>
+            <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">64</div></div>
+            <div class="bento-card" style="background:rgba(212,175,55,0.05)">
+                <span class="stat-label">Total Lunch</span>
+                <div class="stat-value" style="color:var(--gold)">170</div>
             </div>
-            <div class="stat-card"><span class="stat-label">Pick-Up</span>
-                <div class="stat-value">64</div>
+            <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">64</div></div>
+            <div class="bento-card"><span class="stat-label">Inactive</span><div class="stat-value">42</div></div>
+            <div class="bento-card"><span class="stat-label">Default Entries</span><div class="stat-value">42</div></div>
+            <div class="bento-card">
+                <span class="stat-label">Generate Lunch Record</span>
+                <button class="bento-btn">Generate</button>
+            </div>
+
+            <div class="group-title">Dinner Service</div>
+            <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">64</div></div>
+            <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">42</div></div>
+            <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">64</div></div>
+            <div class="bento-card" style="background:rgba(212,175,55,0.05)">
+                <span class="stat-label">Total Dinner</span>
+                <div class="stat-value" style="color:var(--gold)">170</div>
+            </div>
+            <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">64</div></div>
+            <div class="bento-card"><span class="stat-label">Inactive</span><div class="stat-value">42</div></div>
+            <div class="bento-card"><span class="stat-label">Default Entries</span><div class="stat-value">42</div></div>
+            <div class="bento-card">
+                <span class="stat-label">Generate Dinner Record</span>
+                <button class="bento-btn">Generate</button>
             </div>
         </div>
 
         <div class="dashboard-layout">
             <div class="left-col">
                 <div class="card">
-                    <div class="card-header">
-                        <h3>Lunch Kitchen Prep</h3><span class="badge">12:00 - 15:00</span>
-                    </div>
-                    <div class="row"><span class="label">Paneer (Flagship/Premium)</span><span class="qty">28</span>
-                    </div>
-                    <div class="row"><span class="label">Mushroom (Flagship/Premium)</span><span class="qty">14</span>
-                    </div>
-                    <div class="row"><span class="label">Chicken (Flagship/Premium)</span><span class="qty">42</span>
-                    </div>
-                    <div class="row"><span class="label">Prawns (Premium Only)</span><span class="qty">12</span></div>
-                    <div class="row"><span class="label">Fish (Premium Only)</span><span class="qty">08</span></div>
-                    <div class="row"><span class="label">Standard Veg (Normal)</span><span class="qty">35</span></div>
+                    <div class="card-header"><h3>Lunch Kitchen Prep</h3></div>
+                    <div class="row"><span>Paneer Flagship</span><span class="qty">28</span></div>
+                    <div class="row"><span>Mushroom Flagship</span><span class="qty">14</span></div>
+                    <div class="row"><span>Chicken Flagship</span><span class="qty">42</span></div>
+                    <div class="row"><span>Prawns Premium</span><span class="qty">12</span></div>
+                    <div class="row"><span>Standard Veg</span><span class="qty">35</span></div>
                 </div>
-
                 <div class="card">
-                    <div class="card-header">
-                        <h3>Dinner Kitchen Prep</h3><span class="badge">19:00 - 22:00</span>
-                    </div>
-                    <div class="row"><span class="label">Paneer (Flagship/Premium)</span><span class="qty">22</span>
-                    </div>
-                    <div class="row"><span class="label">Mushroom (Flagship/Premium)</span><span class="qty">09</span>
-                    </div>
-                    <div class="row"><span class="label">Chicken (Flagship/Premium)</span><span class="qty">38</span>
-                    </div>
-                    <div class="row"><span class="label">Egg (Premium Only)</span><span class="qty">25</span></div>
-                    <div class="row"><span class="label">Standard Veg (Normal)</span><span class="qty">20</span></div>
+                    <div class="card-header"><h3>Dinner Kitchen Prep</h3></div>
+                    <div class="row"><span>Paneer Flagship</span><span class="qty">22</span></div>
+                    <div class="row"><span>Mushroom Flagship</span><span class="qty">09</span></div>
+                    <div class="row"><span>Chicken Flagship</span><span class="qty">38</span></div>
+                    <div class="row"><span>Egg Premium</span><span class="qty">25</span></div>
+                    <div class="row"><span>Standard Veg</span><span class="qty">20</span></div>
                 </div>
             </div>
 
             <div class="right-col">
                 <div class="card">
-                    <div class="card-header">
-                        <h3>Low Meals Alert (< 5)</h3>
-                    </div>
-                    <div class="alert-item">
-                        <div class="alert-info">
-                            <h4>Rahul Varma</h4>
-                            <p>Premium 60 | Room 302</p>
+                    <div class="card-header"><h3>Low Meals Alert</h3></div>
+                    <div class="scroll-container alert-area">
+                        <div class="alert-item">
+                            <div class="alert-info"><h4>Rahul Varma</h4><p>Room 302</p></div>
+                            <span class="badge-danger">2 Left</span>
                         </div>
-                        <span class="badge-left">2 Left</span>
-                        <button class="remind-btn">Remind</button>
-                    </div>
-                    <div class="alert-item">
-                        <div class="alert-info">
-                            <h4>Sneha Kapoor</h4>
-                            <p>Normal 30 | Room 105</p>
+                        <div class="alert-item">
+                            <div class="alert-info"><h4>Sneha Kapoor</h4><p>Room 105</p></div>
+                            <span class="badge-danger">4 Left</span>
                         </div>
-                        <span class="badge-left">4 Left</span>
-                        <button class="remind-btn">Remind</button>
-                    </div>
-                    <div class="alert-item">
-                        <div class="alert-info">
-                            <h4>Amitabh B.</h4>
-                            <p>Premium 60 | Room 501</p>
+                        <div class="alert-item">
+                            <div class="alert-info"><h4>Amit B.</h4><p>Room 202</p></div>
+                            <span class="badge-danger">1 Left</span>
                         </div>
-                        <span class="badge-left">1 Left</span>
-                        <button class="remind-btn">Remind</button>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">
-                        <h3>Broadcast Message <span class="badge" style="color:var(--gold)">LIVE</span></h3>
-                    </div>
-
-                    <div class="chat-area">
+                    <div class="card-header"><h3>Broadcast Message</h3></div>
+                    <div class="scroll-container chat-area">
                         <div class="chat-msg admin">
-                            <div class="chat-meta">
-                                <span>ADMIN | 10:30 AM</span>
-                                <button class="delete-btn" onclick="this.closest('.chat-msg').remove()">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path
-                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                        </path>
-                                    </svg>
-                                    Delete
-                                </button>
-                            </div>
-                            <p class="chat-text">Lunch service is now live. Please check your prep lists.</p>
-                        </div>
-
-                        <div class="chat-msg">
-                            <div class="chat-meta">
-                                <span>SYSTEM | Yesterday</span>
-                                <button class="delete-btn" onclick="this.closest('.chat-msg').remove()">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path
-                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                        </path>
-                                    </svg>
-                                    Delete
-                                </button>
-                            </div>
-                            <p class="chat-text">Weekly menu has been updated for all Premium subscribers.</p>
-                        </div>
-
-                        <div class="chat-msg admin">
-                            <div class="chat-meta">
-                                <span>ADMIN | 15 Dec</span>
-                                <button class="delete-btn" onclick="this.closest('.chat-msg').remove()">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path
-                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                        </path>
-                                    </svg>
-                                    Delete
-                                </button>
-                            </div>
-                            <p class="chat-text">Reminder: Kitchen will be closed for maintenance this Sunday.</p>
+                            <div class="chat-meta"><span>ADMIN | 10:30 AM</span><button class="delete-btn">Delete</button></div>
+                            <p class="chat-text">Lunch service is live. Check prep lists.</p>
                         </div>
                     </div>
-
                     <div class="input-group">
-                        <input type="text" placeholder="Message all users...">
+                        <input type="text" placeholder="Message all...">
                         <button class="send-btn">SEND</button>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
     </main>
 </body>
-
 </html>
