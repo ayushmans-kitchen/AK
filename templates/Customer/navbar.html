@@ -1,4 +1,137 @@
 {% load static %}
+<style>
+    /* =========================================
+   PREMIUM NAVBAR & NAVIGATION
+   ========================================= */
+.navbar {
+    background: rgba(5, 5, 5, 0.85); /* Deep black with transparency */
+    backdrop-filter: blur(15px);     /* Glass effect */
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.8rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-image {
+    height: 40px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo-image:hover {
+    transform: scale(1.05);
+}
+
+/* Desktop Navigation */
+.navbar-nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-link {
+    color: #94a3b8; /* Muted slate */
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: all 0.3s ease;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+}
+
+.nav-link:hover {
+    color: #FFC107; /* Gold */
+    background: rgba(255, 193, 7, 0.05);
+}
+
+/* Hamburger Menu Button */
+.hamburger {
+    display: none; /* Hidden on desktop */
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #FFC107;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* =========================================
+   MOBILE RESPONSIVE NAVIGATION
+   ========================================= */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .navbar-nav {
+        display: none; /* Controlled by JS '.active' class */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #0a0a0c;
+        flex-direction: column;
+        padding: 2rem 0;
+        gap: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+
+    .navbar-nav.active {
+        display: flex;
+        animation: slideInDown 0.3s ease-out;
+    }
+
+    .nav-link {
+        width: 80%;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    /* Hamburger Active Animation */
+    .hamburger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+}
+
+@keyframes slideInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
 <header class="navbar">
     <div class="navbar-container">
         <div class="navbar-logo">
@@ -8,8 +141,8 @@
             <span></span><span></span><span></span>
         </button>
         <nav class="navbar-nav" id="navbarNav">
-            <a href="{% url 'user_dashboard' %}" class="nav-link active">My Meals</a>
-            <a href="{% url 'user_profile' %}" class="nav-link active">Profie</a>
+            <a href="{% url 'user_dashboard' %}" class="nav-link">My Meals</a>
+            <a href="{% url 'user_profile' %}" class="nav-link">Profie</a>
             <a href="{% url 'user_history' %}" class="nav-link">History</a>
             <a href="{% url 'logout' %}" class="nav-link">Logout</a>
         </nav>

@@ -1,557 +1,271 @@
-/* ===========================
-    DESIGN TOKENS & VARIABLES
-    =========================== */
+/* =========================================
+   USER PROFILE - PERFECT RESPONSIVE THEME
+   (Designed for sticky Navbar compatibility)
+   ========================================= */
 :root {
-    --color-primary: #d4af37; /* Gold/Yellow */
-    --color-primary-dark: #b8860b;
-    --color-background: #000000;
-    --color-background-secondary: #0a0a0a;
-    --color-background-tertiary: #1c1c1c;
-    --color-text: #ffffff;
-    --color-text-secondary: #e0e0e0;
-    --color-text-muted: #a0a0a0;
-    --color-border: #333333;
-    --color-success: #4ade80; /* Green */
-    --color-danger: #ef4444; /* Red */
-    
-    /* Specific Action Colors (Used in Dashboard and Profile radios) */
-    --color-pickup: #00bcd4; /* Cyan */
-    --color-delivery: #ff9800; /* Orange */
-    --color-cancel: #ef4444; /* Red */
-    
-    --color-card-bg: var(--color-background-tertiary); 
-
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
-
-    --font-sans: "Montserrat", sans-serif;
-    --font-display: "Playfair Display", serif;
-
-    --border-radius: 0.5rem;
-    --transition: 0.3s ease;
+    --primary: #FFC107;
+    --primary-dark: #FFB300;
+    --bg-deep: #050505;
+    --surface: #121212;
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-main: #FFFFFF;
+    --text-muted: #94a3b8;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
 }
 
-/* ===========================
-    RESET & BASE STYLES
-    =========================== */
+/* --- Core Reset & Body --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
 body {
-    font-family: var(--font-sans);
-    background-color: var(--color-background);
-    color: var(--color-text);
+    background-color: var(--bg-deep);
+    background-image: 
+        radial-gradient(circle at 0% 0%, rgba(255, 193, 7, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.02) 0%, transparent 40%);
+    color: var(--text-main);
+    font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
-    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
 }
 
-h1, h2, h3 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: var(--spacing-lg);
-}
-
-a {
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: color var(--transition);
-}
-
-p {
-    margin-bottom: var(--spacing-md);
-}
-
-/* ===========================
-    NAVBAR
-    =========================== */
-.navbar {
-    background-color: var(--color-background-secondary);
-    border-bottom: 2px solid var(--color-primary);
-    padding: var(--spacing-md) 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.navbar-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-lg);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.logo-image {
-    height: 40px;
-}
-
-.navbar-nav {
-    display: flex;
-    gap: var(--spacing-lg);
-    flex-wrap: wrap;
-}
-
-.nav-link {
-    color: var(--color-text-secondary);
-    font-weight: 500;
-    transition: color var(--transition);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-bottom: 2px solid transparent;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary);
-}
-
-/* ===========================
-    LAYOUT CONTAINERS & TYPOGRAPHY
-    =========================== */
+/* --- Fluid Main Container --- */
 .user-page {
-    min-height: 100vh;
-    padding: var(--spacing-2xl) var(--spacing-lg);
-    background-color: var(--color-background);
+    width: 100%;
+    max-width: 850px; /* Narrower for focused profile settings */
+    margin: 0 auto;
+    padding: clamp(2rem, 10vh, 5rem) 1.25rem 6rem;
 }
 
 .user-container {
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 100%;
+    animation: profileFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .page-title {
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-lg);
-    font-size: 2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+    text-align: center;
+    margin-bottom: clamp(2rem, 5vh, 3.5rem);
+    font-weight: 900;
 }
 
-.user-plan-display,
-.user-greeting { 
-    color: var(--color-primary);
-    font-weight: 600;
-    font-size: 1.25rem;
-    margin-bottom: var(--spacing-xl);
-}
-
-.user-greeting {
-    color: var(--color-text-secondary);
-    font-size: 1.1rem;
+/* --- Profile Card Container --- */
+.profile-card {
+    background: var(--surface);
+    border: 1px solid var(--card-border);
+    border-radius: 32px;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
 }
 
 .section-title {
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-lg);
-    font-size: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 12px;
+    font-weight: 800;
 }
 
-/* ===========================
-    MEAL COUNTERS (Dashboard)
-    =========================== */
-.meal-counters {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-2xl);
-}
-
-.counter-card {
-    background-color: var(--color-card-bg);
-    border: 2px solid var(--color-primary);
-    padding: var(--spacing-xl);
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-    transition: all var(--transition);
-}
-
-.counter-icon {
-    font-size: 2.5rem; 
-    flex-shrink: 0;
-}
-
-.counter-label {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-    margin-bottom: var(--spacing-xs);
-}
-
-.counter-number {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    color: var(--color-primary);
-    font-weight: 700;
-}
-
-/* ===========================
-    MEALS GRID & CARDS (Dashboard)
-    =========================== */
-.meals-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-2xl);
-}
-
-.meal-card {
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-lg);
-    transition: all var(--transition);
-}
-
-.meal-time {
-    display: inline-block;
-    background-color: var(--color-primary);
-    color: var(--color-background);
-    padding: var(--spacing-xs) var(--spacing-md);
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 0.875rem;
-    margin-bottom: var(--spacing-md);
-}
-
-.meal-details {
-    margin-bottom: var(--spacing-lg);
-}
-
-.meal-course {
-    color: var(--color-primary);
-    font-weight: 600;
-    font-size: 0.875rem;
-    margin-bottom: var(--spacing-xs);
-}
-
-.meal-description {
-    color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-sm);
-}
-
-.meal-time-slot {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-}
-
-/* ===========================
-    MEAL STATUS MESSAGE (Dashboard Locked State)
-    =========================== */
-.meal-status-message {
-    margin-top: var(--spacing-md);
-    padding: var(--spacing-sm);
-    border-left: 5px solid var(--color-success);
-    background-color: rgba(74, 203, 102, 0.1);
-    color: var(--color-success);
-    font-weight: 600;
-    border-radius: 0 var(--border-radius) var(--border-radius) 0;
-}
-
-.meal-status-message.cancelled {
-    border-left: 5px solid var(--color-danger);
-    background-color: rgba(239, 68, 68, 0.1);
-    color: var(--color-danger);
-}
-.meal-status-message p {
-    margin: 0;
-    font-size: 0.9rem;
-    margin-bottom: var(--spacing-xs);
-}
-.meal-status-message p:last-child {
-    margin-bottom: 0;
-}
-
-/* Styles for locked meal cards (Dashboard) */
-.locked-card .food-type-dropdown,
-.locked-card .meal-actions,
-.locked-card .btn-confirm {
-    display: none !important;
-}
-
-.locked-card .meal-course {
-    color: var(--color-success); 
-}
-
-
-/* ===========================
-    DROPDOWN & INPUT STYLES (General)
-    =========================== */
-.food-type-dropdown,
-.select-field {
-    width: 100%;
-    padding: var(--spacing-md);
-    margin-top: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
-    background-color: var(--color-background-tertiary);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    font-family: var(--font-sans);
-    appearance: none; 
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23d4af37' d='M10 12.586l4.293-4.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 12.586z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
-    cursor: pointer;
-    transition: border-color var(--transition);
-}
-
-.food-type-dropdown:focus,
-.select-field:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.5);
-}
-
-.food-type-dropdown option,
-.select-field option {
-    background-color: var(--color-background-tertiary);
-    color: var(--color-text-secondary);
-}
-
-/* ===========================
-    ACTION BUTTONS (General Radio Group & Confirm)
-    =========================== */
-.btn {
-    display: inline-block;
-    padding: var(--spacing-md) var(--spacing-xl);
-    font-family: var(--font-sans);
-    font-weight: 600;
-    border: 2px solid transparent;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: all var(--transition);
-    text-align: center;
-    font-size: 1rem;
-    white-space: nowrap;
-}
-
-.btn-primary {
-    background-color: var(--color-primary);
-    color: var(--color-background);
-    border-color: var(--color-primary);
-}
-
-.btn-primary:hover {
-    background-color: var(--color-primary-dark);
-    border-color: var(--color-primary-dark);
-    transform: translateY(-2px);
-}
-
-.btn-confirm {
-    width: 100%;
-    margin-top: var(--spacing-lg);
-    display: block;
-}
-
-.meal-actions.radio-group { /* Dashboard radio layout */
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); 
-    gap: var(--spacing-sm);
-    user-select: none;
-}
-
-.radio-group input[type="radio"] {
-    display: none;
-}
-
-.radio-group .radio-label {
-    padding: var(--spacing-md) var(--spacing-lg);
-    font-size: 0.875rem;
-    border: 2px solid;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: all var(--transition);
-    text-align: center;
-    font-weight: 600;
-    background-color: transparent;
-}
-
-/* --- Radio Label Colors --- */
-.radio-label.btn-dining { border-color: var(--color-primary); color: var(--color-primary); }
-.radio-label.btn-pickup { border-color: var(--color-pickup); color: var(--color-pickup); }
-.radio-label.btn-delivery { border-color: var(--color-delivery); color: var(--color-delivery); }
-.radio-label.btn-cancel { border-color: var(--color-cancel); color: var(--color-cancel); }
-
-/* --- Checked/Selected State --- */
-.radio-group input[type="radio"]:checked + .radio-label {
-    color: var(--color-background);
-}
-
-.radio-group input[type="radio"]:checked + .radio-label.btn-dining { background-color: var(--color-primary); }
-.radio-group input[type="radio"]:checked + .radio-label.btn-pickup { background-color: var(--color-pickup); }
-.radio-group input[type="radio"]:checked + .radio-label.btn-delivery { background-color: var(--color-delivery); }
-.radio-group input[type="radio"]:checked + .radio-label.btn-cancel { background-color: var(--color-cancel); }
-
-
-/* ===========================
-    PROFILE PAGE SPECIFIC STYLES
-    =========================== */
-
-.profile-card {
-    background-color: var(--color-background-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-2xl);
-    margin-bottom: var(--spacing-2xl);
-}
-
+/* --- Profile Info Grid (Responsive) --- */
 .profile-info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-    gap: var(--spacing-xl);
+    /* Two columns on desktop, One on mobile */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Force specific items to full width */
+.info-group:has(.radio-group), 
+.message-banner {
+    grid-column: 1 / -1;
 }
 
 .info-group {
-    margin-bottom: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 .info-label {
-    display: block;
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-    margin-bottom: var(--spacing-xs);
-    font-weight: 500;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.info-value {
-    color: var(--color-text);
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: var(--spacing-sm) 0;
-    border-bottom: 1px solid var(--color-border);
+/* Non-editable Labels (Name, Email, Phone) */
+label[type="text"] {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #fff;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     display: block;
+}
+
+/* --- Form Controls --- */
+.select-field {
     width: 100%;
-}
-
-.input-field {
-    color: var(--color-text-secondary);
-    font-size: 1rem;
-    font-weight: 400;
-    background-color: var(--color-background-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-md);
-    margin-top: var(--spacing-sm);
-    display: block;
-    width: 100%;
-    transition: border-color var(--transition);
-}
-
-.input-field[readonly] {
-    opacity: 0.7;
-    cursor: default;
-    background-color: var(--color-background-tertiary);
-}
-
-/* Service Radio Groups in Profile (Flex layout) */
-.default-service-options {
-    display: flex;
-    gap: var(--spacing-sm);
-    margin-top: var(--spacing-sm);
-}
-
-.default-service-options .radio-label {
-    flex-grow: 1;
-    padding: var(--spacing-sm);
-    font-size: 0.85rem; 
-}
-
-.profile-actions {
-    margin-top: var(--spacing-2xl);
-    text-align: right;
-}
-
-/* =================================
-    RESPONSIVE DESIGN (Media Queries)
-    ================================= */
-
-/* Hamburger menu setup */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    background: none;
-    border: none;
+    padding: 1rem 1.25rem;
+    background: #1a1a1e;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    color: white;
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    appearance: none;
     cursor: pointer;
-    padding: var(--spacing-md);
-    gap: var(--spacing-xs);
-    z-index: 101;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23FFC107'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.25rem center;
+    background-size: 1.1rem;
+    transition: 0.3s;
 }
 
-.hamburger span {
+.select-field:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.1);
+}
+
+/* --- Segmented Radio Chips --- */
+.radio-group {
+    display: grid;
+    /* Flexible chips that stack or side-by-side */
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 5px;
+}
+
+.radio-group input { display: none; }
+
+.radio-label {
+    background: #1a1a1e;
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radio-group input:checked + .radio-label {
+    background: rgba(255, 193, 7, 0.1);
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: scale(0.98);
+}
+
+/* Special color for Paused/Cancel */
+input[value="False"]:checked + .radio-label {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+/* --- Action Buttons --- */
+.profile-actions, .history-actions {
+    margin-top: 3rem;
+}
+
+.btn {
+    width: 100%;
+    padding: 1.2rem;
+    border-radius: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
     display: block;
-    width: 25px;
-    height: 3px;
-    background-color: var(--color-primary);
-    border-radius: 2px;
-    transition: all var(--transition);
+    text-align: center;
+    border: none;
+    min-height: 55px;
 }
 
-/* Tablet and Smaller Devices (max-width: 768px) */
-@media (max-width: 768px) {
-    body { font-size: 15px; }
-    .hamburger { display: flex; }
+.btn-primary {
+    background: var(--primary);
+    color: #000;
+}
 
-    .navbar-nav {
-        position: absolute; top: 60px; left: 0; right: 0;
-        background-color: var(--color-background-secondary);
-        flex-direction: column; width: 100%; max-height: 0;
-        overflow: hidden; transition: max-height var(--transition);
-        border: none;
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(255, 193, 7, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    margin-top: 1.25rem;
+}
+
+.btn-secondary:hover {
+    color: #fff;
+    border-color: #fff;
+}
+
+/* --- Responsive Banners --- */
+.message-banner.warning {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid var(--warning);
+    padding: 1.25rem;
+    border-radius: 20px;
+    color: var(--warning);
+    font-size: 0.9rem;
+}
+
+/* --- Footer --- */
+.footer {
+    text-align: center;
+    padding: 4rem 1.5rem 2rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* =========================================
+   MOBILE OPTIMIZATIONS
+   ========================================= */
+@media screen and (max-width: 768px) {
+    .user-page {
+        padding-top: 2rem;
     }
-    .navbar-nav.active { max-height: 500px; border-bottom: 2px solid var(--color-primary); }
-    .nav-link { padding: var(--spacing-lg) var(--spacing-lg); border-bottom: 1px solid var(--color-border); display: block; width: 100%; text-align: left; }
-
-    /* Dashboard adjustments */
-    .meal-counters { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--spacing-md); }
-    .counter-icon { font-size: 2rem; }
-    .counter-number { font-size: 1.5rem; }
-    .meals-grid { grid-template-columns: 1fr; }
     
-    /* Profile adjustments */
+    .profile-card {
+        padding: 2rem 1.5rem;
+        border-radius: 28px;
+    }
+
     .profile-info-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: 1fr; /* Stack everything */
+        gap: 1.8rem;
+    }
+
+    .radio-group {
+        grid-template-columns: 1fr; /* Stack chips for better thumb reach */
     }
 }
 
-/* Mobile Devices (max-width: 480px) */
-@media (max-width: 480px) {
-    body { font-size: 14px; }
-    .page-title { font-size: 2rem; }
-    .user-plan-display, .user-greeting { font-size: 1rem; }
-    .user-page { padding: var(--spacing-lg) var(--spacing-md); }
-
-    /* Dashboard adjustments */
-    .meal-counters { grid-template-columns: 1fr; gap: var(--spacing-lg); }
-    .counter-card { flex-direction: column; text-align: center; padding: var(--spacing-lg); }
-    .counter-icon { font-size: 1.75rem; }
-    .counter-number { font-size: 1.25rem; }
-
-    .meal-actions.radio-group { grid-template-columns: 1fr; gap: var(--spacing-xs); }
-    .radio-group .radio-label { font-size: 0.8rem; padding: var(--spacing-sm); }
-    .btn-confirm { padding: var(--spacing-md); font-size: 0.875rem; }
-    
-    /* Profile adjustments */
-    .profile-card { padding: var(--spacing-lg); }
-    .profile-info-grid { grid-template-columns: 1fr; }
-    .default-service-options { flex-wrap: wrap; }
-    .default-service-options .radio-label {
-        width: calc(50% - var(--spacing-xs)); 
-        font-size: 0.75rem;
-    }
+@keyframes profileFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }

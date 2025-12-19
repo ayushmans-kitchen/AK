@@ -1,383 +1,248 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>User Dashboard - Hotel Meal Management</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href=/>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ayushman's Kitchen Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#FFC107", // Gold-ish Amber for better readability
+                    "primary-dark": "#FFB300",
+                    "background-light": "#FAFAFA",
+                    "background-dark": "#050505", // Deep black
+                    "surface-light": "#FFFFFF",
+                    "surface-dark": "#121212", // Slightly lighter black for cards
+                    "accent-gold": "#D4AF37", // Metallic gold for accents
+                },
+                fontFamily: {
+                    "display": ["Spline Sans", "sans-serif"],
+                    "body": ["Noto Sans", "sans-serif"],
+                },
+                borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "2rem", "2xl": "2.5rem", "full": "9999px"},
+                boxShadow: {
+                    'gold': '0 4px 14px 0 rgba(255, 193, 7, 0.39)',
+                }
+            },
+        },
+    }
+</script>
 <style>
-    /* Core Styling Variables */
-:root {
-    --gold: #d4af37;
-    --dark-bg: #000000;
-    --dark-card: #0a0a0a;
-    --dark-mid: #1c1c1c;
-    --white: #ffffff;
-    --gray-text: #e0e0e0;
-    --border-color: #333333;
-    --red: #ef4444;
-    --cyan: #00bcd4;
-    --orange: #ff9800;
-    --blue-info: #3b82f6;
-    --amber-warning: #fbbf24;
-}
-
-/* Base Reset & Typography */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Montserrat', sans-serif; /* Using a real font now */
-    background-color: var(--dark-bg);
-    color: var(--white);
-    line-height: 1.6;
-}
-
-h1, h2 {
-    font-family: 'Playfair Display', serif; /* Using a real font now */
-    color: var(--gold);
-    margin-bottom: 1rem;
-}
-
-a {
-    color: var(--gold);
-    text-decoration: none;
-}
-
-/* Layout */
-.user-page {
-    padding: 2rem 1rem;
-    min-height: 100vh;
-}
-
-.user-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.page-title {
-    font-size: 2.5rem;
-}
-
-.user-plan-display {
-    color: var(--gold);
-    font-weight: 600;
-    margin-bottom: 2rem;
-    font-size: 1.25rem;
-}
-
-/* Navbar */
-.navbar {
-    background-color: var(--dark-card);
-    border-bottom: 2px solid var(--gold);
-    padding: 1rem 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-.navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
-}
-.logo-image { height: 40px; }
-.hamburger { display: none; } /* Hide on desktop */
-.navbar-nav { display: flex; gap: 1rem; }
-.nav-link { color: var(--gray-text); padding: 0.5rem 1rem; border-bottom: 2px solid transparent; transition: color 0.3s; }
-.nav-link:hover, .nav-link.active { color: var(--gold); border-bottom-color: var(--gold); }
-
-
-/* --- NEW FEATURES STYLING --- */
-
-/* Message Banners */
-.message-banner {
-    padding: 1rem 1.5rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    font-weight: 500;
-    border-left: 5px solid;
-}
-
-.message-banner p { margin: 0; color: var(--gray-text); }
-.message-banner p strong { font-weight: bold; }
-
-.message-banner.info {
-    background-color: rgba(59, 130, 246, 0.1);
-    border-left-color: var(--blue-info);
-}
-
-.message-banner.warning {
-    background-color: rgba(251, 191, 36, 0.1);
-    border-left-color: var(--amber-warning);
-}
-
-/* Last Meal Details */
-.last-meal-details {
-    margin-bottom: 2rem;
-}
-
-.last-meal-card {
-    background-color: var(--dark-mid);
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.last-meal-type {
-    color: var(--gold);
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.last-meal-choice,
-.last-meal-service {
-    font-size: 0.95rem;
-    color: var(--gray-text);
-    margin: 0;
-}
-
-/* Meal Counters */
-.meal-counters {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.counter-card {
-    background-color: var(--dark-card);
-    border: 2px solid var(--gold);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.counter-icon { font-size: 2rem; flex-shrink: 0; }
-.counter-label { color: #a0a0a0; font-size: 0.8rem; margin: 0; }
-.counter-number { font-size: 2rem; color: var(--gold); font-weight: 700; margin: 0; font-family: 'Playfair Display', serif; }
-
-/* Meal Cards (Today's Meals) */
-.section-title { font-size: 1.5rem; }
-
-.meals-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-}
-
-.meal-card {
-    background-color: var(--dark-card);
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-}
-
-.meal-time {
-    display: inline-block;
-    background-color: var(--gold);
-    color: var(--dark-bg);
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-}
-
-.meal-course {
-    color: var(--gold);
-    font-weight: 600;
-    font-size: 0.875rem;
-    margin-bottom: 0.25rem;
-}
-
-.meal-description {
-    color: var(--gray-text);
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.food-type-dropdown {
-    width: 100%;
-    padding: 0.75rem;
-    margin: 0.5rem 0 1rem 0;
-    background-color: var(--dark-mid);
-    color: var(--gray-text);
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23d4af37' d='M10 12.586l4.293-4.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 12.586z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
-}
-
-/* Buttons and Radio Group */
-.btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    font-weight: 600;
-    border: 2px solid;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    text-align: center;
-    transition: 0.3s;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.btn-primary {
-    background-color: var(--gold);
-    color: var(--dark-bg);
-    border-color: var(--gold);
-}
-.btn-primary:hover { opacity: 0.9; }
-
-.btn-secondary {
-    background-color: transparent;
-    border-color: var(--gray-text);
-    color: var(--gray-text);
-    padding: 0.5rem 1rem;
-    align-self: flex-end;
-}
-.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
-
-.btn-confirm {
-    width: 100%;
-    margin-top: 1rem;
-    display: block;
-}
-
-.meal-actions.radio-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
-    user-select: none;
-}
-
-.radio-group input[type="radio"] { display: none; }
-
-.radio-group .radio-label {
-    padding: 0.75rem;
-    font-size: 0.875rem;
-    border: 2px solid;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    text-align: center;
-    font-weight: 600;
-    transition: all 0.2s;
-}
-
-.radio-label.btn-dining { border-color: var(--gold); color: var(--gold); }
-.radio-label.btn-pickup { border-color: var(--cyan); color: var(--cyan); }
-.radio-label.btn-delivery { border-color: var(--orange); color: var(--orange); }
-.radio-label.btn-cancel { border-color: var(--red); color: var(--red); }
-
-.radio-group input[type="radio"]:checked + .radio-label {
-    color: var(--dark-bg);
-}
-
-.radio-group input[type="radio"]:checked + .radio-label.btn-dining { background-color: var(--gold); }
-.radio-group input[type="radio"]:checked + .radio-label.btn-pickup { background-color: var(--cyan); }
-.radio-group input[type="radio"]:checked + .radio-label.btn-delivery { background-color: var(--orange); }
-.radio-group input[type="radio"]:checked + .radio-label.btn-cancel { background-color: var(--red); }
-
-/* Footer */
-.footer {
-    background-color: var(--dark-card);
-    border-top: 2px solid var(--gold);
-    padding: 1.5rem 1rem;
-    text-align: center;
-    color: #a0a0a0;
-    margin-top: 2rem;
-}
-
-
-/* --- Basic Responsiveness (for Mobile) --- */
-@media (max-width: 768px) {
-    .page-title { font-size: 2rem; }
-    .user-plan-display { font-size: 1rem; }
-    
-    .meal-counters {
-        grid-template-columns: 1fr; /* Stack counters vertically on small screens */
+    body {
+      min-height: max(884px, 100dvh);
     }
-
-    .counter-card {
-        flex-direction: column;
-        text-align: center;
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
-    
-    .last-meal-card .btn-secondary {
-        align-self: stretch; /* Full width button on small screen */
+    .material-symbols-outlined.filled {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
-
-    .meals-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .meal-actions.radio-group {
-        grid-template-columns: 1fr; /* Stack radio buttons vertically for easier tap targets */
-    }
-}
 </style>
-</head>
-<body>
-    <header class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-logo">
-                <img src="assets/logo.png" alt="Logo" class="logo-image"/>
-            </div>
-            <button class="hamburger" id="hamburger" aria-label="Menu">
-                <span></span><span></span><span></span>
-            </button>
-            <nav class="navbar-nav" id="navbarNav">
-                <a href="#" class="nav-link active">My Meals</a>
-                <a href="#" class="nav-link">History</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="user-page">
-        <div class="user-container">
-            <h1 class="page-title" id="userGreeting">WELCOME JANE DOE</h1>
-            <p class="user-plan-display" id="userPlanDisplay">Your Current Plan: PREMIUM60</p>
-
-            <div class="message-banner info" role="alert">
-                <p>🌟 **Important:** Our premium menu for dinner has been updated! Check the new delicious options below.</p>
-            </div>
-            
-            <div class="message-banner warning" role="alert">
-                <p>⚠️ **Low Meal Alert!** You only have **3** meals remaining. Please renew your plan soon to avoid interruption.</p>
-            </div>
-
-            <section class="last-meal-details" aria-label="Last meal summary">
-                <h2 class="section-title">Your Last Meal 🍽️</h2>
-                <div class="last-meal-card">
-                    <p class="last-meal-type">**DINNER** (Dec 12)</p>
-                    <p class="last-meal-choice">Food: CHICKEN TIKKA</p>
-                    <p class="last-meal-service">Service: **DELIVERY**</p>
-                    <a href="#" class="btn btn-secondary">View History</a>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-neutral-900 dark:text-neutral-50 antialiased selection:bg-primary selection:text-black transition-colors duration-300">
+<div class="mx-auto max-w-md min-h-screen relative flex flex-col pb-28">
+<header class="flex items-center justify-between p-6 pb-2 sticky top-0 z-40 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="flex items-center gap-3">
+<div class="relative group cursor-pointer">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-primary shadow-sm" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDQMfbr69jnqlrNZPxrnc8dkXz10iFjtBNhgn7kLZYlQxQHhJiPmds5X8e_Gs2Oy-4gIfAFcjq3x1_QCqETHN0LSxVI-SHwSJBoiL9zDTcpfSfNZEJAZDeWDXDtAYNSWrYvFbkmfeY7KEDfjHS9wdMRJILZe7fSdaOoxecEwjOGzcTxBiyUSTfpFJIaAwcgfkma6ohd8mxoabhJuNfvUxw5FsANsmjLTClmxtMzTCrXZ-94DtRQJbScnVa8fZR5bCJ-9RsyU4TLGpKw');"></div>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-black rounded-full"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Welcome back</span>
+<span class="text-sm font-bold text-neutral-900 dark:text-white">Ayushman</span>
+</div>
+</div>
+<button class="relative flex items-center justify-center size-10 rounded-full bg-surface-light dark:bg-surface-dark border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors shadow-sm text-neutral-900 dark:text-white group">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">notifications</span>
+<span class="absolute top-2.5 right-2.5 flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+</button>
+</header>
+<section class="px-6 py-2 flex items-end justify-between">
+<div>
+<h1 class="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white leading-tight">
+            Dashboard
+        </h1>
+<p class="text-neutral-500 dark:text-neutral-400 text-sm font-medium mt-1">
+<span class="material-symbols-outlined text-[16px] align-text-bottom mr-1 text-primary">calendar_today</span>
+            Wed, 24 Oct
+        </p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Current Plan</span>
+<div class="bg-surface-light dark:bg-surface-dark border border-neutral-200 dark:border-neutral-800 px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">
+<span class="size-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-bold text-neutral-900 dark:text-white">Gold Premium</span>
+</div>
+</div>
+</section>
+<section class="px-6 py-4">
+<div class="grid grid-cols-3 gap-4">
+<div class="col-span-1 flex flex-col justify-between rounded-2xl bg-gradient-to-br from-primary to-yellow-500 p-4 shadow-gold relative overflow-hidden group h-32">
+<div class="absolute -right-4 -top-4 text-black opacity-10 rotate-12 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-6xl">local_dining</span>
+</div>
+<p class="text-black/70 text-xs font-bold uppercase tracking-wide relative z-10">Available</p>
+<div>
+<p class="text-black text-4xl font-bold leading-none relative z-10">12</p>
+<p class="text-black/60 text-[10px] font-bold mt-1">Meals left</p>
+</div>
+</div>
+<div class="col-span-2 grid grid-cols-2 gap-4">
+<div class="flex flex-col justify-center gap-1 rounded-2xl bg-surface-light dark:bg-surface-dark border border-neutral-200 dark:border-neutral-800 p-4 shadow-sm h-32">
+<div class="flex items-center gap-2 mb-2">
+<span class="p-1.5 rounded-full bg-green-500/10 text-green-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+</span>
+</div>
+<p class="text-3xl font-bold text-neutral-900 dark:text-white">18</p>
+<p class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wide">Consumed</p>
+</div>
+<div class="flex flex-col justify-center gap-1 rounded-2xl bg-surface-light dark:bg-surface-dark border border-neutral-200 dark:border-neutral-800 p-4 shadow-sm h-32">
+<div class="flex items-center gap-2 mb-2">
+<span class="p-1.5 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">cancel</span>
+</span>
+</div>
+<p class="text-3xl font-bold text-neutral-900 dark:text-white">2</p>
+<p class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wide">Cancelled</p>
+</div>
+</div>
+</div>
+</section>
+<section class="px-6 py-2">
+<div class="relative overflow-hidden rounded-2xl bg-neutral-900 text-white p-5 shadow-lg border border-neutral-800">
+<div class="absolute -right-6 -top-6 size-32 bg-primary rounded-full blur-3xl opacity-20"></div>
+<div class="flex items-start gap-4 relative z-10">
+<div class="flex items-center justify-center size-10 rounded-full bg-white/10 shrink-0 text-primary border border-white/5">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div class="flex-1">
+<h3 class="text-sm font-bold text-primary mb-1 uppercase tracking-wide">Low Balance Alert</h3>
+<p class="text-neutral-300 text-sm mb-4 leading-relaxed">Your meal balance is running low (2 meals left). Recharge now to avoid interruption.</p>
+<button class="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg text-xs font-bold hover:bg-neutral-200 transition-colors">
+                    Recharge Plan <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section class="px-6 py-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+            Today's Menu
+            <span class="size-1.5 rounded-full bg-primary"></span>
+</h2>
+<div class="flex bg-neutral-100 dark:bg-neutral-800 p-1 rounded-lg">
+<span class="text-[10px] font-bold px-3 py-1 bg-white dark:bg-neutral-700 shadow-sm text-black dark:text-white rounded-md uppercase tracking-wide">Lunch</span>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-none border border-neutral-100 dark:border-neutral-800 overflow-hidden">
+<div class="relative h-48 w-full bg-neutral-200">
+<div class="w-full h-full bg-cover bg-center transition-transform hover:scale-105 duration-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCd24BGfz-rAjvHHI-YPx8hSBEV0zJD6re-5nLIHEn0BeQ2qAxstCubuIIVTpGH55SWvoSnbLJjk-ccxtPH5SLsSM84EmVwUGmAa5CchSVVUEb6RMahWUmNbjDnqfSzyUC3e8YxW0XcN2-jd6j2YXjlFVAfOXuatE2hZjc0PgEjsMqfjT9DnKPKNRPlDZa2A7doAPbhRz5bpiaVTqJnKwmzUewsBPxMoMNDdnnPx2bPwqJZtry4k9EwvX9mdTgQRoxDGAAEhOmvXtyq');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<div>
+<span class="px-2 py-1 rounded bg-black/40 backdrop-blur-md text-white text-[10px] font-bold border border-white/10">North Indian</span>
+<h3 class="text-white font-bold text-lg mt-1">Premium Thali</h3>
+</div>
+<div class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-primary">local_fire_department</span> 450 kcal
                 </div>
-            </section>
-            
-            
-        </div>
-    </main>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-6">
+<div>
+<div class="grid grid-cols-2 gap-3 mb-3">
+<button class="relative flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-primary bg-primary/5 dark:bg-primary/10 text-neutral-900 dark:text-white transition-all shadow-sm">
+<span class="absolute top-2 right-2 flex size-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full size-2 bg-primary"></span>
+</span>
+<div class="size-4 border-2 border-green-500 flex items-center justify-center rounded-sm">
+<div class="size-2 bg-green-500 rounded-full"></div>
+</div>
+<span class="text-sm font-bold">Veg Thali</span>
+</button>
+<button class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-neutral-200 dark:border-neutral-700 text-neutral-500 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all">
+<div class="size-4 border-2 border-red-500 flex items-center justify-center rounded-sm opacity-50">
+<div class="size-2 bg-red-500 rounded-full"></div>
+</div>
+<span class="text-sm font-medium">Non-Veg</span>
+</button>
+</div>
+<p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed px-1">
+                     Includes: Paneer Butter Masala, Yellow Dal Tadka, Jeera Rice, 2 Rotis, Fresh Salad &amp; Sweet Curd.
+                 </p>
+</div>
+<div>
+<label class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-3 block">Service Mode</label>
+<div class="flex gap-3">
+<label class="flex-1 relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="mode" type="radio"/>
+<div class="p-3 rounded-xl border border-neutral-200 dark:border-neutral-700 peer-checked:border-primary peer-checked:bg-primary peer-checked:text-black dark:peer-checked:text-black bg-transparent flex flex-row items-center justify-center gap-2 transition-all h-12">
+<span class="material-symbols-outlined text-[20px]">restaurant</span>
+<span class="text-xs font-bold">Dine In</span>
+</div>
+</label>
+<label class="flex-1 relative cursor-pointer group">
+<input class="peer sr-only" name="mode" type="radio"/>
+<div class="p-3 rounded-xl border border-neutral-200 dark:border-neutral-700 peer-checked:border-primary peer-checked:bg-primary peer-checked:text-black dark:peer-checked:text-black bg-transparent flex flex-row items-center justify-center gap-2 transition-all h-12 text-neutral-500 dark:text-neutral-400">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+<span class="text-xs font-bold">Pickup</span>
+</div>
+</label>
+</div>
+</div>
+<button class="w-full bg-neutral-900 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-black font-bold text-sm py-4 rounded-xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2">
+                Confirm Selection
+                <span class="material-symbols-outlined">check</span>
+</button>
+</div>
+</div>
+</section>
+<nav class="fixed bottom-0 left-0 right-0 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-xl border-t border-neutral-200 dark:border-white/5 pb-8 pt-3 z-50">
+<div class="flex items-center justify-around max-w-md mx-auto relative">
+<button class="flex flex-col items-center gap-1 p-2 text-primary">
+<span class="material-symbols-outlined filled">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-[10px] font-medium">Menu</span>
+</button>
+<div class="relative -top-8">
+<button class="flex items-center justify-center size-14 bg-primary text-black rounded-full shadow-gold hover:shadow-lg hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-2xl">account_balance_wallet</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 p-2 text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[10px] font-medium">History</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</div>
+</nav>
+</div>
+<script>
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+    }
+</script>
 
-    <footer class="footer">
-        <p>&copy; 2025 Ayushman's Kitchen. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+</body></html>

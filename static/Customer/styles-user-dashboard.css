@@ -1,649 +1,266 @@
-/* ===========================
-    DESIGN TOKENS & VARIABLES
-    =========================== */
+/* =========================================
+   USER DASHBOARD - PREMIUM APP THEME
+   (Excludes Navbar Styles)
+   ========================================= */
 :root {
-    --color-primary: #d4af37; /* Gold/Yellow */
-    --color-primary-dark: #b8860b;
-    --color-background: #000000;
-    --color-background-secondary: #0a0a0a;
-    --color-background-tertiary: #1c1c1c;
-    --color-text: #ffffff;
-    --color-text-secondary: #e0e0e0;
-    --color-text-muted: #a0a0a0;
-    --color-border: #333333;
-    --color-success: #4ade80;
-    --color-danger: #ef4444;
-    
-    /* Specific Action Colors */
-    --color-pickup: #00bcd4; /* Cyan */
-    --color-delivery: #ff9800; /* Orange */
-    --color-cancel: #ef4444; /* Red */
-
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
-
-    --font-sans: "Montserrat", sans-serif;
-    --font-display: "Playfair Display", serif;
-
-    --border-radius: 0.5rem;
-    --transition: 0.3s ease;
+    --primary: #FFC107;
+    --primary-dark: #FFB300;
+    --bg-deep: #050505;
+    --surface: #121212;
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-main: #FFFFFF;
+    --text-muted: #94a3b8;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
 }
 
-/* ===========================
-    RESET & BASE STYLES
-    =========================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
+/* --- Base Layout --- */
 body {
-    font-family: var(--font-sans);
-    background-color: var(--color-background);
-    color: var(--color-text);
+    background-color: var(--bg-deep);
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(255, 193, 7, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.02) 0%, transparent 40%);
+    color: var(--text-main);
+    font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
-    font-size: 16px; /* Base size for large screens */
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: var(--spacing-lg);
-}
-
-a {
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: color var(--transition);
-}
-
-p {
-    margin-bottom: var(--spacing-md);
-}
-
-/* ===========================
-    NAVBAR
-    =========================== */
-.navbar {
-    background-color: var(--color-background-secondary);
-    border-bottom: 2px solid var(--color-primary);
-    padding: var(--spacing-md) 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.navbar-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-lg);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.logo-image {
-    height: 40px;
-}
-
-.navbar-nav {
-    display: flex;
-    gap: var(--spacing-lg);
-    flex-wrap: wrap;
-}
-
-.nav-link {
-    color: var(--color-text-secondary);
-    font-weight: 500;
-    transition: color var(--transition);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-bottom: 2px solid transparent;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary);
-}
-
-/* ===========================
-    LAYOUT CONTAINERS & TYPOGRAPHY
-    =========================== */
 .user-page {
-    min-height: 100vh;
-    padding: var(--spacing-2xl) var(--spacing-lg);
-    background-color: var(--color-background);
-}
-
-.user-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 2rem 1rem 5rem;
 }
 
+/* --- Typography & Header --- */
 .page-title {
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-lg);
-    font-size: 2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    margin-bottom: 0.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 .user-plan-display {
-    color: var(--color-primary);
-    font-weight: 600;
-    font-size: 1.25rem;
-    margin-bottom: var(--spacing-sm);
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
 }
 
-.user-greeting {
-    color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-xl);
-    font-size: 1.1rem;
+/* --- Banners & Alerts --- */
+.message-banner {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    border: 1px solid transparent;
+    backdrop-filter: blur(10px);
 }
 
-.section-title {
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-lg);
-    font-size: 1.5rem;
+.message-banner.info {
+    background: rgba(255, 193, 7, 0.1);
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
-/* ===========================
-    MEAL COUNTERS & ICON SIZE
-    =========================== */
+.message-banner.warning {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+/* --- Stat Counters Grid --- */
 .meal-counters {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-2xl);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
 }
 
 .counter-card {
-    background-color: var(--color-card-bg);
-    border: 2px solid var(--color-primary);
-    padding: var(--spacing-xl);
-    border-radius: var(--border-radius);
+    background: var(--surface);
+    border: 1px solid var(--card-border);
+    padding: 1.5rem;
+    border-radius: 20px;
     display: flex;
     align-items: center;
-    gap: var(--spacing-lg);
-    transition: all var(--transition);
+    gap: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Default icon size */
+.counter-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px -10px rgba(255, 193, 7, 0.2);
+}
+
 .counter-icon {
-    font-size: 2.5rem; 
-    flex-shrink: 0;
+    font-size: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
 }
 
 .counter-label {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-    margin-bottom: var(--spacing-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 .counter-number {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    color: var(--color-primary);
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+/* --- Meal Management --- */
+.section-title {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin: 3rem 0 1.5rem;
     font-weight: 700;
 }
 
-/* ===========================
-    MEALS GRID & CARDS
-    =========================== */
 .meals-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-2xl);
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 2rem;
 }
 
 .meal-card {
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-lg);
-    transition: all var(--transition);
+    background: var(--surface);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .meal-time {
+    background: var(--primary);
+    color: #000;
+    font-weight: 800;
+    padding: 0.4rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
     display: inline-block;
-    background-color: var(--color-primary);
-    color: var(--color-background);
-    padding: var(--spacing-xs) var(--spacing-md);
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 0.875rem;
-    margin-bottom: var(--spacing-md);
-}
-
-.meal-details {
-    margin-bottom: var(--spacing-lg);
-}
-
-.meal-course {
-    color: var(--color-primary);
-    font-weight: 600;
-    font-size: 0.875rem;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 1.5rem;
 }
 
 .meal-description {
-    color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-sm);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
 }
 
-.meal-time-slot {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-}
-
-/* ===========================
-    DROPDOWN STYLES
-    =========================== */
+/* --- Form Elements --- */
 .food-type-dropdown {
     width: 100%;
-    padding: var(--spacing-md);
-    margin-top: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
-    background-color: var(--color-background-tertiary);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    font-family: var(--font-sans);
-    appearance: none; 
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23d4af37' d='M10 12.586l4.293-4.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 12.586z'/%3E%3C/svg%3E");
+    padding: 1rem;
+    background: #1e1e1e;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 1.5rem;
+    font-family: inherit;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23FFC107'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1rem center;
-    background-size: 1em;
-    cursor: pointer;
-    transition: border-color var(--transition);
+    background-size: 1rem;
 }
 
-.food-type-dropdown:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.5);
+.radio-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 2rem;
 }
 
-.food-type-dropdown option {
-    background-color: var(--color-background-tertiary);
-    color: var(--color-text-secondary);
-}
+.radio-group input { display: none; }
 
-/* ===========================
-   ACTION BUTTONS (Radio Group & Confirm)
-   =========================== */
-
-/* Base button for Confirm */
-.btn {
-    display: inline-block;
-    padding: var(--spacing-md) var(--spacing-xl);
-    font-family: var(--font-sans);
-    font-weight: 600;
-    border: 2px solid transparent;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: all var(--transition);
+.radio-label {
+    background: #1e1e1e;
+    padding: 1rem;
+    border-radius: 12px;
     text-align: center;
-    font-size: 1rem;
-    white-space: nowrap;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s;
+    color: var(--text-muted);
 }
 
-.btn-primary {
-    background-color: var(--color-primary);
-    color: var(--color-background);
-    border-color: var(--color-primary);
+.radio-group input:checked + .radio-label {
+    border-color: var(--primary);
+    background: rgba(255, 193, 7, 0.1);
+    color: var(--primary);
 }
 
-.btn-primary:hover {
-    background-color: var(--color-primary-dark);
-    border-color: var(--color-primary-dark);
-    transform: translateY(-2px);
-}
-
-/* Style for the Confirm Button */
 .btn-confirm {
     width: 100%;
-    margin-top: var(--spacing-lg);
-    display: block;
-}
-
-/* Segmented Radio Button Group */
-.meal-actions.radio-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2x2 layout by default */
-    gap: var(--spacing-sm);
-    user-select: none;
-}
-
-.radio-group input[type="radio"] {
-    display: none;
-}
-
-.radio-group .radio-label {
-    padding: var(--spacing-md) var(--spacing-lg);
-    font-size: 0.875rem;
-    border: 2px solid;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: all var(--transition);
-    text-align: center;
-    font-weight: 600;
-    background-color: transparent;
-}
-
-/* --- Label Colors --- */
-
-.radio-label.btn-dining { border-color: var(--color-primary); color: var(--color-primary); }
-.radio-label.btn-pickup { border-color: var(--color-pickup); color: var(--color-pickup); }
-.radio-label.btn-delivery { border-color: var(--color-delivery); color: var(--color-delivery); }
-.radio-label.btn-cancel { border-color: var(--color-cancel); color: var(--color-cancel); }
-
-/* --- Checked/Selected State --- */
-
-.radio-group input[type="radio"]:checked + .radio-label {
-    color: var(--color-background);
-}
-
-.radio-group input[type="radio"]:checked + .radio-label.btn-dining { background-color: var(--color-primary); }
-.radio-group input[type="radio"]:checked + .radio-label.btn-pickup { background-color: var(--color-pickup); }
-.radio-group input[type="radio"]:checked + .radio-label.btn-delivery { background-color: var(--color-delivery); }
-.radio-group input[type="radio"]:checked + .radio-label.btn-cancel { background-color: var(--color-cancel); }
-
-
-/* ===========================
-    FOOTER
-    =========================== */
-.footer {
-    background-color: var(--color-background-secondary);
-    border-top: 2px solid var(--color-primary);
-    padding: var(--spacing-xl) var(--spacing-lg);
-    text-align: center;
-    color: var(--color-text-muted);
-    margin-top: var(--spacing-2xl);
-}
-/* Core Styling Variables */
-        :root {
-            --gold: #d4af37;
-            --dark-bg: #000000;
-            --dark-card: #0a0a0a;
-            --dark-mid: #1c1c1c;
-            --white: #ffffff;
-            --gray-text: #e0e0e0;
-            --border-color: #333333;
-            --blue-info: #3b82f6;
-            --amber-warning: #fbbf24;
-        }
-
-        /* Base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--white);
-            line-height: 1.6;
-            padding: 2rem 1rem; /* Added padding for overall visibility */
-        }
-
-        h2 {
-            font-family: 'Playfair Display', serif;
-            color: var(--gold);
-            margin-bottom: 1rem;
-        }
-
-        a {
-            text-decoration: none;
-        }
-        
-        /* Utility container to simulate dashboard width */
-        .content-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* --- Message Banners --- */
-        .message-banner {
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            font-weight: 500;
-            border-left: 5px solid;
-        }
-
-        .message-banner p { margin: 0; color: var(--gray-text); }
-        .message-banner p strong { font-weight: bold; }
-
-        .message-banner.info {
-            background-color: rgba(59, 130, 246, 0.1);
-            border-left-color: var(--blue-info);
-        }
-
-        .message-banner.warning {
-            background-color: rgba(251, 191, 36, 0.1);
-            border-left-color: var(--amber-warning);
-        }
-
-        /* --- Last Meal Details Section --- */
-        .last-meal-details {
-            margin-bottom: 2rem;
-            padding: 0 1rem;
-        }
-
-        .section-title { font-size: 1.5rem; }
-
-        .last-meal-card {
-            background-color: var(--dark-mid);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .last-meal-type {
-            color: var(--gold);
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .last-meal-choice,
-        .last-meal-service {
-            font-size: 0.95rem;
-            color: var(--gray-text);
-            margin: 0;
-        }
-
-        /* --- Button Styling --- */
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            border: 2px solid;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.3s;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            border-color: var(--gray-text);
-            color: var(--gray-text);
-            padding: 0.5rem 1rem;
-            align-self: flex-end;
-        }
-        .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
-
-
-        /* --- Basic Responsiveness (for Mobile) --- */
-        @media (max-width: 768px) {
-            .message-banner {
-                margin: 1rem 0;
-            }
-            .last-meal-details {
-                padding: 0;
-            }
-            .last-meal-card .btn-secondary {
-                align-self: stretch; /* Make button full width on small screens */
-            }
-        }
-
-/* =================================
-    RESPONSIVE DESIGN (Media Queries)
-    ================================= */
-
-/* Hamburger menu setup (Hidden on large screens) */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    background: none;
+    background: var(--primary);
+    color: #000;
     border: none;
+    padding: 1.1rem;
+    border-radius: 15px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-transform: uppercase;
     cursor: pointer;
-    padding: var(--spacing-md);
-    gap: var(--spacing-xs);
-    z-index: 101;
+    transition: transform 0.1s, background 0.2s;
 }
 
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: var(--color-primary);
-    border-radius: 2px;
-    transition: all var(--transition);
+.btn-confirm:active {
+    transform: scale(0.98);
 }
 
-/* Tablet and Smaller Devices (max-width: 768px) */
+/* --- Locked/Confirmed UI --- */
+.locked-card {
+    background: linear-gradient(145deg, #121212 0%, #0a0a0a 100%);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.meal-status-message {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.1);
+    border-radius: 15px;
+    color: var(--success);
+    font-weight: 700;
+}
+
+/* --- Footer --- */
+.footer {
+    text-align: center;
+    padding: 5rem 1rem 2rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
-    body {
-        font-size: 15px;
-    }
-
-    .hamburger {
-        display: flex; /* Show hamburger */
-    }
-
-    .navbar-nav {
-        /* Mobile menu overlay styles */
-        position: absolute;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background-color: var(--color-background-secondary);
-        flex-direction: column;
-        width: 100%;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height var(--transition);
-        border: none;
-    }
-
-    .navbar-nav.active {
-        max-height: 500px;
-        border-bottom: 2px solid var(--color-primary);
-    }
-
-    .nav-link {
-        padding: var(--spacing-lg) var(--spacing-lg);
-        border-bottom: 1px solid var(--color-border);
-        display: block;
-        width: 100%;
-        text-align: left;
-    }
-
-    /* Counter card adjustments */
-    .meal-counters {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: var(--spacing-md);
-    }
-    
-    .counter-icon {
-        font-size: 2rem; /* Reduce icon size on tablet */
-    }
-
-    .counter-number {
-        font-size: 1.5rem; /* Reduce number size on tablet */
-    }
-
-    .food-type-dropdown,
-    .radio-group .radio-label {
-        font-size: 0.9rem;
-    }
-
-    .meals-grid {
-        grid-template-columns: 1fr; /* Stack meal cards vertically */
-    }
-}
-
-/* Mobile Devices (max-width: 480px) */
-@media (max-width: 480px) {
-    body {
-        font-size: 14px;
-    }
-
-    .page-title {
-        font-size: 2rem;
-    }
-
-    .user-plan-display {
-        font-size: 1rem;
-    }
-    
-    .user-page {
-        padding: var(--spacing-lg) var(--spacing-md);
-    }
-
-    /* Stack counter cards */
-    .meal-counters {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-    
-    .counter-card {
-        flex-direction: column;
-        text-align: center;
-        padding: var(--spacing-lg);
-    }
-    
-    .counter-icon {
-        font-size: 1.75rem; /* Further reduce icon size on small mobile */
-    }
-
-    .counter-number {
-        font-size: 1.25rem;
-    }
-
-    /* Stack radio buttons vertically for easier tapping */
-    .meal-actions.radio-group {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-xs);
-    }
-
-    .radio-group .radio-label {
-        font-size: 0.8rem;
-        padding: var(--spacing-sm);
-    }
-    
-    .btn-confirm {
-        padding: var(--spacing-md);
-        font-size: 0.875rem;
-    }
+    .meal-counters { grid-template-columns: 1fr; }
+    .meals-grid { grid-template-columns: 1fr; }
+    .radio-group { grid-template-columns: 1fr; }
+    .page-title { font-size: 2rem; }
 }

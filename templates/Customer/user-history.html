@@ -1,15 +1,19 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal History - Hotel Meal Management</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{% static 'Customer/styles-user-history.css' %}">
 </head>
+
 <body>
     <!-- Added hamburger menu -->
     {% include "Customer/navbar.html" %}
@@ -17,7 +21,6 @@
     <main class="user-page">
         <div class="user-container">
             <h1 class="page-title">Your Meal History</h1>
-            <p class="history-subtitle">Last 14 Days</p>
 
             <section class="history-section">
                 <div class="table-responsive">
@@ -31,32 +34,32 @@
                             </tr>
                         </thead>
                         <tbody>
-    {% for row in history %}
-    <tr>
-        <td data-label="Date">{{ row.date|date:"d M Y" }}</td>
-        <td data-label="Meal Type">{{ row.meal_type }}</td>
-        <td data-label="Service">{{ row.service }}</td>
-        <td data-label="Status">
-            {% if row.status == "Cancelled" %}
-                <span class="badge badge-cancelled">Cancelled</span>
-            {% else %}
-                <span class="badge badge-completed">Completed</span>
-            {% endif %}
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="4" class="text-center">No meal history found.</td>
-    </tr>
-    {% endfor %}
-</tbody>
+                            {% for row in history %}
+                            <tr>
+                                <td data-label="Date">{{ row.date|date:"d M Y" }}</td>
+                                <td data-label="Meal Type">{{ row.meal_type }}</td>
+                                <td data-label="Service">{{ row.service }}</td>
+                                <td data-label="Status">
+                                    {% if row.status == "Cancelled" %}
+                                    <span class="badge badge-cancelled">Cancelled</span>
+                                    {% else %}
+                                    <span class="badge badge-completed">Completed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No meal history found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
 
                     </table>
                 </div>
             </section>
 
             <div class="history-actions">
-                <a href="{% url "user_dashboard" %}" class="btn btn-secondary">Back to Dashboard</a>
+                <a href="{% url " user_dashboard" %}" class="btn btn-secondary">Back to Dashboard</a>
             </div>
         </div>
     </main>
@@ -65,6 +68,7 @@
         <p>&copy; 2025 Ayushman's Kitchen. All rights reserved.</p>
     </footer>
 
-   
+
 </body>
+
 </html>

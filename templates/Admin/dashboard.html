@@ -1,231 +1,630 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Admin Dashboard | Ayushman's Kitchen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
-            --color-gold: #d4af37;
-            --color-bg-deep: #000000;
-            --color-bg-card: #0f0f0f;
-            --color-bg-sidebar: #050505;
-            --color-text: #ffffff;
-            --color-text-muted: #a0a0a0;
-            --color-border: #222222;
-            --color-danger: #ff4444;
-            --color-warning: #ffbb33;
-            --transition: 0.3s ease;
+            --gold: #d4af37;
+            --bg-deep: #050505;
+            --bg-card: #0f0f0f;
+            --border: #1f1f1f;
+            --text-muted: #888888;
+            --sb-width: 260px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* RESET & BASE */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--color-bg-deep); color: var(--color-text); line-height: 1.5; }
-
-        /* LAYOUT */
-        .admin-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
-        
-        @media (min-width: 1024px) {
-            .admin-wrapper { flex-direction: row; }
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* SIDEBAR */
-        .sidebar {
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-deep);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* --- SIDEBAR TOGGLE LOGIC --- */
+        .nav-toggle {
+            display: none;
+        }
+
+        /* --- MOBILE HEADER (Top Left Logo, Top Right 3-Lines) --- */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            background-color: var(--color-bg-sidebar);
-            border-bottom: 1px solid var(--color-border);
-            padding: 1.5rem;
+            height: 65px;
+            background: #000;
+            padding: 0 1.5rem;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 2100;
+            border-bottom: 1px solid var(--border);
         }
 
-        @media (min-width: 1024px) {
-            .sidebar { width: 260px; height: 100vh; position: fixed; border-right: 1px solid var(--color-border); border-bottom: none; }
+        .hamburger {
+            width: 28px;
+            height: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
         }
 
-        .logo { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 2rem; }
+        .hamburger span {
+            height: 3px;
+            width: 100%;
+            background: var(--gold);
+            border-radius: 10px;
+            transition: var(--transition);
+        }
 
-        .nav-links { list-style: none; display: flex; gap: 10px; justify-content: center; }
-        @media (min-width: 1024px) { .nav-links { flex-direction: column; justify-content: flex-start; } }
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sb-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #000;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1.25rem;
+            z-index: 2000;
+            transition: var(--transition);
+        }
 
-        .nav-item { padding: 0.8rem 1.2rem; color: var(--color-text-muted); cursor: pointer; border-radius: 8px; transition: var(--transition); font-size: 0.9rem; text-decoration: none; display: block; }
-        .nav-item.active, .nav-item:hover { background: #1a1a1a; color: var(--color-gold); }
+        .sidebar-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 3rem;
+            color: #fff;
+        }
 
-        /* MAIN CONTENT */
-        .main-content { flex: 1; padding: 1.5rem; }
-        @media (min-width: 1024px) { .main-content { margin-left: 260px; padding: 2.5rem; } }
+        .gold-dot {
+            color: var(--gold);
+        }
 
-        .header-main { margin-bottom: 2rem; }
-        .header-main h1 { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: 2rem; }
+        .nav-links {
+            list-style: none;
+            flex-grow: 1;
+        }
 
-        /* GRID */
-        .dashboard-grid {
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .nav-item.active {
+            background: var(--gold);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .nav-item:hover:not(.active) {
+            color: #fff;
+            background: #111;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: var(--sb-width);
+            padding: 2.5rem;
+            transition: var(--transition);
+        }
+
+        .top-bar {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+
+        .top-bar h1 {
+            font-family: 'Playfair Display';
+            font-size: 1.8rem;
+            color: var(--gold);
+        }
+
+        .top-bar p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        /* --- STATS GRID (4 Columns) --- */
+        .stats-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
         }
-        @media (min-width: 1200px) { .dashboard-grid { grid-template-columns: 1fr 1fr; } }
 
-        /* CARDS */
-        .card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem; }
-        .card-title { font-size: 1.1rem; color: var(--color-gold); margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 0.5rem; }
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
 
-        /* STATS BAR */
-        .stats-bar { display: flex; overflow-x: auto; gap: 1rem; margin-bottom: 1rem; padding-bottom: 5px; }
-        .stat-item { min-width: 140px; flex: 1; background: #0a0a0a; padding: 1rem; border-radius: 8px; border-top: 3px solid var(--color-gold); }
-        .stat-item span { display: block; font-size: 0.7rem; color: var(--color-text-muted); text-transform: uppercase; }
-        .stat-item strong { font-size: 1.5rem; }
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gold);
+        }
 
-        /* PREP LISTS */
-        .prep-row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #1a1a1a; font-size: 0.9rem; }
-        .prep-row:last-child { border-bottom: none; }
-        .prep-row .label { color: var(--color-text-muted); }
-        .prep-row .qty { font-weight: 700; color: var(--color-gold); }
+        .stat-card.danger::after {
+            background: #ff4444;
+        }
 
-        /* SCROLL AREAS */
-        .scroll-area {
-            max-height: 280px;
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        /* --- DASHBOARD CONTENT GRID --- */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-header h3 {
+            font-size: 1rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge {
+            background: #222;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.85rem 0;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 0.85rem;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .row .label {
+            color: #ccc;
+        }
+
+        .row .qty {
+            color: var(--gold);
+            font-weight: 800;
+        }
+
+        /* --- ALERTS & MESSAGING --- */
+
+        /* Delete Button Styling */
+        .delete-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #666;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn svg {
+            opacity: 0.6;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 68, 68, 0.1);
+            border-color: rgba(255, 68, 68, 0.3);
+            color: #ff4444;
+        }
+
+        .delete-btn:hover svg {
+            opacity: 1;
+        }
+
+        /* Refined Chat Layout */
+        .chat-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .chat-msg {
+            margin-bottom: 1.25rem;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border-left: 3px solid #333;
+        }
+
+        .chat-msg.admin {
+            border-left-color: var(--gold);
+            background: rgba(212, 175, 55, 0.03);
+        }
+
+        .alert-item {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .alert-info h4 {
+            font-size: 0.85rem;
+            margin-bottom: 2px;
+        }
+
+        .alert-info p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .badge-left {
+            background: #ff4444;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .remind-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 0.65rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .chat-area {
+            height: 180px;
             overflow-y: auto;
-            padding-right: 5px;
+            padding-right: 10px;
+            margin-bottom: 1rem;
         }
 
-        /* Custom Scrollbar */
-        .scroll-area::-webkit-scrollbar { width: 5px; }
-        .scroll-area::-webkit-scrollbar-track { background: #050505; }
-        .scroll-area::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 10px; }
+        .chat-msg {
+            margin-bottom: 1rem;
+            border-left: 2px solid #333;
+            padding-left: 10px;
+            position: relative;
+        }
 
-        .alert-box { background: #1a0a0a; border: 1px solid #441a1a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
-        .alert-info h4 { font-size: 0.9rem; }
-        .alert-info p { font-size: 0.7rem; color: var(--color-text-muted); }
-        .badge { font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; font-weight: bold; }
-        .badge-danger { background: var(--color-danger); color: white; }
+        .chat-msg.admin {
+            border-left-color: var(--gold);
+        }
 
-        .btn { background: transparent; border: 1px solid var(--color-gold); color: var(--color-gold); padding: 5px 12px; border-radius: 4px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat'; font-weight: 600; }
-        .btn:hover { background: var(--color-gold); color: black; }
+        .chat-meta {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
 
-        /* MESSAGE BOX SPECIFICS */
-        .chat-container { display: flex; flex-direction: column; height: 400px; }
-        .message-history { flex: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 8px; }
-        .msg-item { margin-bottom: 1rem; padding-left: 10px; border-left: 2px solid #333; transition: opacity 0.3s ease; }
-        .msg-item.admin { border-left-color: var(--color-gold); }
-        .msg-meta { display: flex; justify-content: space-between; font-size: 0.65rem; margin-bottom: 4px; font-weight: 700; align-items: center; }
-        .msg-text { font-size: 0.85rem; color: #ccc; }
-        .delete-msg { background: transparent; border: none; color: var(--color-danger); cursor: pointer; font-size: 1.1rem; line-height: 1; padding: 0 5px; }
+        .chat-text {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: #bbb;
+        }
+
+        .msg-close {
+            cursor: pointer;
+            color: #ff4444;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        .input-group input {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .send-btn {
+            background: var(--gold);
+            border: none;
+            padding: 0 15px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 1024px) {
+            .mobile-header {
+                display: flex;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                padding-top: 5rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 6rem 1.5rem 2rem 1.5rem;
+            }
+
+            .nav-toggle:checked~.sidebar {
+                transform: translateX(0);
+            }
+
+            .nav-toggle:checked~.mobile-header .hamburger span:nth-child(1) {
+                transform: translateY(7.5px) rotate(45deg);
+            }
+
+            .nav-toggle:checked~.mobile-header .hamburger span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle:checked~.mobile-header .hamburger span:nth-child(3) {
+                transform: translateY(-7.5px) rotate(-45deg);
+            }
+
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-    <div class="admin-wrapper">
-        <aside class="sidebar">
-            <div class="logo">AK ADMIN</div>
-            <ul class="nav-links">
-                <a href=" {% url 'ayushman_dashboard'%}" class="nav-item active"><li>Dashboard</li></a>
-                <a href="{% url 'subscribers' %}" class="nav-item"><li>Subscribers</li></a>
-                <a href="#" class="nav-item"><li>Menu Manager</li></a>
-                <a href="#" class="nav-item"><li>History</li></a>
-            </ul>
-        </aside>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
 
-        <main class="main-content">
-            <header class="header-main">
-                <h1>DASHBOARD</h1>
-                <p style="color: var(--color-text-muted)">Wednesday, 17 December 2025</p>
-            </header>
+     {% include "Admin/sidebar.html" %}
 
-            <div class="stats-bar">
-                <div class="stat-item"><span>Total Meals</span><strong>248</strong></div>
-                <div class="stat-item"><span>Cancelled</span><strong>42</strong></div>
-                <div class="stat-item" style="border-top-color: var(--color-danger)"><span>Low Balance</span><strong>14</strong></div>
+    <main class="main-content">
+        <header class="top-bar">
+            <h1>DASHBOARD</h1>
+            <p>Wednesday, 17 December 2025</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card"><span class="stat-label">Total Meals</span>
+                <div class="stat-value">248</div>
             </div>
-            
-            <div class="stats-bar">
-                <div class="stat-item"><span>Dine-In</span><strong>64</strong></div>
-                <div class="stat-item"><span>Deliveries</span><strong>42</strong></div>
-                <div class="stat-item"><span>Pick-Up</span><strong>64</strong></div>
+            <div class="stat-card"><span class="stat-label">Cancelled</span>
+                <div class="stat-value">42</div>
             </div>
+            <div class="stat-card danger"><span class="stat-label">Low Balance</span>
+                <div class="stat-value">14</div>
+            </div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card"><span class="stat-label">Dine-In</span>
+                <div class="stat-value">64</div>
+            </div>
+            <div class="stat-card"><span class="stat-label">Deliveries</span>
+                <div class="stat-value">42</div>
+            </div>
+            <div class="stat-card"><span class="stat-label">Pick-Up</span>
+                <div class="stat-value">64</div>
+            </div>
+        </div>
 
-            <div class="dashboard-grid">
-                
+        <div class="dashboard-layout">
+            <div class="left-col">
                 <div class="card">
-                    <div class="card-title">Lunch Kitchen Prep <span class="badge" style="background:#222">12:00 - 15:00</span></div>
-                    <div class="prep-row"><span class="label">Paneer (Flagship/Premium)</span><span class="qty">28</span></div>
-                    <div class="prep-row"><span class="label">Mushroom (Flagship/Premium)</span><span class="qty">14</span></div>
-                    <div class="prep-row"><span class="label">Chicken (Flagship/Premium)</span><span class="qty">42</span></div>
-                    <div class="prep-row"><span class="label">Prawns (Premium Only)</span><span class="qty">12</span></div>
-                    <div class="prep-row"><span class="label">Fish (Premium Only)</span><span class="qty">08</span></div>
-                    <div class="prep-row"><span class="label">Standard Veg (Normal)</span><span class="qty">35</span></div>
+                    <div class="card-header">
+                        <h3>Lunch Kitchen Prep</h3><span class="badge">12:00 - 15:00</span>
+                    </div>
+                    <div class="row"><span class="label">Paneer (Flagship/Premium)</span><span class="qty">28</span>
+                    </div>
+                    <div class="row"><span class="label">Mushroom (Flagship/Premium)</span><span class="qty">14</span>
+                    </div>
+                    <div class="row"><span class="label">Chicken (Flagship/Premium)</span><span class="qty">42</span>
+                    </div>
+                    <div class="row"><span class="label">Prawns (Premium Only)</span><span class="qty">12</span></div>
+                    <div class="row"><span class="label">Fish (Premium Only)</span><span class="qty">08</span></div>
+                    <div class="row"><span class="label">Standard Veg (Normal)</span><span class="qty">35</span></div>
                 </div>
 
                 <div class="card">
-                    <div class="card-title">Dinner Kitchen Prep <span class="badge" style="background:#222">19:00 - 22:00</span></div>
-                    <div class="prep-row"><span class="label">Paneer (Flagship/Premium)</span><span class="qty">22</span></div>
-                    <div class="prep-row"><span class="label">Mushroom (Flagship/Premium)</span><span class="qty">09</span></div>
-                    <div class="prep-row"><span class="label">Chicken (Flagship/Premium)</span><span class="qty">38</span></div>
-                    <div class="prep-row"><span class="label">Egg (Premium Only)</span><span class="qty">25</span></div>
-                    <div class="prep-row"><span class="label">Standard Veg (Normal)</span><span class="qty">20</span></div>
+                    <div class="card-header">
+                        <h3>Dinner Kitchen Prep</h3><span class="badge">19:00 - 22:00</span>
+                    </div>
+                    <div class="row"><span class="label">Paneer (Flagship/Premium)</span><span class="qty">22</span>
+                    </div>
+                    <div class="row"><span class="label">Mushroom (Flagship/Premium)</span><span class="qty">09</span>
+                    </div>
+                    <div class="row"><span class="label">Chicken (Flagship/Premium)</span><span class="qty">38</span>
+                    </div>
+                    <div class="row"><span class="label">Egg (Premium Only)</span><span class="qty">25</span></div>
+                    <div class="row"><span class="label">Standard Veg (Normal)</span><span class="qty">20</span></div>
                 </div>
+            </div>
 
+            <div class="right-col">
                 <div class="card">
-                    <div class="card-title">Low Meals Alert (< 5)</div>
-                    <div class="scroll-area">
-                        <div class="alert-box">
-                            <div class="alert-info"><h4>Rahul Varma</h4><p>Premium 60 | Room 302</p></div>
-                            <span class="badge badge-danger">2 Left</span>
-                            <button class="btn">Remind</button>
+                    <div class="card-header">
+                        <h3>Low Meals Alert (< 5)</h3>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-info">
+                            <h4>Rahul Varma</h4>
+                            <p>Premium 60 | Room 302</p>
                         </div>
-                        <div class="alert-box">
-                            <div class="alert-info"><h4>Sneha Kapoor</h4><p>Normal 30 | Room 105</p></div>
-                            <span class="badge badge-danger">4 Left</span>
-                            <button class="btn">Remind</button>
+                        <span class="badge-left">2 Left</span>
+                        <button class="remind-btn">Remind</button>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-info">
+                            <h4>Sneha Kapoor</h4>
+                            <p>Normal 30 | Room 105</p>
                         </div>
-                        <div class="alert-box">
-                            <div class="alert-info"><h4>Amitabh B.</h4><p>Premium 60 | Room 501</p></div>
-                            <span class="badge badge-danger">1 Left</span>
-                            <button class="btn">Remind</button>
+                        <span class="badge-left">4 Left</span>
+                        <button class="remind-btn">Remind</button>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-info">
+                            <h4>Amitabh B.</h4>
+                            <p>Premium 60 | Room 501</p>
                         </div>
+                        <span class="badge-left">1 Left</span>
+                        <button class="remind-btn">Remind</button>
                     </div>
                 </div>
 
-                <div class="card chat-container">
-                    <div class="card-title">Broadcast Message <span class="badge" style="background: var(--color-gold); color: black;">Live</span></div>
-                    
-                    <div class="message-history scroll-area">
-                        <div class="msg-item admin">
-                            <div class="msg-meta">
-                                <div><span style="color: var(--color-gold);">ADMIN</span> <span style="margin-left: 8px; font-weight: 400; color: var(--color-text-muted);">10:30 AM</span></div>
-                                <button class="delete-msg" onclick="this.parentElement.parentElement.remove()" title="Delete Message">&times;</button>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Broadcast Message <span class="badge" style="color:var(--gold)">LIVE</span></h3>
+                    </div>
+
+                    <div class="chat-area">
+                        <div class="chat-msg admin">
+                            <div class="chat-meta">
+                                <span>ADMIN | 10:30 AM</span>
+                                <button class="delete-btn" onclick="this.closest('.chat-msg').remove()">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path
+                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                        </path>
+                                    </svg>
+                                    Delete
+                                </button>
                             </div>
-                            <p class="msg-text">Lunch service is now live. Please check your prep lists.</p>
+                            <p class="chat-text">Lunch service is now live. Please check your prep lists.</p>
                         </div>
-                        <div class="msg-item">
-                            <div class="msg-meta">
-                                <div><span style="color: var(--color-text-muted);">SYSTEM</span> <span style="margin-left: 8px; font-weight: 400;">Yesterday</span></div>
-                                <button class="delete-msg" onclick="this.parentElement.parentElement.remove()" title="Delete Message">&times;</button>
+
+                        <div class="chat-msg">
+                            <div class="chat-meta">
+                                <span>SYSTEM | Yesterday</span>
+                                <button class="delete-btn" onclick="this.closest('.chat-msg').remove()">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path
+                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                        </path>
+                                    </svg>
+                                    Delete
+                                </button>
                             </div>
-                            <p class="msg-text">Weekly menu has been updated for all Premium subscribers.</p>
+                            <p class="chat-text">Weekly menu has been updated for all Premium subscribers.</p>
                         </div>
-                        <div class="msg-item admin">
-                            <div class="msg-meta">
-                                <div><span style="color: var(--color-gold);">ADMIN</span> <span style="margin-left: 8px; font-weight: 400; color: var(--color-text-muted);">15 Dec</span></div>
-                                <button class="delete-msg" onclick="this.parentElement.parentElement.remove()" title="Delete Message">&times;</button>
+
+                        <div class="chat-msg admin">
+                            <div class="chat-meta">
+                                <span>ADMIN | 15 Dec</span>
+                                <button class="delete-btn" onclick="this.closest('.chat-msg').remove()">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path
+                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                        </path>
+                                    </svg>
+                                    Delete
+                                </button>
                             </div>
-                            <p class="msg-text">Reminder: Kitchen will be closed for maintenance this Sunday.</p>
+                            <p class="chat-text">Reminder: Kitchen will be closed for maintenance this Sunday.</p>
                         </div>
                     </div>
 
-                    <div style="border-top: 1px solid var(--color-border); padding-top: 1rem;">
-                        <div style="display: flex; gap: 8px;">
-                            <input type="text" placeholder="Message all users..." 
-                                style="flex: 1; background: #1a1a1a; border: 1px solid var(--color-border); border-radius: 6px; padding: 10px; color: white; font-family: 'Montserrat'; outline: none; font-size: 0.85rem;">
-                            <button class="btn">SEND</button>
-                        </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Message all users...">
+                        <button class="send-btn">SEND</button>
                     </div>
                 </div>
-
             </div>
-        </main>
-    </div>
-
+        </div>
+        </div>
+    </main>
 </body>
+
 </html>
