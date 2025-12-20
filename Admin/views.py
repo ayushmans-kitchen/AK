@@ -61,7 +61,7 @@ def dashboard(request):
         'total_inactive_customers':customers.filter(user_status_active=False,paused_subscription=False,is_staff=False,is_superuser=False).count(),
         'total_plan_end_customers':customers.filter(paused_subscription=True,is_staff=False,is_superuser=False).count(),
 
-        'total_lunch':lunch_record.count(),
+        'total_lunch':lunch_record.exclude(service_choice="Cancel").count(),
         'lunch_dinein':lunch_record.filter(service_choice="DineIn").count(),
         'lunch_delivery':lunch_record.filter(service_choice="Delivery").count(),
         'lunch_pickup':lunch_record.filter(service_choice="PickUp").count(),
@@ -69,7 +69,7 @@ def dashboard(request):
         'lunch_inactive':customers.filter(lunch_status_active=True,user_status_active=False,paused_subscription=False,is_staff=False,is_superuser=False).count(),
         'lunch_default_need':customers.filter(user_status_active=True,lunch_status_active=True,is_staff=False,is_superuser=False).exclude(lunch_records__for_date=today).count(),
 
-        'total_dinner':dinner_record.count(),
+        'total_dinner':dinner_record.exclude(service_choice="Cancel").count(),
         'dinner_dinein':dinner_record.filter(service_choice="DineIn").count(),
         'dinner_delivery':dinner_record.filter(service_choice="Delivery").count(),
         'dinner_pickup':dinner_record.filter(service_choice="PickUp").count(),
