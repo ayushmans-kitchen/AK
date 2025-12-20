@@ -75,12 +75,12 @@ def dashboard(request):
         'dinner_pickup':dinner_record.filter(service_choice="PickUp").count(),
         'dinner_cancelled':dinner_record.filter(service_choice="Cancel").count(),
         'dinner_inactive':customers.filter(dinner_status_active=True,user_status_active=False,paused_subscription=False,is_staff=False,is_superuser=False).count(),
-        'dinner_default_need':customers.filter(user_status_active=True,dinner_status_active=True,is_active=False,is_superuser=False).exclude(dinner_records__for_date=today).count(),
+        'dinner_default_need':customers.filter(user_status_active=True,dinner_status_active=True,is_staff=False,is_superuser=False).exclude(dinner_records__for_date=today).count(),
 
         "l_food": L_FOOD_CHOICES,
         "d_food": D_FOOD_CHOICES,
 
-        'low_balance_customer':customers.filter(meal_balance__lte=6),
+        'low_balance_customer':customers.filter(meal_balance__lte=6,is_staff=False,is_superuser=False),
         'admin_messgaes':admin_messgaes,
     }
     return render(request,"Admin/dashboard.html",context)
