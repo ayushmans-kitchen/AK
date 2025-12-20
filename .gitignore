@@ -9,7 +9,7 @@ zenv/
 env/
 
 # Database files
-
+db.sqlite3
 # Media and static files (generated or uploaded)
 media/
 static_collected/ # If you use collectstatic to a specific directory

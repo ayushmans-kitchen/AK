@@ -52,7 +52,12 @@
 
         /* --- BENTO STATS GRID --- */
         .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
-        .bento-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; display: flex; flex-direction: column; justify-content: center; }
+        
+        /* Bento Link Wrapper Reset */
+        .bento-grid a { text-decoration: none; color: inherit; display: block; transition: transform 0.2s ease; }
+        .bento-grid a:hover { transform: translateY(-3px); }
+
+        .bento-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; display: flex; flex-direction: column; justify-content: center; height: 100%; }
         
         .featured-card { grid-column: span 2; border-left: 3px solid var(--gold); background: linear-gradient(to right, #0f0f0f, #0c0c0c); }
         .group-title { grid-column: span 4; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-top: 0.5rem; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
@@ -144,20 +149,12 @@
 
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
 
-    <header class="mobile-header">
-        <div class="logo" style="font-family: 'Playfair Display'; color: var(--gold); font-weight: 900; font-size: 1rem;">AK ADMIN</div>
-        <label for="nav-toggle" class="hamburger">
-            <span></span><span></span><span></span>
-        </label>
-    </header>
-
     {% include "Admin/sidebar.html" %}
 
     <main class="main-content">
         <header class="top-bar">
             <h1>SERVICE DASHBOARD</h1>
             <p> {% now "l d F Y" %}</p>
-
         </header>
 
         <div class="bento-grid">
@@ -175,65 +172,87 @@
             </div>
 
             <div class="group-title">Lunch Service</div>
-            <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">{{lunch_dinein}}</div></div>
-            <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{lunch_delivery}}</div></div>
-            <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{lunch_pickup}}</div></div>
-            <div class="bento-card" style="background:rgba(212,175,55,0.05)">
-                <span class="stat-label">Total Lunch</span>
-                <div class="stat-value" style="color:var(--gold)">{{total_lunch}}</div>
-            </div>
-            <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">{{lunch_cancelled}}</div></div>
+            
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">{{lunch_dinein}}</div></div>
+            </a>
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{lunch_delivery}}</div></div>
+            </a>
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{lunch_pickup}}</div></div>
+            </a>
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card" style="background:rgba(212,175,55,0.05)">
+                    <span class="stat-label">Total Lunch</span>
+                    <div class="stat-value" style="color:var(--gold)">{{total_lunch}}</div>
+                </div>
+            </a>
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">{{lunch_cancelled}}</div></div>
+            </a>
+
             <div class="bento-card"><span class="stat-label">Inactive</span><div class="stat-value">{{lunch_inactive}}</div></div>
             <div class="bento-card"><span class="stat-label">Default Entries</span><div class="stat-value">{{lunch_default_need}}</div></div>
             <div class="bento-card">
                 <span class="stat-label">Generate Lunch Record</span>
-                <button class="bento-btn"><a href="{% url "gen_Lunch_record" %}">Generate Defaults</a></button>
+                <button class="bento-btn"><a href="{% url 'gen_Lunch_record' %}" style="transform:none;">Generate</a></button>
             </div>
 
             <div class="group-title">Dinner Service</div>
-            <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">{{dinner_dinein}}</div></div>
-            <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{dinner_delivery}}</div></div>
-            <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{dinner_pickup}}</div></div>
-            <div class="bento-card" style="background:rgba(212,175,55,0.05)">
-                <span class="stat-label">Total Dinner</span>
-                <div class="stat-value" style="color:var(--gold)">{{total_dinner}}</div>
-            </div>
-            <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">{{dinner_cancelled}}</div></div>
+
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">{{dinner_dinein}}</div></div>
+            </a>
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{dinner_delivery}}</div></div>
+            </a>
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{dinner_pickup}}</div></div>
+            </a>
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card" style="background:rgba(212,175,55,0.05)">
+                    <span class="stat-label">Total Dinner</span>
+                    <div class="stat-value" style="color:var(--gold)">{{total_dinner}}</div>
+                </div>
+            </a>
+            <a href="{% url 'service_details' %}">
+                <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">{{dinner_cancelled}}</div></div>
+            </a>
+
             <div class="bento-card"><span class="stat-label">Inactive</span><div class="stat-value">{{dinner_inactive}}</div></div>
             <div class="bento-card"><span class="stat-label">Default Entries</span><div class="stat-value">{{dinner_default_need}}</div></div>
             <div class="bento-card">
                 <span class="stat-label">Generate Dinner Record</span>
-                <button class="bento-btn" ><a href="{% url "gen_Dinner_record" %}">Generate</a></button>
+                <button class="bento-btn"><a href="{% url 'gen_Dinner_record' %}" style="transform:none;">Generate</a></button>
+                
             </div>
         </div>
 
         <div class="dashboard-layout">
             <div class="left-col">
-    <div class="card">
-        <div class="card-header"><h3>Lunch Kitchen Prep</h3></div>
+                <div class="card">
+                    <div class="card-header"><h3>Lunch Kitchen Prep</h3></div>
+                    <div class="row"><span>VEG</span><span class="qty">{{ l_food.VEG }}</span></div>
+                    <div class="row"><span>NON VEG</span><span class="qty">{{ l_food.NON_VEG }}</span></div>
+                    <div class="row"><span>PANEER</span><span class="qty">{{ l_food.PANEER }}</span></div>
+                    <div class="row"><span>MUSHROOM</span><span class="qty">{{ l_food.MUSHROOM }}</span></div>
+                    <div class="row"><span>CHICKEN</span><span class="qty">{{ l_food.CHICKEN }}</span></div>
+                    <div class="row"><span>EGG</span><span class="qty">{{ l_food.EGG }}</span></div>
+                    <div class="row"><span>PRAWN</span><span class="qty">{{ l_food.PRAWN }}</span></div>
+                    <div class="row"><span>FISH</span><span class="qty">{{ l_food.FISH }}</span></div>
+                </div>
 
-        <div class="row"><span>VEG</span><span class="qty">{{ l_food.VEG }}</span></div>
-        <div class="row"><span>NON VEG</span><span class="qty">{{ l_food.NON_VEG }}</span></div>
-        <div class="row"><span>PANEER</span><span class="qty">{{ l_food.PANEER }}</span></div>
-        <div class="row"><span>MUSHROOM</span><span class="qty">{{ l_food.MUSHROOM }}</span></div>
-        <div class="row"><span>CHICKEN</span><span class="qty">{{ l_food.CHICKEN }}</span></div>
-        <div class="row"><span>EGG</span><span class="qty">{{ l_food.EGG }}</span></div>
-        <div class="row"><span>PRAWN</span><span class="qty">{{ l_food.PRAWN }}</span></div>
-        <div class="row"><span>FISH</span><span class="qty">{{ l_food.FISH }}</span></div>
-    </div>
-
-    <div class="card">
-        <div class="card-header"><h3>Dinner Kitchen Prep</h3></div>
-
-        <div class="row"><span>VEG</span><span class="qty">{{ d_food.VEG }}</span></div>
-        <div class="row"><span>NON VEG</span><span class="qty">{{ d_food.NON_VEG }}</span></div>
-        <div class="row"><span>PANEER</span><span class="qty">{{ d_food.PANEER }}</span></div>
-        <div class="row"><span>MUSHROOM</span><span class="qty">{{ d_food.MUSHROOM }}</span></div>
-        <div class="row"><span>CHICKEN</span><span class="qty">{{ d_food.CHICKEN }}</span></div>
-        <div class="row"><span>EGG</span><span class="qty">{{ d_food.EGG }}</span></div>
-    </div>
-</div>
-
+                <div class="card">
+                    <div class="card-header"><h3>Dinner Kitchen Prep</h3></div>
+                    <div class="row"><span>VEG</span><span class="qty">{{ d_food.VEG }}</span></div>
+                    <div class="row"><span>NON VEG</span><span class="qty">{{ d_food.NON_VEG }}</span></div>
+                    <div class="row"><span>PANEER</span><span class="qty">{{ d_food.PANEER }}</span></div>
+                    <div class="row"><span>MUSHROOM</span><span class="qty">{{ d_food.MUSHROOM }}</span></div>
+                    <div class="row"><span>CHICKEN</span><span class="qty">{{ d_food.CHICKEN }}</span></div>
+                    <div class="row"><span>EGG</span><span class="qty">{{ d_food.EGG }}</span></div>
+                </div>
+            </div>
 
             <div class="right-col">
                 <div class="card">
@@ -245,26 +264,23 @@
                             <span class="badge-danger">{{c.meal_balance}} Left</span>
                         </div>
                         {% endfor %}
-
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header"><h3>Broadcast Message</h3></div>
                     <div class="scroll-container chat-area">
-
                         {% for m in admin_messgaes %}
-                        <form method='POST' action="{% url "admin_notice_delete" mid=m.pk %}">
+                        <form method='POST' action="{% url 'admin_notice_delete' mid=m.pk %}">
                             {% csrf_token %}
-                        <div class="chat-msg admin">
-                            <div class="chat-meta"><span>{{m.date}}</span><button class="delete-btn">Delete</button></div>
-                            <p class="chat-text">{{m.message}}</p>
-                        </div>
+                            <div class="chat-msg admin">
+                                <div class="chat-meta"><span>{{m.date}}</span><button class="delete-btn">Delete</button></div>
+                                <p class="chat-text">{{m.message}}</p>
+                            </div>
                         </form>
                         {% endfor %}
-
                     </div>
-                    <form method='POST' action="{% url "admin_notice" %}">
+                    <form method='POST' action="{% url 'admin_notice' %}">
                         {% csrf_token %}
                         <div class="input-group"> 
                             <input type="text" placeholder="Message all..." name="message">

@@ -3,7 +3,9 @@
 <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden>
 
 <header class="mobile-nav">
-    <div class="logo">AK ADMIN<span class="gold-dot">.</span></div>
+    <div class="logo">
+        <img src="{% static 'assets/logo.PNG' %}" alt="Logo" class="nav-logo-img">
+    </div>
     <label for="nav-toggle" class="hamburger">
         <span></span>
         <span></span>
@@ -14,7 +16,9 @@
 <label for="nav-toggle" class="nav-overlay"></label>
 
 <aside class="sidebar">
-    <div class="sidebar-logo">AK ADMIN<span class="gold-dot">.</span></div>
+    <div class="sidebar-logo">
+        <img src="{% static 'assets/logo.PNG' %}" alt="Logo" class="sidebar-logo-img">
+    </div>
     
     <ul class="nav-links">
         <li>
@@ -81,6 +85,34 @@
     color: #fff;
     margin-bottom: 3rem;
     padding-left: 0.8rem;
+}
+/* Sidebar Logo Styling */
+.sidebar-logo-img {
+    max-width: 100%; /* Ensures it fits the sidebar width */
+    height: auto;
+    max-height: 80px; /* Adjust this based on your logo aspect ratio */
+    display: block;
+}
+
+/* Mobile Nav Logo Styling */
+.nav-logo-img {
+    height: 45px; /* Adjust to fit inside the 70px header */
+    width: auto;
+    display: block;
+}
+
+/* Align mobile logo vertically */
+.mobile-nav .logo {
+    display: flex;
+    align-items: center;
+}
+
+/* Adjust sidebar logo container if needed */
+.sidebar-logo {
+    padding-left: 0; /* Remove padding if logo is centered or full width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .gold-dot { color: var(--gold); }

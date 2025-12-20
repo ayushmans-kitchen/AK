@@ -17,6 +17,7 @@
             --color-text-muted: #888888;
             --color-border: #1f1f1f;
             --color-danger: #ff4444;
+            --color-success: #4ade80;
             --sb-width: 260px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -38,7 +39,7 @@
         .hamburger { width: 28px; height: 18px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
         .hamburger span { height: 3px; width: 100%; background: var(--color-gold); border-radius: 10px; transition: var(--transition); }
 
-        /* SIDEBAR (Desktop Default) */
+        /* SIDEBAR */
         .sidebar {
             width: var(--sb-width); height: 100vh; position: fixed; left: 0; top: 0;
             background: var(--color-bg-sidebar); border-right: 1px solid var(--color-border); 
@@ -52,7 +53,7 @@
         .header-main h1 { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px; }
 
         /* PROFILE FORM CARD */
-        .profile-card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 16px; padding: 2rem; margin-bottom: 2.5rem; }
+        .profile-card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 16px; padding: 2rem; margin-bottom: 3rem; }
         
         .details-grid {
             display: grid;
@@ -75,37 +76,36 @@
         .btn-renew { background: transparent; border: 1px solid var(--color-gold); color: var(--color-gold); }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
-        /* HISTORY SECTION */
-        .history-section h2 { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: 1.4rem; margin-bottom: 1.5rem; }
-        .table-wrapper { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 12px; overflow-x: auto; }
+        /* TABLES SECTION */
+        .section-container { margin-bottom: 3rem; }
+        .section-container h2 { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: 1.4rem; margin-bottom: 1.5rem; }
+        .table-wrapper { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; }
+        .scroll-container { overflow-x: auto; }
         
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        thead th { color: var(--color-gold); font-size: 0.75rem; text-transform: uppercase; padding: 18px 20px; border-bottom: 2px solid var(--color-border); font-weight: 700; text-align: left; }
+        thead th { background: rgba(212, 175, 55, 0.05); color: var(--color-gold); font-size: 0.75rem; text-transform: uppercase; padding: 18px 20px; border-bottom: 1px solid var(--color-border); font-weight: 700; text-align: left; }
         tbody td { padding: 18px 20px; font-size: 0.9rem; border-bottom: 1px solid #161616; color: #ddd; }
+        tr:last-child td { border-bottom: none; }
         
-        .badge-cancelled { background: rgba(255, 68, 68, 0.1); color: var(--color-danger); padding: 5px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; }
+        /* BADGES */
+        .badge { padding: 5px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+        .badge-cancelled { background: rgba(255, 68, 68, 0.1); color: var(--color-danger); }
+        .badge-active { background: rgba(74, 222, 128, 0.1); color: var(--color-success); }
+        .badge-plan { background: rgba(212, 175, 55, 0.1); color: var(--color-gold); border: 1px solid rgba(212, 175, 55, 0.3); }
 
         /* RESPONSIVE MEDIA QUERIES */
         @media (max-width: 1024px) {
             .mobile-header { display: flex; }
             .sidebar { transform: translateX(-100%); padding-top: 5rem; }
             .main-content { margin-left: 0; padding: 6.5rem 1.5rem 2rem 1.5rem; }
-            
-            /* Toggle Logic */
             .nav-toggle:checked ~ .sidebar { transform: translateX(0); }
             .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
             .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(2) { opacity: 0; }
             .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
-            
-            .header-main h1 { font-size: 1.5rem; }
         }
 
         @media (max-width: 600px) {
-            .profile-card { padding: 1.5rem; }
-            .details-grid { grid-template-columns: 1fr; }
-            .input-group[style*="grid-column"] { grid-column: span 1 !important; }
             .button-row .btn { width: 100%; flex: none; }
-            .main-content { padding-top: 5.5rem; }
         }
     </style>
 </head>
@@ -140,6 +140,10 @@
                 <div class="input-group">
                     <label>Email Address</label>
                     <input type="email" value="amitabh@bigb.com">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" value="********">
                 </div>
                 <div class="input-group">
                     <label>Subscription Plan</label>
@@ -187,42 +191,69 @@
             </div>
         </form>
 
-        <div class="history-section">
+        <div class="section-container">
+            <h2>Subscription History</h2>
+            <div class="table-wrapper">
+                <div class="scroll-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Plan Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-plan">Premium 60</span></td>
+                                <td>01 Dec 2025</td>
+                                <td>30 Dec 2025</td>
+                                <td><span class="badge badge-active">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-plan">Flagship 30</span></td>
+                                <td>01 Nov 2025</td>
+                                <td>30 Nov 2025</td>
+                                <td><span style="color: var(--color-text-muted);">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container">
             <h2>Meal History</h2>
             <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Meal Type</th>
-                            <th>Service</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>15 Dec 2025</td>
-                            <td>Dinner</td>
-                            <td>Cancel</td>
-                            <td><span class="badge-cancelled">Cancelled</span></td>
-                        </tr>
-                        <tr>
-                            <td>14 Dec 2025</td>
-                            <td>Lunch</td>
-                            <td>Delivery</td>
-                            <td style="color: #4ade80;">Delivered</td>
-                        </tr>
-                        <tr>
-                            <td>13 Dec 2025</td>
-                            <td>Dinner</td>
-                            <td>Dine-In</td>
-                            <td style="color: #4ade80;">Completed</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="scroll-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Meal Type</th>
+                                <th>Service</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15 Dec 2025</td>
+                                <td>Dinner</td>
+                                <td>Cancel</td>
+                                <td><span class="badge-cancelled">Cancelled</span></td>
+                            </tr>
+                            <tr>
+                                <td>14 Dec 2025</td>
+                                <td>Lunch</td>
+                                <td>Delivery</td>
+                                <td style="color: var(--color-success);">Delivered</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
-
 </body>
 </html>
