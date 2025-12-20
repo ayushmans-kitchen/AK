@@ -97,6 +97,10 @@ def service_details(request):
 def subscribers(request):
     return render(request,"Admin/subscribers.html")
 
+@staff_member_required(login_url='/login/')
+def add_customer(request):
+    return render(request,"Admin/add-customer.html")
+
 
 @staff_member_required(login_url='/login/')
 def profile(request):

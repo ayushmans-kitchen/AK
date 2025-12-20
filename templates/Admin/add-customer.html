@@ -1,0 +1,290 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Create New User | Ayushman's Kitchen</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700" rel="stylesheet"/>
+    
+    <style>
+        :root {
+            --gold: #d4af37;
+            --bg-pure: #000000;
+            --card-dark: #0a0a0a;
+            --border-muted: #1a1a1a;
+            --sb-width: 260px;
+        }
+
+        /* --- BASE STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-pure); 
+            color: #ffffff; 
+            font-family: 'Manrope', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Prevent white boxes for saved passwords */
+        input:-webkit-autofill {
+            -webkit-text-fill-color: #ffffff !important;
+            -webkit-box-shadow: 0 0 0px 1000px #000000 inset !important;
+        }
+
+        /* --- LAYOUT FOR SIDEBAR --- */
+        .main-content {
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media (min-width: 1025px) {
+            .main-content { margin-left: var(--sb-width); padding: 3rem; }
+        }
+
+        @media (max-width: 1024px) {
+            .main-content { margin-left: 0; padding: 90px 1.5rem 2rem 1.5rem; }
+        }
+
+        /* --- FORM UI --- */
+        .form-container { width: 100%; max-width: 950px; }
+        
+        .page-header { margin-bottom: 2.5rem; }
+        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 0.5rem; }
+        .page-header p { color: #666; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; }
+        
+        .form-card {
+            background-color: var(--card-dark);
+            border: 1px solid var(--border-muted);
+            padding: 2.5rem;
+            border-radius: 4px; /* Sharp corners per theme */
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+
+        .field-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+        .field-label { font-size: 0.65rem; font-weight: 800; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .dark-input {
+            background-color: #000;
+            border: 1px solid var(--border-muted);
+            height: 50px;
+            color: #fff;
+            padding: 0 16px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .dark-input:focus { border-color: var(--gold); background-color: #050505; }
+        textarea.dark-input { height: auto; padding: 15px; min-height: 100px; }
+
+        /* --- CUSTOM RADIOS & CHECKS --- */
+        .hidden-field { display: none; }
+        .logic-box {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .check-row { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 5px; }
+        .inline-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.85rem; }
+        .inline-label input { accent-color: var(--gold); width: 18px; height: 18px; }
+
+        .btn-gold {
+            width: 100%; height: 55px; background-color: var(--gold); color: #000;
+            border: none; font-size: 0.9rem; font-weight: 900; text-transform: uppercase;
+            letter-spacing: 2px; cursor: pointer; transition: 0.3s; margin-top: 2rem;
+        }
+        .btn-gold:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    {% include "Admin/sidebar.html" %}
+
+    <main class="main-content">
+        <div class="form-container">
+            <header class="page-header">
+                <h1>Create New User</h1>
+            </header>
+
+            <div class="form-card">
+                <form id="createUserForm" method="POST">
+                    {% csrf_token %}
+
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label class="field-label">Full Name</label>
+                            <input name="name" class="dark-input" required>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Email Address</label>
+                            <input name="email" type="email" class="dark-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label class="field-label">Phone Number</label>
+                            <input name="phone" class="dark-input">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Password</label>
+                            <input type="password" name="password" class="dark-input" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Delivery Address / Room No.</label>
+                        <textarea name="address" class="dark-input"></textarea>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label class="field-label">Meal Plan</label>
+                            <select id="planSelect" name="subscription_choice" class="dark-input" required>
+                                <option value="">-- select plan --</option>
+                                <option value="NORMAL30">Normal — 30 Meals</option>
+                                <option value="NORMAL60">Normal — 60 Meals</option>
+                                <option value="FLAGSHIP30">Premium Tier 1 — 30 Meals</option>
+                                <option value="FLAGSHIP60">Premium Tier 1 — 60 Meals</option>
+                                <option value="PREMIUM30">Premium Tier 2 — 30 Meals</option>
+                                <option value="PREMIUM60">Premium Tier 2 — 60 Meals</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Default Service Choice</label>
+                            <select name="default_service_choice" class="dark-input" required>
+                                <option value="DineIn">Dine-In</option>
+                                <option value="PickUp">Pick-Up</option>
+                                <option value="Delivery" selected>Delivery</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="accessBox" class="logic-box hidden-field">
+                        <label class="field-label">Temporal Access (30-Meal Rule)</label>
+                        <div class="check-row">
+                            <label class="inline-label"><input type="radio" name="access_choice" value="lunch" id="accessLunch"> Lunch</label>
+                            <label class="inline-label"><input type="radio" name="access_choice" value="dinner" id="accessDinner"> Dinner</label>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div id="flagship_lunch_box" class="field-group hidden-field">
+                            <label class="field-label">Flagship Lunch Default</label>
+                            <select name="flagship_lunch_default" class="dark-input">
+                                {% for val,label in FLAGSHIP_MENU_LUNCH %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div id="flagship_dinner_box" class="field-group hidden-field">
+                            <label class="field-label">Flagship Dinner Default</label>
+                            <select name="flagship_dinner_default" class="dark-input">
+                                {% for val,label in FLAGSHIP_MENU_DINNER %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div id="premium_lunch_box" class="field-group hidden-field">
+                            <label class="field-label">Premium Lunch Default</label>
+                            <select name="premium_lunch_default" class="dark-input">
+                                {% for val,label in PREMIUM_MENU_LUNCH %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div id="premium_dinner_box" class="field-group hidden-field">
+                            <label class="field-label">Premium Dinner Default</label>
+                            <select name="premium_dinner_default" class="dark-input">
+                                {% for val,label in PREMIUM_MENU_DINNER %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Account States</label>
+                        <div class="check-row">
+                            <label class="inline-label"><input type="checkbox" name="is_active" checked> User Active</label>
+                            <label class="inline-label"><input type="checkbox" name="lunch_status_active" id="lunch_status_active" checked> Lunch Authorized</label>
+                            <label class="inline-label"><input type="checkbox" name="dinner_status_active" id="dinner_status_active" checked> Dinner Authorized</label>
+                        </div>
+                    </div>
+
+                    <button class="btn-gold" type="submit">Finalize & Save User</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const planSelect = document.getElementById("planSelect");
+            const accessBox = document.getElementById("accessBox");
+            const accessLunch = document.getElementById("accessLunch");
+            const accessDinner = document.getElementById("accessDinner");
+            
+            const fLunch = document.getElementById("flagship_lunch_box");
+            const fDinner = document.getElementById("flagship_dinner_box");
+            const pLunch = document.getElementById("premium_lunch_box");
+            const pDinner = document.getElementById("premium_dinner_box");
+            
+            const lunchActive = document.getElementById("lunch_status_active");
+            const dinnerActive = document.getElementById("dinner_status_active");
+
+            function resetUI() {
+                [fLunch, fDinner, pLunch, pDinner].forEach(el => el.classList.add("hidden-field"));
+            }
+
+            function updateUI() {
+                const plan = planSelect.value.toUpperCase();
+                resetUI();
+                if (!plan) return;
+
+                const is60 = plan.endsWith("60");
+
+                if (is60) {
+                    accessBox.classList.add("hidden-field");
+                    lunchActive.checked = true; dinnerActive.checked = true;
+                    accessLunch.disabled = true; accessDinner.disabled = true;
+                    
+                    if (plan.startsWith("FLAGSHIP")) { fLunch.classList.remove("hidden-field"); fDinner.classList.remove("hidden-field"); }
+                    if (plan.startsWith("PREMIUM")) { pLunch.classList.remove("hidden-field"); pDinner.classList.remove("hidden-field"); }
+                } else {
+                    accessBox.classList.remove("hidden-field");
+                    accessLunch.disabled = false; accessDinner.disabled = false;
+                    handle30Logic(plan);
+                }
+            }
+
+            function handle30Logic(plan) {
+                resetUI();
+                if (accessLunch.checked) {
+                    lunchActive.checked = true; dinnerActive.checked = false;
+                    if (plan.startsWith("FLAGSHIP")) fLunch.classList.remove("hidden-field");
+                    if (plan.startsWith("PREMIUM")) pLunch.classList.remove("hidden-field");
+                } else if (accessDinner.checked) {
+                    lunchActive.checked = false; dinnerActive.checked = true;
+                    if (plan.startsWith("FLAGSHIP")) fDinner.classList.remove("hidden-field");
+                    if (plan.startsWith("PREMIUM")) pDinner.classList.remove("hidden-field");
+                }
+            }
+
+            planSelect.addEventListener("change", updateUI);
+            accessLunch.addEventListener("change", () => handle30Logic(planSelect.value.toUpperCase()));
+            accessDinner.addEventListener("change", () => handle30Logic(planSelect.value.toUpperCase()));
+
+            document.getElementById("createUserForm").addEventListener("submit", (e) => {
+                const plan = planSelect.value.toUpperCase();
+                if (plan.includes("30") && !accessLunch.checked && !accessDinner.checked) {
+                    alert("Please select Lunch or Dinner access for the 30-meal plan.");
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
