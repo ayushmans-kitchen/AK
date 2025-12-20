@@ -57,25 +57,25 @@ def dashboard(request):
 
 
     context={
-        'total_customers':customers.count(),
-        'total_inactive_customers':customers.filter(user_status_active=False,paused_subscription=False).count(),
-        'total_plan_end_customers':customers.filter(paused_subscription=True).count(),
+        'total_customers':customers.exclude(is_staff=True,is_superuser=True).count(),
+        'total_inactive_customers':customers.filter(user_status_active=False,paused_subscription=False,is_staff=False,is_superuser=False).count(),
+        'total_plan_end_customers':customers.filter(paused_subscription=True,is_staff=False,is_superuser=False).count(),
 
         'total_lunch':lunch_record.count(),
         'lunch_dinein':lunch_record.filter(service_choice="DineIn").count(),
         'lunch_delivery':lunch_record.filter(service_choice="Delivery").count(),
         'lunch_pickup':lunch_record.filter(service_choice="PickUp").count(),
         'lunch_cancelled':lunch_record.filter(service_choice="Cancel").count(),
-        'lunch_inactive':customers.filter(lunch_status_active=True,user_status_active=False,paused_subscription=False).count(),
-        'lunch_default_need':customers.filter(user_status_active=True,lunch_status_active=True).exclude(lunch_records__for_date=today).count(),
+        'lunch_inactive':customers.filter(lunch_status_active=True,user_status_active=False,paused_subscription=False,is_staff=False,is_superuser=False).count(),
+        'lunch_default_need':customers.filter(user_status_active=True,lunch_status_active=True,is_staff=False,is_superuser=False).exclude(lunch_records__for_date=today).count(),
 
         'total_dinner':dinner_record.count(),
         'dinner_dinein':dinner_record.filter(service_choice="DineIn").count(),
         'dinner_delivery':dinner_record.filter(service_choice="Delivery").count(),
         'dinner_pickup':dinner_record.filter(service_choice="PickUp").count(),
         'dinner_cancelled':dinner_record.filter(service_choice="Cancel").count(),
-        'dinner_inactive':customers.filter(dinner_status_active=True,user_status_active=False,paused_subscription=False).count(),
-        'dinner_default_need':customers.filter(user_status_active=True,dinner_status_active=True).exclude(dinner_records__for_date=today).count(),
+        'dinner_inactive':customers.filter(dinner_status_active=True,user_status_active=False,paused_subscription=False,is_staff=False,is_superuser=False).count(),
+        'dinner_default_need':customers.filter(user_status_active=True,dinner_status_active=True,is_active=False,is_superuser=False).exclude(dinner_records__for_date=today).count(),
 
         "l_food": L_FOOD_CHOICES,
         "d_food": D_FOOD_CHOICES,
