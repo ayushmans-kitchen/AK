@@ -1,0 +1,15 @@
+{
+  "buildCommand": "bash build_files.sh",
+  "builds": [
+    {
+      "src": "Akitchen/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "Akitchen/wsgi.py"
+    }
+  ]
+}
