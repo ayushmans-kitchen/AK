@@ -10,6 +10,7 @@ env/
 
 # Database files
 db.sqlite3
+
 # Media and static files (generated or uploaded)
 media/
 static_collected/ # If you use collectstatic to a specific directory
@@ -37,3 +38,5 @@ Thumbs.db
 # Deployment related files (if not part of your build process)
 *.tar.gz
 *.zip
+db.sqlite3
+a.html
