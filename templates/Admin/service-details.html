@@ -193,7 +193,7 @@
                         {% for r in  records %}
                             <tr data-protein="chicken">
                                 {% comment %} <td data-label="User" class="user-name"><strong><a href="{% url "" %}">{{r.customer.name}}</a></strong></td> {% endcomment %}
-                                <td data-label="User" class="user-name"><strong>{{r.customer.name}}</strong></td>
+                                <td data-label="User" class="user-name"><strong><a href="{% url "customer_profile" r.customer.id %}">{{r.customer.name}}</a></strong></td>
                                 <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td>
                                 <td data-label="Subscription Choice">{{r.customer.subscription_choice}}</td>
                                 <td data-label="Phone" class="Phone">{{r.customer.phone}}</td>

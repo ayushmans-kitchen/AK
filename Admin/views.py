@@ -4,6 +4,7 @@ from django.db.models import F
 from django.db.models.functions import Greatest
 from django.db import transaction
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from Customers.models import Customer, LunchRecord, DinnerRecord, SERVICE_TYPE,SUBSCRIPTION_TYPE
 from .models import AdminNotice
@@ -114,10 +115,38 @@ def subscribers(request):
 
 @staff_member_required(login_url='/login/')
 def add_customer(request):
+    if request.method == "POST":
+        name=request.POST.get("name")
+        email=request.POST.get("email")
+        email=request.POST.get("email")
+        phone=request.POST.get("phone")
+        password=request.POST.get("password")
+        address=request.POST.get("address")
+        subscription_choice=request.POST.get("subscription_choice")
+        meal_balance=request.POST.get("meal_balance")
+        default_lunch_service_choice=request.POST.get("default_lunch_service_choice")
+        default_dinner_service_choice=request.POST.get("default_dinner_service_choice")
+
+        try:
+            with transaction.atomic():
+                Customer.objects.create_user(
+                email=email,
+                name=name,
+                phone=phone,
+                password=password,
+                address=address,
+                subscription_choice=subscription_choice,
+                meal_balance=meal_balance,
+                default_lunch_service_choice=default_lunch_service_choice,
+                default_dinner_service_choice=default_dinner_service_choice)
+        except Exception as e:
+            logger.exception("Unexpected error in addind Customer : %s", e)
+            return JsonResponse({"error": str(e)}, status=500)
     return render(request,"Admin/add-customer.html")
 
 
 @staff_member_required(login_url='/login/')
-def profile(request):
-    return render(request,"Admin/profile.html")
+def customer_profile(request,uid):
+    user=get_object_or_404(Customer,pk=uid)
+    return render(request,"Admin/customer_profile.html",{'user':user})
 

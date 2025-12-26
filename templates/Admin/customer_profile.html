@@ -131,39 +131,41 @@
             <div class="details-grid">
                 <div class="input-group">
                     <label>Full Name</label>
-                    <input type="text" value="Amitabh Bachchan">
+                    <input type="text" value="{{user.name}}">
                 </div>
                 <div class="input-group">
                     <label>Phone Number</label>
-                    <input type="text" value="+91 98765 43210">
+                    <input type="text" value="{{user.phone}}">
                 </div>
                 <div class="input-group">
                     <label>Email Address</label>
-                    <input type="email" value="amitabh@bigb.com">
+                    <input type="email" value="{{user.email}}">
                 </div>
                 <div class="input-group">
                     <label>Password</label>
-                    <input type="password" value="********">
+                    <input type="password" placeholder="******">
+                </div>
+                <div class="input-group" style="grid-column: span 2;">
+                    <label>Address / Room No.</label>
+                    <input type="text" value="{{user.address}}">
                 </div>
                 <div class="input-group">
                     <label>Subscription Plan</label>
                     <select>
-                        <option>Premium 60</option>
-                        <option>Premium 30</option>
-                        <option>Flagship 60</option>
-                        <option>Normal 30</option>
+                        <option>NORMAL30</option>
+                        <option>NORMAL60</option>
+                        <option>FLAGSHIP30</option>
+                        <option>FLAGSHIP60</option>
+                        <option>PREMIUM30</option>
+                        <option>PREMIUM60</option>
                     </select>
                 </div>
+                {% comment %} <div class="input-group">
+                    <label>Total Meals Left</label>
+                    <input type="number" value="{{user.meal_balance}}">
+                </div> {% endcomment %}
                 <div class="input-group">
-                    <label>Total Meals</label>
-                    <input type="number" value="60">
-                </div>
-                <div class="input-group">
-                    <label>Meals Left</label>
-                    <input type="number" value="1" style="color: var(--color-danger); font-weight: bold;">
-                </div>
-                <div class="input-group">
-                    <label>Default Food</label>
+                    <label>Default Lunch</label>
                     <select>
                         <option>Chicken</option>
                         <option>Paneer</option>
@@ -172,16 +174,33 @@
                     </select>
                 </div>
                 <div class="input-group">
-                    <label>Default Service</label>
+                    <label>Default Dinner</label>
+                    <select>
+                        <option>Chicken</option>
+                        <option>Paneer</option>
+                        <option>Fish</option>
+                        <option>Veg</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Meals Left</label>
+                    <input type="number" value="{{user.meal_balance}}" style="color: var(--color-danger); font-weight: bold;">
+                </div>
+                <div class="input-group">
+                    <label>Default Lunch Service</label>
                     <select>
                         <option>Delivery</option>
                         <option>Dine-In</option>
                         <option>Self-Pickup</option>
                     </select>
                 </div>
-                <div class="input-group" style="grid-column: span 2;">
-                    <label>Address / Room No.</label>
-                    <input type="text" value="Jalsa, Room 501, Mumbai">
+                <div class="input-group">
+                    <label>Default Dinner Service</label>
+                    <select>
+                        <option>Delivery</option>
+                        <option>Dine-In</option>
+                        <option>Self-Pickup</option>
+                    </select>
                 </div>
             </div>
 

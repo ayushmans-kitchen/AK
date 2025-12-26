@@ -1,7 +1,6 @@
 from django.urls import path, include
-from Admin.views import dashboard, service_details, subscribers, profile
 from .backend_views import gen_Dinner_record,gen_Lunch_record,add_admin_message,delete_admin_notice
-from Admin.views import dashboard, service_details, subscribers, profile,add_customer
+from Admin.views import dashboard, service_details, subscribers,add_customer,customer_profile
 
 urlpatterns = [
     path('dashboard/',dashboard,name='ayushman_dashboard'),
@@ -10,7 +9,8 @@ urlpatterns = [
 
     path('subscribers/',subscribers,name='subscribers'),
     path('add-customer/',add_customer,name='add_customer'),
-    path('profile/',profile,name='profile'),
+    # path('profile/',customer_profile,name='customer_profile'),
+    path('profile/<int:uid>/',customer_profile, name='customer_profile'),
     
     
     path('gen_Lunch_record/',gen_Lunch_record,name='gen_Lunch_record'),

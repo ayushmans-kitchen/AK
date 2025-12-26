@@ -117,9 +117,8 @@
             </header>
 
             <div class="form-card">
-                <form id="createUserForm" method="POST">
+                <form id="createUserForm" method="POST" action="{% url "add_customer" %}">
                     {% csrf_token %}
-
                     <div class="form-grid">
                         <div class="field-group">
                             <label class="field-label">Full Name</label>
@@ -138,7 +137,7 @@
                         </div>
                         <div class="field-group">
                             <label class="field-label">Password</label>
-                            <input type="password" name="password" class="dark-input" required>
+                            <input type="password" name="password" value="" class="dark-input" required>
                         </div>
                     </div>
 
@@ -152,17 +151,29 @@
                             <label class="field-label">Meal Plan</label>
                             <select id="planSelect" name="subscription_choice" class="dark-input" required>
                                 <option value="">-- select plan --</option>
-                                <option value="NORMAL30">Normal — 30 Meals</option>
-                                <option value="NORMAL60">Normal — 60 Meals</option>
-                                <option value="FLAGSHIP30">Premium Tier 1 — 30 Meals</option>
-                                <option value="FLAGSHIP60">Premium Tier 1 — 60 Meals</option>
-                                <option value="PREMIUM30">Premium Tier 2 — 30 Meals</option>
-                                <option value="PREMIUM60">Premium Tier 2 — 60 Meals</option>
+                                <option value="NORMAL30">Normal30</option>
+                                <option value="NORMAL60">Normal60</option>
+                                <option value="FLAGSHIP30">Flagship30</option>
+                                <option value="FLAGSHIP60">Flagship60</option>
+                                <option value="PREMIUM30">Premium30</option>
+                                <option value="PREMIUM60">Premium60</option>
                             </select>
                         </div>
                         <div class="field-group">
-                            <label class="field-label">Default Service Choice</label>
-                            <select name="default_service_choice" class="dark-input" required>
+                            <label class="field-label">Meal Balance</label>
+                            <input name="meal_balance" class="dark-input">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Default Lunch Service Choice</label>
+                            <select name="default_lunch_service_choice" class="dark-input" required>
+                                <option value="DineIn">Dine-In</option>
+                                <option value="PickUp">Pick-Up</option>
+                                <option value="Delivery" selected>Delivery</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Default Dinner Service Choice</label>
+                            <select name="default_dinner_service_choice" class="dark-input" required>
                                 <option value="DineIn">Dine-In</option>
                                 <option value="PickUp">Pick-Up</option>
                                 <option value="Delivery" selected>Delivery</option>
@@ -170,40 +181,32 @@
                         </div>
                     </div>
 
-                    <div id="accessBox" class="logic-box hidden-field">
-                        <label class="field-label">Temporal Access (30-Meal Rule)</label>
-                        <div class="check-row">
-                            <label class="inline-label"><input type="radio" name="access_choice" value="lunch" id="accessLunch"> Lunch</label>
-                            <label class="inline-label"><input type="radio" name="access_choice" value="dinner" id="accessDinner"> Dinner</label>
-                        </div>
-                    </div>
-
-                    <div class="form-grid">
-                        <div id="flagship_lunch_box" class="field-group hidden-field">
+                    {% comment %} <div class="form-grid">
+                        <div id="flagship_lunch_box" class="field-group ">
                             <label class="field-label">Flagship Lunch Default</label>
                             <select name="flagship_lunch_default" class="dark-input">
                                 {% for val,label in FLAGSHIP_MENU_LUNCH %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
                             </select>
                         </div>
-                        <div id="flagship_dinner_box" class="field-group hidden-field">
+                        <div id="flagship_dinner_box" class="field-group ">
                             <label class="field-label">Flagship Dinner Default</label>
                             <select name="flagship_dinner_default" class="dark-input">
                                 {% for val,label in FLAGSHIP_MENU_DINNER %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
                             </select>
                         </div>
-                        <div id="premium_lunch_box" class="field-group hidden-field">
+                        <div id="premium_lunch_box" class="field-group ">
                             <label class="field-label">Premium Lunch Default</label>
                             <select name="premium_lunch_default" class="dark-input">
                                 {% for val,label in PREMIUM_MENU_LUNCH %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
                             </select>
                         </div>
-                        <div id="premium_dinner_box" class="field-group hidden-field">
+                        <div id="premium_dinner_box" class="field-group ">
                             <label class="field-label">Premium Dinner Default</label>
                             <select name="premium_dinner_default" class="dark-input">
                                 {% for val,label in PREMIUM_MENU_DINNER %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
                             </select>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
 
                     <div class="field-group">
                         <label class="field-label">Account States</label>
@@ -220,7 +223,7 @@
         </div>
     </main>
 
-    <script>
+    {% comment %} <script>
         document.addEventListener("DOMContentLoaded", () => {
             const planSelect = document.getElementById("planSelect");
             const accessBox = document.getElementById("accessBox");
@@ -285,6 +288,6 @@
                 }
             });
         });
-    </script>
+    </script> {% endcomment %}
 </body>
 </html>
