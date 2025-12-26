@@ -179,7 +179,7 @@
             <a href="{% url 'service_details' %}">
                 <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{lunch_delivery}}</div></div>
             </a>
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='PickUp' dayTime='Lunch' %}">
                 <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{lunch_pickup}}</div></div>
             </a>
             <a href="{% url 'service_details' %}">

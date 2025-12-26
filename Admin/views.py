@@ -88,8 +88,19 @@ def dashboard(request):
 
 
 @staff_member_required(login_url='/login/')
-def service_details(request):
-    return render(request,"Admin/service-details.html")
+def service_details(request, dayTime, service):
+    if dayTime == "Lunch":
+        result = LunchRecord.objects.filter(for_date = today, service_choice = service)
+    if dayTime == "Dinner":
+        result = DinnerRecord.objects.filter(for_date = today, service_choice = service)
+
+
+    context = {
+        "records": result,
+        "dayTime": dayTime,
+        "service": service,
+    }    
+    return render(request,"Admin/service-details.html", context)
 
     
 

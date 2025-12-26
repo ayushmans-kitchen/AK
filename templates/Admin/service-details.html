@@ -144,7 +144,7 @@
             <header class="detail-header">
                 <div>
                     <span class="back-link" onclick="window.history.back()">← Back to Dashboard</span>
-                    <h1>Lunch Prep Detail</h1>
+                    <h1>{{dayTime}} {{service}}</h1>
                 </div>
                 <div style="text-align: right;">
                     <p id="current-date" style="color: var(--color-text-muted); font-size: 0.8rem; font-weight: 600;"></p>
@@ -177,27 +177,22 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
+                        
+                        {% for r in  records %}
+                            
+                        
+                            
                         <tr data-protein="chicken">
-                            <td data-label="User" class="user-name"><strong>Amitabh Bachchan</strong></td>
-                            <td data-label="Meal Choice">Chicken (Flagship)</td>
-                            <td data-label="Service"><span class="service-tag tag-delivery">Delivery</span></td>
-                            <td data-label="Location" class="location">Room 501</td>
-                            <td data-label="Action"><button class="btn-check" onclick="toggleStatus(this)">Mark Ready</button></td>
+                            <td data-label="User" class="user-name"><strong>{{r.customer.name}}</strong></td>
+                            <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td>
+                            <td data-label="Subscription Choice">{{r.customer.subscription_choice}}</td>
+                            <td data-label="Phone" class="Phone">{{r.customer.phone}}</td>
+                            <td data-label="Address" class="Address">{{r.customer.address}}</td>
+                            <td data-label="balance" class="balance">{{r.customer.meal_balance}}</td>
+                            
                         </tr>
-                        <tr data-protein="veg">
-                            <td data-label="User" class="user-name"><strong>Deepika Padukone</strong></td>
-                            <td data-label="Meal Choice">Standard Veg</td>
-                            <td data-label="Service"><span class="service-tag tag-dinein">Dine-In</span></td>
-                            <td data-label="Location" class="location">Table 12</td>
-                            <td data-label="Action"><button class="btn-check" onclick="toggleStatus(this)">Mark Ready</button></td>
-                        </tr>
-                        <tr data-protein="prawns">
-                            <td data-label="User" class="user-name"><strong>Ranbir Kapoor</strong></td>
-                            <td data-label="Meal Choice">Prawns (Premium)</td>
-                            <td data-label="Service"><span class="service-tag tag-delivery">Delivery</span></td>
-                            <td data-label="Location" class="location">Room 304</td>
-                            <td data-label="Action"><button class="btn-check" onclick="toggleStatus(this)">Mark Ready</button></td>
-                        </tr>
+                        {% endfor %}
+                        
                     </tbody>
                 </table>
                 <div id="no-results" class="hidden" style="padding: 40px; text-align: center; color: var(--color-text-muted); font-size: 0.9rem;">

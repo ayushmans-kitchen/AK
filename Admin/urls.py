@@ -6,6 +6,8 @@ from Admin.views import dashboard, service_details, subscribers, profile,add_cus
 urlpatterns = [
     path('dashboard/',dashboard,name='ayushman_dashboard'),
     path('service-details/',service_details,name='service_details'),
+    path('service-details/<str:service>/<str:dayTime>/',service_details, name='service_details'),
+
     path('subscribers/',subscribers,name='subscribers'),
     path('add-customer/',add_customer,name='add_customer'),
     path('profile/',profile,name='profile'),
