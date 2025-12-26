@@ -132,6 +132,7 @@
                                                 <option value="PANEER" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
                                                 <option value="MUSHROOM" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
                                                 <option value="CHICKEN" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                                <option value="VEG" {% if request.user.FLAGSHIP_MENU_LUNCH_default_choice == "VEG" %}selected{% endif %}>VEG</option>
                                             </select>
                                         {% endif %}
                                         {% if request.user.subscription_choice == "PREMIUM30" or request.user.subscription_choice == "PREMIUM60" %}
@@ -222,6 +223,7 @@
                                                 <option value="PANEER" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
                                                 <option value="MUSHROOM" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
                                                 <option value="CHICKEN" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                                <option value="VEG" {% if request.user.FLAGSHIP_MENU_DINNER_default_choice == "VEG" %}selected{% endif %}>VEG</option>
                                             </select>
                                         {% endif %}
 
