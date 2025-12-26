@@ -173,22 +173,22 @@
 
             <div class="group-title">Lunch Service</div>
             
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='DineIn' dayTime='Lunch' %}">
                 <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">{{lunch_dinein}}</div></div>
             </a>
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='Delivery' dayTime='Lunch' %}">
                 <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{lunch_delivery}}</div></div>
             </a>
             <a href="{% url 'service_details' service='PickUp' dayTime='Lunch' %}">
                 <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{lunch_pickup}}</div></div>
             </a>
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='Total' dayTime='Lunch'%}">
                 <div class="bento-card" style="background:rgba(212,175,55,0.05)">
                     <span class="stat-label">Total Lunch</span>
                     <div class="stat-value" style="color:var(--gold)">{{total_lunch}}</div>
                 </div>
             </a>
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='Cancel' dayTime='Lunch' %}">
                 <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">{{lunch_cancelled}}</div></div>
             </a>
 
@@ -201,22 +201,22 @@
 
             <div class="group-title">Dinner Service</div>
 
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='DineIn' dayTime='Dinner' %}">
                 <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">{{dinner_dinein}}</div></div>
             </a>
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='Delivery' dayTime='Dinner' %}">
                 <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{dinner_delivery}}</div></div>
             </a>
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='PickUp' dayTime='Dinner' %}">
                 <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{dinner_pickup}}</div></div>
             </a>
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='Total' dayTime='Dinner' %}">
                 <div class="bento-card" style="background:rgba(212,175,55,0.05)">
                     <span class="stat-label">Total Dinner</span>
                     <div class="stat-value" style="color:var(--gold)">{{total_dinner}}</div>
                 </div>
             </a>
-            <a href="{% url 'service_details' %}">
+            <a href="{% url 'service_details' service='Cancel' dayTime='Dinner' %}">
                 <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">{{dinner_cancelled}}</div></div>
             </a>
 

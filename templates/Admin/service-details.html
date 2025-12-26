@@ -156,13 +156,17 @@
             </div>
 
             <div class="summary-strip" id="filter-container">
-                <div class="protein-pill active" data-filter="all">All Meals</div>
-                <div class="protein-pill" data-filter="chicken">Chicken</div>
-                <div class="protein-pill" data-filter="paneer">Paneer</div>
-                <div class="protein-pill" data-filter="fish">Fish</div>
-                <div class="protein-pill" data-filter="prawns">Prawns</div>
-                <div class="protein-pill" data-filter="veg">Standard Veg</div>
+                <div class="protein-pill active" data-filter="all">ALL</div>
+                <div class="protein-pill" data-filter="paneer">PANEER</div>
+                <div class="protein-pill" data-filter="mushroom">MUSHROOM</div>
+                <div class="protein-pill" data-filter="chicken">CHICKEN</div>
+                <div class="protein-pill" data-filter="egg">EGG</div>
+                <div class="protein-pill" data-filter="prawn">PRAWN</div>
+                <div class="protein-pill" data-filter="fish">FISH</div>
+                <div class="protein-pill" data-filter="veg">VEG</div>
+                <div class="protein-pill" data-filter="non_veg">NON_VEG</div>
             </div>
+
 
             <div class="table-container">
                 <table id="order-table">
@@ -203,66 +207,67 @@
     </div>
 
     <button class="print-fab" onclick="window.print()">Print List</button>
+<script>
+    /* =====================
+       MEAL CHOICE NORMALIZE
+       (2nd column only)
+    ====================== */
 
-    <script>
-        // Set current date
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-GB', {
-            day: 'numeric', month: 'short', year: 'numeric'
-        });
+    const mealRules = [
+        { key: 'paneer',  label: 'PANEER' },
+        { key: 'mushroom',label: 'MUSHROOM' },
+        { key: 'chicken', label: 'CHICKEN' },
+        { key: 'egg',     label: 'EGG' },
+        { key: 'prawn',   label: 'PRAWN' },
+        { key: 'fish',    label: 'FISH' },
+        { key: 'veg',     label: 'VEG' },
+        { key: 'non_veg', label: 'NON_VEG' }
+    ];
 
-        const searchInput = document.getElementById('orderSearch');
-        const filterPills = document.querySelectorAll('.protein-pill');
-        const tableRows = document.querySelectorAll('#table-body tr');
-        const noResults = document.getElementById('no-results');
+    const rows = document.querySelectorAll('#table-body tr');
 
-        let currentFilter = 'all';
+    rows.forEach(row => {
+        const mealCell = row.children[1]; // Meal Choice column
+        const text = mealCell.innerText.toLowerCase();
 
-        function updateDisplay() {
-            const searchTerm = searchInput.value.toLowerCase();
-            let visibleCount = 0;
+        const match = mealRules.find(m => text.includes(m.key));
+        if (match) {
+            mealCell.innerText = match.label;
+            row.dataset.protein = match.key; // REQUIRED for filter
+        }
+    });
 
-            tableRows.forEach(row => {
-                const name = row.querySelector('.user-name').innerText.toLowerCase();
-                const location = row.querySelector('.location').innerText.toLowerCase();
-                const protein = row.getAttribute('data-protein');
+    /* =====================
+       FILTER BUTTON LOGIC
+    ====================== */
 
-                const matchesSearch = name.includes(searchTerm) || location.includes(searchTerm);
-                const matchesFilter = currentFilter === 'all' || protein === currentFilter;
+    const pills = document.querySelectorAll('.protein-pill');
+    const noResults = document.getElementById('no-results');
 
-                if (matchesSearch && matchesFilter) {
-                    row.classList.remove('hidden');
-                    visibleCount++;
-                } else {
-                    row.classList.add('hidden');
-                }
+    pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+
+            // active state
+            pills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+
+            const filter = pill.dataset.filter;
+            let visible = 0;
+
+            rows.forEach(row => {
+                const show =
+                    filter === 'all' ||
+                    row.dataset.protein === filter;
+
+                row.classList.toggle('hidden', !show);
+                if (show) visible++;
             });
 
-            visibleCount === 0 ? noResults.classList.remove('hidden') : noResults.classList.add('hidden');
-        }
-
-        searchInput.addEventListener('input', updateDisplay);
-
-        filterPills.forEach(pill => {
-            pill.addEventListener('click', () => {
-                filterPills.forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
-                currentFilter = pill.getAttribute('data-filter');
-                updateDisplay();
-            });
+            noResults.classList.toggle('hidden', visible !== 0);
         });
+    });
+</script>
 
-        function toggleStatus(btn) {
-            const row = btn.closest('tr');
-            if (btn.classList.contains('ready')) {
-                btn.classList.remove('ready');
-                btn.innerText = 'Mark Ready';
-                row.classList.remove('completed');
-            } else {
-                btn.classList.add('ready');
-                btn.innerText = '✓ Ready';
-                row.classList.add('completed');
-            }
-        }
-    </script>
+
 </body>
 </html>
