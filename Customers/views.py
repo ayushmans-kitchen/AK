@@ -57,17 +57,11 @@ def user_dashboard(request):
 def user_profile(request):
     user=request.user
     if request.method == "POST":
-        default_lunch_service = request.POST.get("default_lunch_service", "NONE")
-        default_dinner_service = request.POST.get("default_dinner_service", "NONE")
+        default_lunch_service = request.POST.get("default_lunch_service")
+        default_dinner_service = request.POST.get("default_dinner_service")
 
         status_availability=request.POST.get("status_availability")
         
-
-        # user.default_meal_choice="NONE"
-        user.FLAGSHIP_MENU_LUNCH_default_choice="NONE"
-        user.FLAGSHIP_MENU_DINNER_default_choice="NONE"
-        user.PREMIUM_MENU_LUNCH_default_choice="NONE"
-        user.PREMIUM_MENU_DINNER_default_choice="NONE"
 
         if user.subscription_choice == "NORMAL30" or user.subscription_choice == "NORMAL60" :            
             user.default_lunch_service_choice=default_lunch_service
