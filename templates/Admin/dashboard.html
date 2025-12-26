@@ -233,24 +233,16 @@
             <div class="left-col">
                 <div class="card">
                     <div class="card-header"><h3>Lunch Kitchen Prep</h3></div>
-                    <div class="row"><span>VEG</span><span class="qty">{{ l_food.VEG }}</span></div>
-                    <div class="row"><span>NON VEG</span><span class="qty">{{ l_food.NON_VEG }}</span></div>
-                    <div class="row"><span>PANEER</span><span class="qty">{{ l_food.PANEER }}</span></div>
-                    <div class="row"><span>MUSHROOM</span><span class="qty">{{ l_food.MUSHROOM }}</span></div>
-                    <div class="row"><span>CHICKEN</span><span class="qty">{{ l_food.CHICKEN }}</span></div>
-                    <div class="row"><span>EGG</span><span class="qty">{{ l_food.EGG }}</span></div>
-                    <div class="row"><span>PRAWN</span><span class="qty">{{ l_food.PRAWN }}</span></div>
-                    <div class="row"><span>FISH</span><span class="qty">{{ l_food.FISH }}</span></div>
+                    {% for key,value in menu_lunch_count.items %}
+                        <div class="row"><span>{{key}}</span><span class="qty">{{ value }}</span></div>
+                    {% endfor %}
                 </div>
-
+                
                 <div class="card">
                     <div class="card-header"><h3>Dinner Kitchen Prep</h3></div>
-                    <div class="row"><span>VEG</span><span class="qty">{{ d_food.VEG }}</span></div>
-                    <div class="row"><span>NON VEG</span><span class="qty">{{ d_food.NON_VEG }}</span></div>
-                    <div class="row"><span>PANEER</span><span class="qty">{{ d_food.PANEER }}</span></div>
-                    <div class="row"><span>MUSHROOM</span><span class="qty">{{ d_food.MUSHROOM }}</span></div>
-                    <div class="row"><span>CHICKEN</span><span class="qty">{{ d_food.CHICKEN }}</span></div>
-                    <div class="row"><span>EGG</span><span class="qty">{{ d_food.EGG }}</span></div>
+                    {% for key,value in menu_dinner_count.items %}
+                        <div class="row"><span>{{key}}</span><span class="qty">{{ value }}</span></div>
+                    {% endfor %}
                 </div>
             </div>
 

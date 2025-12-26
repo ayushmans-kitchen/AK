@@ -157,14 +157,22 @@
 
             <div class="summary-strip" id="filter-container">
                 <div class="protein-pill active" data-filter="all">ALL</div>
-                <div class="protein-pill" data-filter="paneer">PANEER</div>
-                <div class="protein-pill" data-filter="mushroom">MUSHROOM</div>
-                <div class="protein-pill" data-filter="chicken">CHICKEN</div>
-                <div class="protein-pill" data-filter="egg">EGG</div>
-                <div class="protein-pill" data-filter="prawn">PRAWN</div>
-                <div class="protein-pill" data-filter="fish">FISH</div>
-                <div class="protein-pill" data-filter="veg">VEG</div>
-                <div class="protein-pill" data-filter="non_veg">NON_VEG</div>
+                {% if cancelled_page %}
+                {% else %}
+                {% if dayTime == "Lunch" %}
+                    {% for key,label in all_menus_lunch %}
+                        <div class="protein-pill" data-filter="{{ key|lower }}">
+                            {{ label }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    {% for key, label in all_menus_dinner %}
+                        <div class="protein-pill" data-filter="{{ key|lower }}">
+                            {{ label }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% endif %}
             </div>
 
 
@@ -183,18 +191,15 @@
                     <tbody id="table-body">
                         
                         {% for r in  records %}
-                            
-                        
-                            
-                        <tr data-protein="chicken">
-                            <td data-label="User" class="user-name"><strong>{{r.customer.name}}</strong></td>
-                            <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td>
-                            <td data-label="Subscription Choice">{{r.customer.subscription_choice}}</td>
-                            <td data-label="Phone" class="Phone">{{r.customer.phone}}</td>
-                            <td data-label="Address" class="Address">{{r.customer.address}}</td>
-                            <td data-label="balance" class="balance">{{r.customer.meal_balance}}</td>
-                            
-                        </tr>
+                            <tr data-protein="chicken">
+                                {% comment %} <td data-label="User" class="user-name"><strong><a href="{% url "" %}">{{r.customer.name}}</a></strong></td> {% endcomment %}
+                                <td data-label="User" class="user-name"><strong>{{r.customer.name}}</strong></td>
+                                <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td>
+                                <td data-label="Subscription Choice">{{r.customer.subscription_choice}}</td>
+                                <td data-label="Phone" class="Phone">{{r.customer.phone}}</td>
+                                <td data-label="Address" class="Address">{{r.customer.address}}</td>
+                                <td data-label="balance" class="balance">{{r.customer.meal_balance}}</td>
+                            </tr>
                         {% endfor %}
                         
                     </tbody>
@@ -208,66 +213,28 @@
 
     <button class="print-fab" onclick="window.print()">Print List</button>
 <script>
-    /* =====================
-       MEAL CHOICE NORMALIZE
-       (2nd column only)
-    ====================== */
-
-    const mealRules = [
-        { key: 'paneer',  label: 'PANEER' },
-        { key: 'mushroom',label: 'MUSHROOM' },
-        { key: 'chicken', label: 'CHICKEN' },
-        { key: 'egg',     label: 'EGG' },
-        { key: 'prawn',   label: 'PRAWN' },
-        { key: 'fish',    label: 'FISH' },
-        { key: 'veg',     label: 'VEG' },
-        { key: 'non_veg', label: 'NON_VEG' }
-    ];
-
     const rows = document.querySelectorAll('#table-body tr');
-
-    rows.forEach(row => {
-        const mealCell = row.children[1]; // Meal Choice column
-        const text = mealCell.innerText.toLowerCase();
-
-        const match = mealRules.find(m => text.includes(m.key));
-        if (match) {
-            mealCell.innerText = match.label;
-            row.dataset.protein = match.key; // REQUIRED for filter
-        }
-    });
-
-    /* =====================
-       FILTER BUTTON LOGIC
-    ====================== */
-
     const pills = document.querySelectorAll('.protein-pill');
     const noResults = document.getElementById('no-results');
-
     pills.forEach(pill => {
         pill.addEventListener('click', () => {
-
-            // active state
+            // Active state
             pills.forEach(p => p.classList.remove('active'));
             pill.classList.add('active');
-
-            const filter = pill.dataset.filter;
+            const filter = pill.innerText.trim(); // EXACT text
             let visible = 0;
-
             rows.forEach(row => {
+                const mealText = row.children[1].innerText.trim(); // EXACT text
                 const show =
-                    filter === 'all' ||
-                    row.dataset.protein === filter;
-
+                    filter === 'ALL' ||
+                    mealText === filter;
                 row.classList.toggle('hidden', !show);
                 if (show) visible++;
             });
-
             noResults.classList.toggle('hidden', visible !== 0);
         });
     });
 </script>
-
 
 </body>
 </html>
