@@ -17,6 +17,8 @@ from Admin.models import AdminNotice
 
 @login_required
 def user_dashboard(request):
+    if request.user.is_staff:
+        return redirect('ayushman_dashboard')
     user=request.user
     used_meals= user.total_meals - user.meal_balance
     cl_l=LunchRecord.objects.filter(service_choice="Cancel",customer=user).count()
