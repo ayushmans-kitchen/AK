@@ -255,6 +255,8 @@
                             <div class="alert-info"><h4>{{c.name}}</h4><p>{{c.phone}}</p></div>
                             <span class="badge-danger">{{c.meal_balance}} Left</span>
                         </div>
+                        {% empty %}
+                        <p>No users have less than 6 meals</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -270,6 +272,8 @@
                                 <p class="chat-text">{{m.message}}</p>
                             </div>
                         </form>
+                        {% empty %}
+                        <p>You haven't added any messages.</p>
                         {% endfor %}
                     </div>
                     <form method='POST' action="{% url 'admin_notice' %}">
