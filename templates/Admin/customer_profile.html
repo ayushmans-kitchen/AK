@@ -127,86 +127,83 @@
             <h1>USER PROFILE</h1>
         </header>
 
-        <form class="profile-card">
+        <form class="profile-card" method="POST" action="{% url "customer_profile" user.id %}">
+            {% csrf_token %}
             <div class="details-grid">
                 <div class="input-group">
                     <label>Full Name</label>
-                    <input type="text" value="{{user.name}}">
+                    <input type="text" name="name" value="{{user.name}}">
                 </div>
                 <div class="input-group">
                     <label>Phone Number</label>
-                    <input type="text" value="{{user.phone}}">
+                    <input type="text" name="phone" value="{{user.phone}}">
                 </div>
                 <div class="input-group">
                     <label>Email Address</label>
-                    <input type="email" value="{{user.email}}">
+                    <input type="email" name="email" value={{user.email}}>
                 </div>
                 <div class="input-group">
                     <label>Password</label>
-                    <input type="password" placeholder="******">
+                    <input type="password" name="password" placeholder="******">
                 </div>
                 <div class="input-group" style="grid-column: span 2;">
                     <label>Address / Room No.</label>
-                    <input type="text" value="{{user.address}}">
+                    <input type="text" name="address" value="{{user.address}}">
                 </div>
                 <div class="input-group">
                     <label>Subscription Plan</label>
-                    <select>
-                        <option>NORMAL30</option>
-                        <option>NORMAL60</option>
-                        <option>FLAGSHIP30</option>
-                        <option>FLAGSHIP60</option>
-                        <option>PREMIUM30</option>
-                        <option>PREMIUM60</option>
+                    <select name="subscription_choice">
+                        <option {% if user.subscription_choice == "NORMAL30" %} selected {% endif %} >NORMAL30</option>
+                        <option {% if user.subscription_choice == "NORMAL60" %} selected {% endif %} >NORMAL60</option>
+                        <option {% if user.subscription_choice == "FLAGSHIP30" %} selected {% endif %} >FLAGSHIP30</option>
+                        <option {% if user.subscription_choice == "FLAGSHIP60" %} selected {% endif %} >FLAGSHIP60</option>
+                        <option {% if user.subscription_choice == "PREMIUM30" %} selected {% endif %} >PREMIUM30</option>
+                        <option {% if user.subscription_choice == "PREMIUM60" %} selected {% endif %} >PREMIUM60</option>
                     </select>
                 </div>
-                {% comment %} <div class="input-group">
-                    <label>Total Meals Left</label>
-                    <input type="number" value="{{user.meal_balance}}">
-                </div> {% endcomment %}
+
                 <div class="input-group">
                     <label>Default Lunch</label>
-                    <select>
-                        <option>Chicken</option>
-                        <option>Paneer</option>
-                        <option>Fish</option>
-                        <option>Veg</option>
+                    <select name="{{lunch_v}}">
+                        {% for key,value in lmenu %}
+                            <option {% if df_lunch == value %}selected{% endif %}>{{value}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="input-group">
                     <label>Default Dinner</label>
-                    <select>
-                        <option>Chicken</option>
-                        <option>Paneer</option>
-                        <option>Fish</option>
-                        <option>Veg</option>
+                    <select name="dinner_v">
+                        {% for key,value in dmenu %}
+                            <option {% if df_dinner == value %}selected{% endif %}>{{value}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="input-group">
                     <label>Meals Left</label>
-                    <input type="number" value="{{user.meal_balance}}" style="color: var(--color-danger); font-weight: bold;">
+                    <input type="number" value="{{user.meal_balance}}" style="color: var(--color-danger); font-weight: bold;" name="meal_balance">
                 </div>
+                
                 <div class="input-group">
                     <label>Default Lunch Service</label>
-                    <select>
-                        <option>Delivery</option>
-                        <option>Dine-In</option>
-                        <option>Self-Pickup</option>
+                    <select name="default_lunch_service_choice">
+                        <option {% if user.default_lunch_service_choice == "Delivery" %}selected{% endif %} >Delivery</option>
+                        <option {% if user.default_lunch_service_choice == "DineIn" %}selected{% endif %} >DineIn</option>
+                        <option {% if user.default_lunch_service_choice == "PickUp" %}selected{% endif %} >PickUp</option>
                     </select>
                 </div>
                 <div class="input-group">
                     <label>Default Dinner Service</label>
-                    <select>
-                        <option>Delivery</option>
-                        <option>Dine-In</option>
-                        <option>Self-Pickup</option>
+                    <select name="default_dinner_service_choice">
+                        <option {% if user.default_dinner_service_choice == "Delivery" %}selected{% endif %} >Delivery</option>
+                        <option {% if user.default_dinner_service_choice == "DineIn" %}selected{% endif %} >DineIn</option>
+                        <option {% if user.default_dinner_service_choice == "PickUp" %}selected{% endif %} >PickUp</option>
                     </select>
                 </div>
             </div>
 
             <div class="button-row">
-                <button type="submit" class="btn btn-save">Save Changes</button>
-                <button type="button" class="btn btn-renew">Renew Subscription</button>
+                <button type="submit" name="action" value="update" class="btn btn-save">Save Changes</button>
+                <button type="submit" name="action" value="renew" class="btn btn-renew">Renew Subscription </button>
             </div>
         </form>
 

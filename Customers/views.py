@@ -20,7 +20,10 @@ def user_dashboard(request):
     if request.user.is_staff:
         return redirect('ayushman_dashboard')
     user=request.user
-    used_meals= user.total_meals - user.meal_balance
+    us_l=LunchRecord.objects.filter(customer=user).exclude(service_choice="Cancel").count()
+    us_d=DinnerRecord.objects.filter(customer=user).exclude(service_choice="Cancel").count()
+
+    used_meals= us_l+us_d
     cl_l=LunchRecord.objects.filter(service_choice="Cancel",customer=user).count()
     cl_d=DinnerRecord.objects.filter(service_choice="Cancel",customer=user).count()
     cancelled_meals=cl_l+cl_d
@@ -42,6 +45,8 @@ def user_dashboard(request):
     context={
         'user':user,
         'used_meals':used_meals,
+        'us_l':us_l,
+        'us_d':us_d,
         'cancelled_meals':cancelled_meals,
         'lunch_record':lunch_record,
         'dinner_record':dinner_record,

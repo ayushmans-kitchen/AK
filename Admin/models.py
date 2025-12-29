@@ -18,7 +18,7 @@ class AdminNotice(models.Model):
         return f"{self.message} - {self.date}"
     
 
-class CustomerHistory(models.Model):
+class MealHistory(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_history")
     subscription_choice = models.CharField(max_length=20, choices=SUBSCRIPTION_TYPE, default="NORMAL60")
     subscription_phase=models.IntegerField()
@@ -37,6 +37,6 @@ class CustomerHistory(models.Model):
         )
 
 
-class MealHistory():
-    pass 
+# class MealHistory():
+#     pass 
 #   will store day wise entire of meals... in json

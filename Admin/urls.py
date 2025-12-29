@@ -9,8 +9,7 @@ urlpatterns = [
 
     path('subscribers/',subscribers,name='subscribers'),
     path('add-customer/',add_customer,name='add_customer'),
-    # path('profile/',customer_profile,name='customer_profile'),
-    path('profile/<int:uid>/',customer_profile, name='customer_profile'),
+    path('customer_profile/<int:uid>/',customer_profile, name='customer_profile'),
     
     
     path('gen_Lunch_record/',gen_Lunch_record,name='gen_Lunch_record'),

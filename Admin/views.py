@@ -10,8 +10,12 @@ from Customers.models import Customer, LunchRecord, DinnerRecord, SERVICE_TYPE,S
 from .models import AdminNotice
 from django.shortcuts import render,redirect
 from Customers.models import MEAL_MENU,FLAGSHIP_MENU_LUNCH,FLAGSHIP_MENU_DINNER,PREMIUM_MENU_LUNCH,PREMIUM_MENU_DINNER
-from .backend_views import gen_Lunch_record,gen_Dinner_record
+from .backend_views import gen_Lunch_record,gen_Dinner_record,create_customer_history
 today = timezone.localdate()
+
+
+from django.contrib.auth import update_session_auth_hash
+
 
 all_menus_lunch = list(dict.fromkeys(MEAL_MENU + FLAGSHIP_MENU_LUNCH + PREMIUM_MENU_LUNCH))
 all_menus_dinner = list(dict.fromkeys(MEAL_MENU + FLAGSHIP_MENU_DINNER + PREMIUM_MENU_DINNER))
@@ -94,8 +98,6 @@ def service_details(request, dayTime, service):
     else:
         cancelled_page=False
     
-    # print(all_menus_lunch)
-    # print(all_menus_dinner)
     context = {
         "records": result,
         "dayTime": dayTime,
@@ -111,7 +113,22 @@ def service_details(request, dayTime, service):
 
 @staff_member_required(login_url='/login/')
 def subscribers(request):
-    return render(request,"Admin/subscribers.html")
+    CST=Customer.objects.filter(is_staff=False,is_superuser=False)
+    N30=CST.filter(subscription_choice="NORMAL30")
+    N60=CST.filter(subscription_choice="NORMAL60")
+    F30=CST.filter(subscription_choice="FLAGSHIP30")
+    F60=CST.filter(subscription_choice="FLAGSHIP60")
+    P30=CST.filter(subscription_choice="PREMIUM30")
+    P60=CST.filter(subscription_choice="PREMIUM60")
+    context={
+        "N30":N30,
+        "N60":N60,
+        "F30":F30,
+        "F60":F60,
+        "P30":P30,
+        "P60":P60,
+    }
+    return render(request,"Admin/subscribers.html",context)
 
 @staff_member_required(login_url='/login/')
 def add_customer(request):
@@ -145,8 +162,156 @@ def add_customer(request):
     return render(request,"Admin/add-customer.html")
 
 
-@staff_member_required(login_url='/login/')
-def customer_profile(request,uid):
-    user=get_object_or_404(Customer,pk=uid)
-    return render(request,"Admin/customer_profile.html",{'user':user})
 
+
+@staff_member_required(login_url='/login/')
+def customer_profile(request, uid):
+    user = get_object_or_404(Customer, pk=uid)
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "update":
+            user.name = request.POST.get("name", user.name)
+            user.phone = request.POST.get("phone", user.phone)
+            user.address = request.POST.get("address", user.address)
+            user.email = request.POST.get("email", user.email)
+
+            user.subscription_choice = request.POST.get(
+                "subscription_choice", user.subscription_choice
+            )
+
+            meal_balance = request.POST.get("meal_balance")
+            if meal_balance is not None:
+                user.meal_balance = int(meal_balance)
+
+            password = request.POST.get("password")
+            if password:
+                user.set_password(password)
+                update_session_auth_hash(request, user)  # IMPORTANT
+
+            user.default_lunch_service_choice = request.POST.get(
+                "default_lunch_service_choice", user.default_lunch_service_choice
+            )
+            user.default_dinner_service_choice = request.POST.get(
+                "default_dinner_service_choice", user.default_dinner_service_choice
+            )
+            user.default_meal_choice = request.POST.get(
+                "default_meal_choice", user.default_meal_choice
+            )
+
+            user.FLAGSHIP_MENU_LUNCH_default_choice = request.POST.get(
+                "FLAGSHIP_MENU_LUNCH_default_choice",
+                user.FLAGSHIP_MENU_LUNCH_default_choice,
+            )
+            user.FLAGSHIP_MENU_DINNER_default_choice = request.POST.get(
+                "FLAGSHIP_MENU_DINNER_default_choice",
+                user.FLAGSHIP_MENU_DINNER_default_choice,
+            )
+
+            user.PREMIUM_MENU_LUNCH_default_choice = request.POST.get(
+                "PREMIUM_MENU_LUNCH_default_choice",
+                user.PREMIUM_MENU_LUNCH_default_choice,
+            )
+            user.PREMIUM_MENU_DINNER_default_choice = request.POST.get(
+                "PREMIUM_MENU_DINNER_default_choice",
+                user.PREMIUM_MENU_DINNER_default_choice,
+            )
+
+            user.save()
+            return redirect("customer_profile", uid=user.id)
+        if action == "renew" :
+            history=create_customer_history(user)
+            if history == "created":
+                LunchRecord.objects.filter(customer=user).delete()
+                DinnerRecord.objects.filter(customer=user).delete()
+
+
+                user.name = request.POST.get("name", user.name)
+                user.phone = request.POST.get("phone", user.phone)
+                user.address = request.POST.get("address", user.address)
+                user.email = request.POST.get("email", user.email)
+
+                user.subscription_choice = request.POST.get(
+                    "subscription_choice", user.subscription_choice
+                )
+
+                meal_balance = request.POST.get("meal_balance")
+                if meal_balance is not None:
+                    user.meal_balance = int(meal_balance)
+
+                password = request.POST.get("password")
+                if password:
+                    user.set_password(password)
+                    update_session_auth_hash(request, user)  
+
+                user.default_lunch_service_choice = request.POST.get(
+                    "default_lunch_service_choice", user.default_lunch_service_choice
+                )
+                user.default_dinner_service_choice = request.POST.get(
+                    "default_dinner_service_choice", user.default_dinner_service_choice
+                )
+                user.default_meal_choice = request.POST.get(
+                    "default_meal_choice", user.default_meal_choice
+                )
+
+                user.FLAGSHIP_MENU_LUNCH_default_choice = request.POST.get(
+                    "FLAGSHIP_MENU_LUNCH_default_choice",
+                    user.FLAGSHIP_MENU_LUNCH_default_choice,
+                )
+                user.FLAGSHIP_MENU_DINNER_default_choice = request.POST.get(
+                    "FLAGSHIP_MENU_DINNER_default_choice",
+                    user.FLAGSHIP_MENU_DINNER_default_choice,
+                )
+
+                user.PREMIUM_MENU_LUNCH_default_choice = request.POST.get(
+                    "PREMIUM_MENU_LUNCH_default_choice",
+                    user.PREMIUM_MENU_LUNCH_default_choice,
+                )
+                user.PREMIUM_MENU_DINNER_default_choice = request.POST.get(
+                    "PREMIUM_MENU_DINNER_default_choice",
+                    user.PREMIUM_MENU_DINNER_default_choice,
+                )
+                user.subscription_phase+=1
+                user.save()
+
+
+    if user.subscription_choice in ["NORMAL30", "NORMAL60"]:
+        lmenu = list(dict.fromkeys(MEAL_MENU))
+        dmenu = list(dict.fromkeys(MEAL_MENU))
+        df_lunch = user.default_meal_choice
+        df_dinner = user.default_meal_choice
+        lunch_v = dinner_v = "default_meal_choice"
+
+    elif user.subscription_choice in ["FLAGSHIP30", "FLAGSHIP60"]:
+        lmenu = list(dict.fromkeys(FLAGSHIP_MENU_LUNCH))
+        dmenu = list(dict.fromkeys(FLAGSHIP_MENU_DINNER))
+        df_lunch = user.FLAGSHIP_MENU_LUNCH_default_choice
+        df_dinner = user.FLAGSHIP_MENU_DINNER_default_choice
+        lunch_v = "FLAGSHIP_MENU_LUNCH_default_choice"
+        dinner_v = "FLAGSHIP_MENU_DINNER_default_choice"
+
+    elif user.subscription_choice in ["PREMIUM30", "PREMIUM60"]:
+        lmenu = list(dict.fromkeys(PREMIUM_MENU_LUNCH))
+        dmenu = list(dict.fromkeys(PREMIUM_MENU_DINNER))
+        df_lunch = user.PREMIUM_MENU_LUNCH_default_choice
+        df_dinner = user.PREMIUM_MENU_DINNER_default_choice
+        lunch_v = "PREMIUM_MENU_LUNCH_default_choice"
+        dinner_v = "PREMIUM_MENU_DINNER_default_choice"
+
+    else:
+        lmenu = dmenu = []
+        df_lunch = df_dinner = None
+        lunch_v = dinner_v = None
+
+    context = {
+        "user": user,
+        "lmenu": lmenu,
+        "dmenu": dmenu,
+        "df_lunch": df_lunch,
+        "df_dinner": df_dinner,
+        "lunch_v": lunch_v,
+        "dinner_v": dinner_v,
+    }
+
+    return render(request, "Admin/customer_profile.html", context)

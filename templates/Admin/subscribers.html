@@ -163,46 +163,43 @@
                 <div class="card-header">
                     <div class="tier-label">
                         <h3>Normal 30</h3>
-                        <span>24</span>
+                        <span>{{N30|length}}</span>
                         <p>Active Users</p>
                     </div>
                     <span class="badge">Rs. 1500</span>
                 </div>
                 <div class="user-list">
-                    <a href="{% url 'profile'%}" class="user-row">
+                    {% for c in N30 %}
+                    <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">👤</div>
-                            <div class="user-details"><h4>John Doe</h4><p>+91 8762536738 • 12 Left</p></div>
+                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
-                    <a href="#" class="user-row">
-                        <div class="user-content">
-                            <div class="avatar">👤</div>
-                            <div class="user-details"><h4>Jane Smith</h4><p>Rm 102 • 5 Left</p></div>
-                        </div>
-                        <span class="arrow">›</span>
-                    </a>
+                    {% endfor %}
                 </div>
             </div>
-
+            
             <div class="tier-card">
                 <div class="card-header">
                     <div class="tier-label">
                         <h3>Normal 60</h3>
-                        <span>12</span>
+                        <span>{{N60|length}}</span>
                         <p>Active Users</p>
                     </div>
                     <span class="badge">Rs. 3000</span>
                 </div>
                 <div class="user-list">
-                    <a href="#" class="user-row">
+                    {% for c in N60 %}
+                    <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">👤</div>
-                            <div class="user-details"><h4>Alice Brown</h4><p>Rm 201 • 45 Left</p></div>
+                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -210,19 +207,21 @@
                 <div class="card-header">
                     <div class="tier-label">
                         <h3>Flagship 30</h3>
-                        <span style="color: var(--gold)">8</span>
+                        <span style="color: var(--gold)">{{F30|length}}</span>
                         <p>Active Users</p>
                     </div>
                     <span class="badge gold">Rs. 1800</span>
                 </div>
                 <div class="user-list">
-                    <a href="#" class="user-row">
+                    {% for c in F30 %}
+                    <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">★</div>
-                            <div class="user-details"><h4>VIP User 1</h4><p>Rm 300 • 29 Left</p></div>
+                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -230,57 +229,63 @@
                 <div class="card-header">
                     <div class="tier-label">
                         <h3>Flagship 60</h3>
-                        <span style="color: var(--gold)">15</span>
+                        <span style="color: var(--gold)">{{F60|length}}</span>
                         <p>Active Users</p>
                     </div>
                     <span class="badge gold">Rs. 3400</span>
                 </div>
                 <div class="user-list">
-                    <a href="#" class="user-row">
+                    {% for c in F60 %}
+                    <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">★</div>
-                            <div class="user-details"><h4>VIP User 3</h4><p>Rm 302 • 58 Left</p></div>
+                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
+                    {% endfor %}
                 </div>
             </div>
             <div class="tier-card flagship">
                 <div class="card-header">
                     <div class="tier-label">
                         <h3>Premium 30</h3>
-                        <span style="color: var(--gold)">15</span>
+                        <span style="color: var(--gold)">{{P30|length}}</span>
                         <p>Active Users</p>
                     </div>
                     <span class="badge gold">Rs. 2200</span>
                 </div>
                 <div class="user-list">
-                    <a href="#" class="user-row">
+                    {% for c in P30 %}
+                    <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
-                            <div class="avatar">★</div>
-                            <div class="user-details"><h4>VIP User 3</h4><p>Rm 302 • 58 Left</p></div>
+                            <div class="avatar">★★</div>
+                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
+                    {% endfor %}
                 </div>
             </div>
             <div class="tier-card flagship">
                 <div class="card-header">
                     <div class="tier-label">
                         <h3>Premium 60</h3>
-                        <span style="color: var(--gold)">15</span>
+                        <span style="color: var(--gold)">{{P60|length}}</span>
                         <p>Active Users</p>
                     </div>
                     <span class="badge gold">Rs. 4200</span>
                 </div>
                 <div class="user-list">
-                    <a href="#" class="user-row">
+                    {% for c in P60 %}
+                    <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
-                            <div class="avatar">★</div>
-                            <div class="user-details"><h4>VIP User 3</h4><p>Rm 302 • 58 Left</p></div>
+                            <div class="avatar">★★</div>
+                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
+                    {% endfor %}
                 </div>
             </div>
 

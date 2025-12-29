@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from .models import AdminNotice,CustomerHistory
+from .models import AdminNotice,MealHistory
 admin.site.register(AdminNotice)
-admin.site.register(CustomerHistory)
+admin.site.register(MealHistory)
