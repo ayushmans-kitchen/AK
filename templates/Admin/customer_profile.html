@@ -92,6 +92,12 @@
         .badge-cancelled { background: rgba(255, 68, 68, 0.1); color: var(--color-danger); }
         .badge-active { background: rgba(74, 222, 128, 0.1); color: var(--color-success); }
         .badge-plan { background: rgba(212, 175, 55, 0.1); color: var(--color-gold); border: 1px solid rgba(212, 175, 55, 0.3); }
+        
+        .field-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+        .field-label { font-size: 0.65rem; font-weight: 800; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .inline-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.85rem; }
+        .inline-label input { accent-color: var(--gold); width: 18px; height: 18px; }
 
         /* RESPONSIVE MEDIA QUERIES */
         @media (max-width: 1024px) {
@@ -140,7 +146,7 @@
                 </div>
                 <div class="input-group">
                     <label>Email Address</label>
-                    <input type="email" name="email" value={{user.email}}>
+                    <input type="email" name="email" value="{{user.email}}">
                 </div>
                 <div class="input-group">
                     <label>Password</label>
@@ -161,7 +167,16 @@
                         <option {% if user.subscription_choice == "PREMIUM60" %} selected {% endif %} >PREMIUM60</option>
                     </select>
                 </div>
-
+                {% if user.subscription_choice == "NORMAL30" or user.subscription_choice == "NORMAL60" %}
+                <div class="input-group">
+                    <label>Default Meal</label>
+                    <select name="{{lunch_v}}">
+                        {% for key,value in lmenu %}
+                            <option {% if df_lunch == value %}selected{% endif %}>{{value}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% else %}
                 <div class="input-group">
                     <label>Default Lunch</label>
                     <select name="{{lunch_v}}">
@@ -172,12 +187,13 @@
                 </div>
                 <div class="input-group">
                     <label>Default Dinner</label>
-                    <select name="dinner_v">
+                    <select name="{{dinner_v}}">
                         {% for key,value in dmenu %}
                             <option {% if df_dinner == value %}selected{% endif %}>{{value}}</option>
                         {% endfor %}
                     </select>
                 </div>
+                {% endif %}
                 <div class="input-group">
                     <label>Meals Left</label>
                     <input type="number" value="{{user.meal_balance}}" style="color: var(--color-danger); font-weight: bold;" name="meal_balance">
@@ -198,6 +214,23 @@
                         <option {% if user.default_dinner_service_choice == "DineIn" %}selected{% endif %} >DineIn</option>
                         <option {% if user.default_dinner_service_choice == "PickUp" %}selected{% endif %} >PickUp</option>
                     </select>
+                </div>
+            </div>
+            <div class="field-group">
+                <label class="field-label">Account States</label>
+                <div class="check-row">
+                    <label class="inline-label" >
+                        <input type="checkbox" name="user_status_active" value="1" {% if user.user_status_active %}checked{% endif %} >
+                        User Active
+                    </label>
+                    <label class="inline-label" >
+                        <input type="checkbox" name="lunch_status_active" value="1" {% if user.lunch_status_active %}checked{% endif %} >
+                        Lunch Authorized
+                    </label>
+                    <label class="inline-label" >
+                        <input type="checkbox" name="dinner_status_active" value="1" {% if user.dinner_status_active %}checked{% endif %} >
+                        Dinner Authorized
+                    </label>
                 </div>
             </div>
 

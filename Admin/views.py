@@ -143,10 +143,14 @@ def add_customer(request):
         meal_balance=request.POST.get("meal_balance")
         default_lunch_service_choice=request.POST.get("default_lunch_service_choice")
         default_dinner_service_choice=request.POST.get("default_dinner_service_choice")
+        user_status_active = "user_status_active" in request.POST
+        lunch_status_active = "lunch_status_active" in request.POST
+        dinner_status_active = "dinner_status_active" in request.POST
+
 
         try:
             with transaction.atomic():
-                Customer.objects.create_user(
+                user=Customer.objects.create_user(
                 email=email,
                 name=name,
                 phone=phone,
@@ -155,132 +159,108 @@ def add_customer(request):
                 subscription_choice=subscription_choice,
                 meal_balance=meal_balance,
                 default_lunch_service_choice=default_lunch_service_choice,
-                default_dinner_service_choice=default_dinner_service_choice)
+                default_dinner_service_choice=default_dinner_service_choice,
+                user_status_active=user_status_active,
+                lunch_status_active=lunch_status_active,
+                dinner_status_active=dinner_status_active,
+                )
+                user.save()
+            return redirect("customer_profile", uid=user.id)
         except Exception as e:
-            logger.exception("Unexpected error in addind Customer : %s", e)
+            # logger.exception("Unexpected error in addind Customer : %s", e)
             return JsonResponse({"error": str(e)}, status=500)
     return render(request,"Admin/add-customer.html")
 
 
 
 
-@staff_member_required(login_url='/login/')
+@staff_member_required(login_url="/login/")
 def customer_profile(request, uid):
     user = get_object_or_404(Customer, pk=uid)
+
+    def update_customer_from_post():
+        user.name = request.POST.get("name", user.name)
+        user.phone = request.POST.get("phone", user.phone)
+        user.address = request.POST.get("address", user.address)
+        user.email = request.POST.get("email", user.email)
+        user.user_status_active = "user_status_active" in request.POST
+        user.lunch_status_active = "lunch_status_active" in request.POST
+        user.dinner_status_active = "dinner_status_active" in request.POST
+        
+        user.subscription_choice = request.POST.get(
+            "subscription_choice", user.subscription_choice
+        )
+
+        meal_balance = request.POST.get("meal_balance")
+        if meal_balance is not None:
+            user.meal_balance = int(meal_balance)
+
+        password = request.POST.get("password")
+        if password:
+            user.set_password(password)
+            update_session_auth_hash(request, user)
+
+        user.default_lunch_service_choice = request.POST.get(
+            "default_lunch_service_choice", user.default_lunch_service_choice
+        )
+        user.default_dinner_service_choice = request.POST.get(
+            "default_dinner_service_choice", user.default_dinner_service_choice
+        )
+        user.default_meal_choice = request.POST.get(
+            "default_meal_choice", user.default_meal_choice
+        )
+
+        user.FLAGSHIP_MENU_LUNCH_default_choice = request.POST.get(
+            "FLAGSHIP_MENU_LUNCH_default_choice",
+            user.FLAGSHIP_MENU_LUNCH_default_choice,
+        )
+        user.FLAGSHIP_MENU_DINNER_default_choice = request.POST.get(
+            "FLAGSHIP_MENU_DINNER_default_choice",
+            user.FLAGSHIP_MENU_DINNER_default_choice,
+        )
+
+        user.PREMIUM_MENU_LUNCH_default_choice = request.POST.get(
+            "PREMIUM_MENU_LUNCH_default_choice",
+            user.PREMIUM_MENU_LUNCH_default_choice,
+        )
+        user.PREMIUM_MENU_DINNER_default_choice = request.POST.get(
+            "PREMIUM_MENU_DINNER_default_choice",
+            user.PREMIUM_MENU_DINNER_default_choice,
+        )
+        user.user_status_active = request.POST.get(
+            "user_status_active", user.user_status_active
+        )
+        user.lunch_status_active = request.POST.get(
+            "lunch_status_active", user.lunch_status_active
+        )
+        user.dinner_status_active = request.POST.get(
+            "dinner_status_active", user.dinner_status_active
+        )
 
     if request.method == "POST":
         action = request.POST.get("action")
 
-        if action == "update":
-            user.name = request.POST.get("name", user.name)
-            user.phone = request.POST.get("phone", user.phone)
-            user.address = request.POST.get("address", user.address)
-            user.email = request.POST.get("email", user.email)
+        with transaction.atomic():
 
-            user.subscription_choice = request.POST.get(
-                "subscription_choice", user.subscription_choice
-            )
+            if action == "renew":
+                history = create_customer_history(user)
+                if history == "created":
+                    LunchRecord.objects.filter(customer=user).delete()
+                    DinnerRecord.objects.filter(customer=user).delete()
 
-            meal_balance = request.POST.get("meal_balance")
-            if meal_balance is not None:
-                user.meal_balance = int(meal_balance)
+                    user.subscription_phase += 1
+                    user.paused_subscription = False
 
-            password = request.POST.get("password")
-            if password:
-                user.set_password(password)
-                update_session_auth_hash(request, user)  # IMPORTANT
-
-            user.default_lunch_service_choice = request.POST.get(
-                "default_lunch_service_choice", user.default_lunch_service_choice
-            )
-            user.default_dinner_service_choice = request.POST.get(
-                "default_dinner_service_choice", user.default_dinner_service_choice
-            )
-            user.default_meal_choice = request.POST.get(
-                "default_meal_choice", user.default_meal_choice
-            )
-
-            user.FLAGSHIP_MENU_LUNCH_default_choice = request.POST.get(
-                "FLAGSHIP_MENU_LUNCH_default_choice",
-                user.FLAGSHIP_MENU_LUNCH_default_choice,
-            )
-            user.FLAGSHIP_MENU_DINNER_default_choice = request.POST.get(
-                "FLAGSHIP_MENU_DINNER_default_choice",
-                user.FLAGSHIP_MENU_DINNER_default_choice,
-            )
-
-            user.PREMIUM_MENU_LUNCH_default_choice = request.POST.get(
-                "PREMIUM_MENU_LUNCH_default_choice",
-                user.PREMIUM_MENU_LUNCH_default_choice,
-            )
-            user.PREMIUM_MENU_DINNER_default_choice = request.POST.get(
-                "PREMIUM_MENU_DINNER_default_choice",
-                user.PREMIUM_MENU_DINNER_default_choice,
-            )
-
-            user.save()
-            return redirect("customer_profile", uid=user.id)
-        if action == "renew" :
-            history=create_customer_history(user)
-            if history == "created":
-                LunchRecord.objects.filter(customer=user).delete()
-                DinnerRecord.objects.filter(customer=user).delete()
-
-
-                user.name = request.POST.get("name", user.name)
-                user.phone = request.POST.get("phone", user.phone)
-                user.address = request.POST.get("address", user.address)
-                user.email = request.POST.get("email", user.email)
-
-                user.subscription_choice = request.POST.get(
-                    "subscription_choice", user.subscription_choice
-                )
-
-                meal_balance = request.POST.get("meal_balance")
-                if meal_balance is not None:
-                    user.meal_balance = int(meal_balance)
-
-                password = request.POST.get("password")
-                if password:
-                    user.set_password(password)
-                    update_session_auth_hash(request, user)  
-
-                user.default_lunch_service_choice = request.POST.get(
-                    "default_lunch_service_choice", user.default_lunch_service_choice
-                )
-                user.default_dinner_service_choice = request.POST.get(
-                    "default_dinner_service_choice", user.default_dinner_service_choice
-                )
-                user.default_meal_choice = request.POST.get(
-                    "default_meal_choice", user.default_meal_choice
-                )
-
-                user.FLAGSHIP_MENU_LUNCH_default_choice = request.POST.get(
-                    "FLAGSHIP_MENU_LUNCH_default_choice",
-                    user.FLAGSHIP_MENU_LUNCH_default_choice,
-                )
-                user.FLAGSHIP_MENU_DINNER_default_choice = request.POST.get(
-                    "FLAGSHIP_MENU_DINNER_default_choice",
-                    user.FLAGSHIP_MENU_DINNER_default_choice,
-                )
-
-                user.PREMIUM_MENU_LUNCH_default_choice = request.POST.get(
-                    "PREMIUM_MENU_LUNCH_default_choice",
-                    user.PREMIUM_MENU_LUNCH_default_choice,
-                )
-                user.PREMIUM_MENU_DINNER_default_choice = request.POST.get(
-                    "PREMIUM_MENU_DINNER_default_choice",
-                    user.PREMIUM_MENU_DINNER_default_choice,
-                )
-                user.subscription_phase+=1
+            if action in ("update", "renew"):
+                update_customer_from_post()
                 user.save()
+                return redirect("customer_profile", uid=user.id)
 
 
     if user.subscription_choice in ["NORMAL30", "NORMAL60"]:
         lmenu = list(dict.fromkeys(MEAL_MENU))
         dmenu = list(dict.fromkeys(MEAL_MENU))
-        df_lunch = user.default_meal_choice
-        df_dinner = user.default_meal_choice
+        df_lunch = df_dinner = user.default_meal_choice
         lunch_v = dinner_v = "default_meal_choice"
 
     elif user.subscription_choice in ["FLAGSHIP30", "FLAGSHIP60"]:
