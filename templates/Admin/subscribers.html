@@ -1,141 +1,233 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscribers | Ayushman's Kitchen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
+
+<style>
+    :root {
+        --gold: #d4af37;
+        --gold-glow: rgba(212, 175, 55, 0.2);
+        --bg-deep: #050505;
+        --bg-card: #0c0c0c;
+        --border: #1a1a1a;
+        --text-muted: #888888;
+        --sb-width: 260px;
+        --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* --- BASE & RESET --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+        font-family: 'Montserrat', sans-serif; 
+        background-color: var(--bg-deep); 
+        color: #fff; 
+        -webkit-font-smoothing: antialiased; 
+        overflow-x: hidden; 
+    }
+
+    /* --- MOBILE HEADER --- */
+    .nav-toggle { display: none; }
+    .mobile-header {
+        display: none; position: fixed; top: 0; width: 100%; height: 60px;
+        background: #000; padding: 0 1.5rem; align-items: center; justify-content: space-between;
+        z-index: 2100; border-bottom: 1px solid var(--border);
+    }
+    .hamburger { width: 25px; height: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
+    .hamburger span { height: 2px; width: 100%; background: var(--gold); border-radius: 10px; transition: var(--transition); }
+
+    /* --- MAIN CONTENT --- */
+    .main-content { 
+        margin-left: var(--sb-width); 
+        padding: 3rem; 
+        transition: var(--transition); 
+        min-height: 100vh; 
+    }
+
+    /* --- HEADER SECTION --- */
+    .page-header { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-bottom: 3rem; 
+        border-bottom: 1px solid var(--border); 
+        padding-bottom: 2rem; 
+        gap: 1.5rem; 
+    }
+
+    .header-info h1 { 
+        font-family: 'Playfair Display', serif; 
+        font-size: 2.8rem; 
+        color: var(--gold); /* Set to Gold as per request */
+        letter-spacing: -1px; 
+        text-transform: uppercase;
+        font-weight: 900;
+        text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-info p { 
+        color: var(--text-muted); 
+        font-size: 0.9rem; 
+        margin-top: 8px; 
+        font-weight: 500; 
+        letter-spacing: 0.5px;
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 1.5rem; }
+
+    /* --- SEARCH BAR --- */
+    .search-wrapper input {
+        width: 350px; 
+        background: #0a0a0a; 
+        border: 1px solid var(--border); 
+        padding: 0.85rem 1.5rem;
+        border-radius: 12px; 
+        color: white; 
+        font-size: 0.9rem; 
+        outline: none; 
+        transition: var(--transition);
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .search-wrapper input:focus { 
+        border-color: var(--gold); 
+        background: #111; 
+        box-shadow: 0 0 20px var(--gold-glow); 
+    }
+
+    /* --- ADD BUTTON --- */
+    .btn-add {
+        background: var(--gold); 
+        color: #000; 
+        padding: 0.85rem 1.8rem; 
+        border-radius: 10px;
+        font-size: 0.8rem; 
+        font-weight: 800; 
+        text-decoration: none; 
+        text-transform: uppercase;
+        letter-spacing: 1.5px; 
+        transition: 0.3s; 
+        display: inline-flex; 
+        align-items: center; 
+        gap: 10px;
+    }
+    .btn-add:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 0 10px 25px var(--gold-glow); 
+        opacity: 0.9;
+    }
+
+    /* --- SUBSCRIBER GRID --- */
+    .subscriber-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); 
+        gap: 1.5rem; 
+    }
+
+    /* --- TIER CARDS --- */
+    .tier-card {
+        background: var(--bg-card); 
+        border: 1px solid var(--border); 
+        border-radius: 16px;
+        padding: 2rem; 
+        display: flex; 
+        flex-direction: column; 
+        height: 500px;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+    .tier-card.flagship { 
+        border-color: rgba(212, 175, 55, 0.4); 
+        background: linear-gradient(145deg, #0d0d0d, #050505);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .card-header { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: flex-start; 
+        margin-bottom: 1.5rem; 
+    }
+    .tier-label h3 { 
+        font-size: 0.75rem; 
+        text-transform: uppercase; 
+        letter-spacing: 2px; 
+        color: var(--gold); 
+        margin-bottom: 8px; 
+    }
+    .tier-label span { font-size: 2.5rem; font-weight: 900; color: #fff; line-height: 1; }
+    .tier-label p { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
+
+    .badge { 
+        background: rgba(255,255,255,0.05); 
+        color: #fff; 
+        padding: 6px 14px; 
+        border-radius: 8px; 
+        font-size: 0.65rem; 
+        font-weight: 800; 
+        border: 1px solid var(--border); 
+    }
+    .badge.gold { color: var(--gold); border-color: var(--gold); background: var(--gold-glow); }
+
+    /* --- USER LIST --- */
+    .user-list { flex: 1; overflow-y: auto; padding-right: 8px; margin-top: 1rem; }
+    .user-list::-webkit-scrollbar { width: 4px; }
+    .user-list::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+    .user-list::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    .user-row {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+        border-radius: 12px; margin-bottom: 12px; text-decoration: none; transition: 0.3s ease;
+    }
+    .user-row:hover { 
+        background: rgba(212, 175, 55, 0.08); 
+        border-color: rgba(212, 175, 55, 0.3); 
+        transform: translateX(5px);
+    }
+    .user-content { display: flex; align-items: center; gap: 15px; }
     
-    <style>
-        :root {
-            --gold: #d4af37;
-            --bg-deep: #050505;
-            --bg-card: #0c0c0c;
-            --border: #1a1a1a;
-            --text-muted: #666;
-            --sb-width: 260px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    .avatar { 
+        width: 40px; height: 40px; 
+        background: #111; border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center; 
+        color: var(--gold); font-size: 1.1rem; border: 1px solid var(--border); 
+    }
+    .flagship .avatar { background: var(--gold); color: #000; border-color: var(--gold); }
+    
+    .user-details h4 { font-size: 0.9rem; color: #fff; font-weight: 700; margin-bottom: 2px; }
+    .user-details p { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; }
+    .arrow { color: #333; transition: 0.3s; font-size: 1.2rem; }
+    .user-row:hover .arrow { color: var(--gold); transform: translateX(3px); }
 
-        /* --- BASE --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-deep); color: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-
-        /* --- MOBILE NAV --- */
-        .nav-toggle { display: none; }
-        .mobile-header {
-            display: none; position: fixed; top: 0; width: 100%; height: 60px;
-            background: #000; padding: 0 1.5rem; align-items: center; justify-content: space-between;
-            z-index: 2100; border-bottom: 1px solid var(--border);
-        }
-        .hamburger { width: 25px; height: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
-        .hamburger span { height: 2px; width: 100%; background: var(--gold); border-radius: 10px; transition: var(--transition); }
-
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: var(--sb-width); height: 100vh; position: fixed; left: 0; top: 0;
-            background: #000; border-right: 1px solid var(--border); display: flex; flex-direction: column;
-            padding: 2rem 1.2rem; z-index: 2000; transition: var(--transition);
-        }
-
-        /* --- MAIN CONTENT --- */
-        .main-content { margin-left: var(--sb-width); padding: 1.5rem 2rem; transition: var(--transition); min-height: 100vh; }
-
-        /* --- HEADER SECTION --- */
-        .page-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; gap: 1.5rem;
-        }
-        .header-info h1 { font-family: 'Playfair Display'; font-size: 1.8rem; color: #fff; letter-spacing: 0.5px; }
-        .header-info p { color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; }
-
-        .header-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-
-        .search-wrapper input {
-            width: 280px; background: #111; border: 1px solid var(--border); padding: 0.6rem 1rem;
-            border-radius: 8px; color: white; font-size: 0.8rem; outline: none; font-family: 'Montserrat';
-        }
-        .search-wrapper input:focus { border-color: var(--gold); }
-
-        /* THE SMALL BUTTON */
-        .btn-add {
-            background: var(--gold); color: #000; padding: 0.6rem 1.2rem; border-radius: 6px;
-            font-size: 0.75rem; font-weight: 700; text-decoration: none; text-transform: uppercase;
-            letter-spacing: 1px; transition: 0.3s; border: none; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-add:hover { transform: translateY(-2px); opacity: 0.9; }
-
-        /* --- SUBSCRIBER GRID --- */
-        .subscriber-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
-
-        /* --- CATEGORY CARDS --- */
-        .tier-card {
-            background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
-            padding: 1.5rem; display: flex; flex-direction: column; height: 450px;
-        }
-        .tier-card.flagship { border: 1px solid var(--gold); }
-
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
-        .tier-label h3 { font-size: 0.8rem; color: #fff; margin-bottom: 4px; }
-        .tier-label span { font-size: 1.8rem; font-weight: 900; }
-        .tier-label p { font-size: 0.7rem; color: var(--text-muted); }
-
-        .badge {
-            background: #1a1a1a; color: var(--text-muted); padding: 4px 10px; border-radius: 50px;
-            font-size: 0.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #333;
-        }
-        .badge.gold { color: var(--gold); border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
-
-        /* --- USER LIST --- */
-        .user-list { flex: 1; overflow-y: auto; padding-right: 5px; margin-top: 1rem; }
-        .user-list::-webkit-scrollbar { width: 3px; }
-        .user-list::-webkit-scrollbar-thumb { background: #222; }
-
-        .user-row {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 10px; background: #0e0e0e; border: 1px solid #161616; border-radius: 8px;
-            margin-bottom: 8px; text-decoration: none; transition: 0.2s;
-        }
-        .user-row:hover { background: #141414; border-color: #333; }
-        .user-content { display: flex; align-items: center; gap: 12px; }
-        
-        .avatar {
-            width: 32px; height: 32px; background: #1a1a1a; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem;
-        }
-        .flagship .avatar { background: var(--gold); color: #000; }
-        .user-details h4 { font-size: 0.75rem; color: #eee; margin-bottom: 2px; }
-        .user-details p { font-size: 0.65rem; color: var(--text-muted); }
-        .arrow { color: #444; font-size: 0.8rem; }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 1024px) {
-            .mobile-header { display: flex; }
-            .sidebar { transform: translateX(-100%); padding-top: 5rem; }
-            .main-content { margin-left: 0; padding: 5.5rem 1rem 1.5rem 1rem; }
-            .nav-toggle:checked ~ .sidebar { transform: translateX(0); }
-            .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-            .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(2) { opacity: 0; }
-            .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-            .page-header { flex-direction: column; align-items: flex-start; }
-            .header-actions { width: 100%; justify-content: space-between; }
-            .search-wrapper { flex: 1; }
-            .search-wrapper input { width: 100%; }
-        }
-
-        @media (max-width: 600px) {
-            .subscriber-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+    /* --- RESPONSIVE LOGIC --- */
+    @media (max-width: 1024px) {
+        .mobile-header { display: flex; height: 70px; }
+        .sidebar { transform: translateX(-100%); }
+        .main-content { margin-left: 0; padding: 7rem 1.5rem 2rem 1.5rem; }
+        .nav-toggle:checked~.sidebar { transform: translateX(0); }
+        .page-header { flex-direction: column; align-items: flex-start; gap: 2rem; }
+        .header-actions { width: 100%; flex-direction: column; gap: 1rem; }
+        .search-wrapper, .search-wrapper input { width: 100%; }
+        .btn-add { width: 100%; justify-content: center; }
+    }
+</style>
 </head>
+
 <body>
 
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
 
     <header class="mobile-header">
-        <div class="logo" style="font-family: 'Playfair Display'; color: var(--gold); font-weight: 900; font-size: 1rem;">AK ADMIN</div>
+        <div class="logo"
+            style="font-family: 'Playfair Display'; color: var(--gold); font-weight: 900; font-size: 1rem;">AK ADMIN
+        </div>
         <label for="nav-toggle" class="hamburger">
             <span></span><span></span><span></span>
         </label>
@@ -151,14 +243,14 @@
             </div>
             <div class="header-actions">
                 <div class="search-wrapper">
-                    <input type="text" placeholder="Search subscribers...">
+                    <input type="text" id="subscriberSearch" placeholder="Search subscribers...">
                 </div>
                 <a href="{% url 'add_customer'%}" class="btn-add"><span>+</span> Add Customer</a>
             </div>
         </div>
 
         <div class="subscriber-grid">
-            
+
             <div class="tier-card">
                 <div class="card-header">
                     <div class="tier-label">
@@ -173,14 +265,17 @@
                     <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">👤</div>
-                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
+                            <div class="user-details">
+                                <h4>{{c.name}}</h4>
+                                <p>{{c.phone}} • {{c.meal_balance}} Left</p>
+                            </div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
                     {% endfor %}
                 </div>
             </div>
-            
+
             <div class="tier-card">
                 <div class="card-header">
                     <div class="tier-label">
@@ -195,7 +290,10 @@
                     <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">👤</div>
-                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
+                            <div class="user-details">
+                                <h4>{{c.name}}</h4>
+                                <p>{{c.phone}} • {{c.meal_balance}} Left</p>
+                            </div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
@@ -217,7 +315,10 @@
                     <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">★</div>
-                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
+                            <div class="user-details">
+                                <h4>{{c.name}}</h4>
+                                <p>{{c.phone}} • {{c.meal_balance}} Left</p>
+                            </div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
@@ -239,7 +340,10 @@
                     <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">★</div>
-                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
+                            <div class="user-details">
+                                <h4>{{c.name}}</h4>
+                                <p>{{c.phone}} • {{c.meal_balance}} Left</p>
+                            </div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
@@ -260,7 +364,10 @@
                     <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">★★</div>
-                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
+                            <div class="user-details">
+                                <h4>{{c.name}}</h4>
+                                <p>{{c.phone}} • {{c.meal_balance}} Left</p>
+                            </div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
@@ -281,7 +388,10 @@
                     <a href="{% url 'customer_profile' c.id %}" class="user-row">
                         <div class="user-content">
                             <div class="avatar">★★</div>
-                            <div class="user-details"><h4>{{c.name}}</h4><p>{{c.phone}} • {{c.meal_balance}} Left</p></div>
+                            <div class="user-details">
+                                <h4>{{c.name}}</h4>
+                                <p>{{c.phone}} • {{c.meal_balance}} Left</p>
+                            </div>
                         </div>
                         <span class="arrow">›</span>
                     </a>
@@ -291,5 +401,49 @@
 
         </div>
     </main>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('subscriberSearch');
+        const userRows = document.querySelectorAll('.user-row');
+        const tierCards = document.querySelectorAll('.tier-card');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+
+            // 1. First, show/hide individual rows
+            userRows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                if (rowText.includes(query)) {
+                    row.style.display = 'flex';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // 2. Then, handle the card fading (Normal 60, Flagship, etc.)
+            tierCards.forEach(card => {
+                // Find all rows inside THIS specific card
+                const rowsInThisCard = card.querySelectorAll('.user-row');
+                
+                // Check if at least one row in this card is visible
+                const hasVisibleResults = Array.from(rowsInThisCard).some(row => 
+                    row.style.display !== 'none'
+                );
+
+                // If we are searching (query not empty) AND no results match in this card
+                if (query !== "" && !hasVisibleResults) {
+                    card.style.opacity = '0.15'; // Fade out
+                    card.style.pointerEvents = 'none'; // Optional: disable clicks on faded cards
+                    card.style.filter = 'grayscale(1)'; // Optional: extra visual cue
+                } else {
+                    card.style.opacity = '1'; // Show normally
+                    card.style.pointerEvents = 'auto';
+                    card.style.filter = 'grayscale(0)';
+                }
+            });
+        });
+    });
+</script>
 </body>
+
 </html>

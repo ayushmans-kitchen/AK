@@ -144,7 +144,7 @@
             <header class="detail-header">
                 <div>
                     <span class="back-link" onclick="window.history.back()">← Back to Dashboard</span>
-                    <h1>{{dayTime}} {{service}}</h1>
+                    <h1>{{types}} Customers</h1>
                 </div>
                 <div style="text-align: right;">
                     <p id="current-date" style="color: var(--color-text-muted); font-size: 0.8rem; font-weight: 600;"></p>
@@ -155,7 +155,7 @@
                 <input type="text" id="orderSearch" class="search-input" placeholder="Search name, room, or table...">
             </div>
 
-            <div class="summary-strip" id="filter-container">
+            {% comment %} <div class="summary-strip" id="filter-container">
                 <div class="protein-pill active" data-filter="all">ALL</div>
                 {% if cancelled_page %}
                 {% else %}
@@ -173,7 +173,7 @@
                     {% endfor %}
                 {% endif %}
                 {% endif %}
-            </div>
+            </div> {% endcomment %}
 
 
             <div class="table-container">
@@ -181,7 +181,7 @@
                     <thead>
                         <tr>
                             <th>User</th>
-                            <th>Meal Choice</th>
+                            {% comment %} <th>Meal Choice</th> {% endcomment %}
                             <th>Subscription Type</th>
                             <th>Phone No.</th>
                             <th>Location</th>
@@ -192,13 +192,12 @@
                         
                         {% for r in  records %}
                             <tr data-protein="chicken">
-                                {% comment %} <td data-label="User" class="user-name"><strong><a href="{% url "" %}">{{r.customer.name}}</a></strong></td> {% endcomment %}
-                                <td data-label="User" class="user-name"><strong>{{r.customer.name}}</strong></td>
-                                <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td>
-                                <td data-label="Subscription Choice">{{r.customer.subscription_choice}}</td>
-                                <td data-label="Phone" class="Phone">{{r.customer.phone}}</td>
-                                <td data-label="Address" class="Address">{{r.customer.address}}</td>
-                                <td data-label="balance" class="balance">{{r.customer.meal_balance}}</td>
+                                <td data-label="User" class="user-name"><strong><a href="{% url "customer_profile" r.id %}">{{r.name}}</a></strong></td>
+                                {% comment %} <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td> {% endcomment %}
+                                <td data-label="Subscription Choice">{{r.subscription_choice}}</td>
+                                <td data-label="Phone" class="Phone">{{r.phone}}</td>
+                                <td data-label="Address" class="Address">{{r.address}}</td>
+                                <td data-label="balance" class="balance">{{r.meal_balance}}</td>
                             </tr>
                         {% endfor %}
                         

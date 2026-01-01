@@ -1,5 +1,7 @@
 from django.shortcuts import render
-
+from django.http import JsonResponse
+from Admin.models import MealHistory
 
 def home(request):
-    return render(request,"Admin/test.html")
+    a=MealHistory.objects.get(customer=4).meal_history
+    return JsonResponse(a)

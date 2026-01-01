@@ -23,7 +23,7 @@ all_menus_dinner = list(dict.fromkeys(MEAL_MENU + FLAGSHIP_MENU_DINNER + PREMIUM
 
 @staff_member_required(login_url='/login/')
 def dashboard(request):
-    customers = Customer.objects.all()
+    customers = Customer.objects.filter(is_staff=False,is_superuser=False)
     lunch_record = LunchRecord.objects.filter(for_date=today)
     dinner_record = DinnerRecord.objects.filter(for_date=today)
     admin_messgaes = AdminNotice.objects.all()
@@ -51,8 +51,8 @@ def dashboard(request):
             menu_dinner_count[choice] += 1
 
     context={
-        'total_customers':customers.exclude(is_staff=True,is_superuser=True).count(),
-        'total_inactive_customers':customers.filter(user_status_active=False,paused_subscription=False,is_staff=False,is_superuser=False).count(),
+        'total_customers':customers.count(),
+        'total_inactive_customers':customers.filter(user_status_active=False,paused_subscription=False).count(),
         'total_plan_end_customers':customers.filter(paused_subscription=True,is_staff=False,is_superuser=False).count(),
 
         'total_lunch':lunch_record.exclude(service_choice="Cancel").count(),
@@ -60,21 +60,21 @@ def dashboard(request):
         'lunch_delivery':lunch_record.filter(service_choice="Delivery").count(),
         'lunch_pickup':lunch_record.filter(service_choice="PickUp").count(),
         'lunch_cancelled':lunch_record.filter(service_choice="Cancel").count(),
-        'lunch_inactive':customers.filter(lunch_status_active=True,user_status_active=False,paused_subscription=False,is_staff=False,is_superuser=False).count(),
-        'lunch_default_need':customers.filter(user_status_active=True,lunch_status_active=True,is_staff=False,is_superuser=False).exclude(lunch_records__for_date=today).count(),
+        'lunch_inactive':customers.filter(lunch_status_active=True,user_status_active=False,paused_subscription=False).count(),
+        'lunch_default_need':customers.filter(user_status_active=True,lunch_status_active=True).exclude(lunch_records__for_date=today).count(),
 
         'total_dinner':dinner_record.exclude(service_choice="Cancel").count(),
         'dinner_dinein':dinner_record.filter(service_choice="DineIn").count(),
         'dinner_delivery':dinner_record.filter(service_choice="Delivery").count(),
         'dinner_pickup':dinner_record.filter(service_choice="PickUp").count(),
         'dinner_cancelled':dinner_record.filter(service_choice="Cancel").count(),
-        'dinner_inactive':customers.filter(dinner_status_active=True,user_status_active=False,paused_subscription=False,is_staff=False,is_superuser=False).count(),
-        'dinner_default_need':customers.filter(user_status_active=True,dinner_status_active=True,is_staff=False,is_superuser=False).exclude(dinner_records__for_date=today).count(),
+        'dinner_inactive':customers.filter(dinner_status_active=True,user_status_active=False,paused_subscription=False).count(),
+        'dinner_default_need':customers.filter(user_status_active=True,dinner_status_active=True).exclude(dinner_records__for_date=today).count(),
 
         "menu_lunch_count": menu_lunch_count,
         "menu_dinner_count": menu_dinner_count,
 
-        'low_balance_customer':customers.filter(meal_balance__lte=6,is_staff=False,is_superuser=False),
+        'low_balance_customer':customers.filter(meal_balance__lte=6),
         'admin_messgaes':admin_messgaes,
     }
     return render(request,"Admin/dashboard.html",context)
@@ -86,13 +86,19 @@ def service_details(request, dayTime, service):
     if dayTime == "Lunch":
         if service=="Total":
             result = LunchRecord.objects.filter(for_date = today).exclude(service_choice="Cancel")
+        elif service=="DE":
+            result = Customer.objects.filter(user_status_active=True,lunch_status_active=True,is_staff=False).exclude(lunch_records__for_date=today)
         else:
             result = LunchRecord.objects.filter(for_date = today,service_choice=service)
+
     if dayTime == "Dinner":
         if service=="Total":
             result = DinnerRecord.objects.filter(for_date = today).exclude(service_choice="Cancel")
+        elif service=="DE":
+            result = Customer.objects.filter(user_status_active=True,dinner_status_active=True,is_staff=False).exclude(dinner_records__for_date=today)
         else:
             result = DinnerRecord.objects.filter(for_date = today,service_choice=service)
+    
     if service == "Cancel":
         cancelled_page=True
     else:
@@ -110,6 +116,18 @@ def service_details(request, dayTime, service):
     return render(request,"Admin/service-details.html", context)
 
     
+
+@staff_member_required(login_url='/login/')
+def customer_list(request,types):
+    if types == "Inactive":
+        result = Customer.objects.filter(is_staff=False,user_status_active=False)
+    if types == "PlanEnded":
+        result = Customer.objects.filter(is_staff=False,paused_subscription=True)
+    context = {
+        "records": result,
+        "types": types,
+    }    
+    return render(request,"Admin/customer-lists.html", context)
 
 @staff_member_required(login_url='/login/')
 def subscribers(request):
@@ -206,27 +224,11 @@ def customer_profile(request, uid):
         user.default_dinner_service_choice = request.POST.get(
             "default_dinner_service_choice", user.default_dinner_service_choice
         )
-        user.default_meal_choice = request.POST.get(
-            "default_meal_choice", user.default_meal_choice
-        )
-
-        user.FLAGSHIP_MENU_LUNCH_default_choice = request.POST.get(
-            "FLAGSHIP_MENU_LUNCH_default_choice",
-            user.FLAGSHIP_MENU_LUNCH_default_choice,
-        )
-        user.FLAGSHIP_MENU_DINNER_default_choice = request.POST.get(
-            "FLAGSHIP_MENU_DINNER_default_choice",
-            user.FLAGSHIP_MENU_DINNER_default_choice,
-        )
-
-        user.PREMIUM_MENU_LUNCH_default_choice = request.POST.get(
-            "PREMIUM_MENU_LUNCH_default_choice",
-            user.PREMIUM_MENU_LUNCH_default_choice,
-        )
-        user.PREMIUM_MENU_DINNER_default_choice = request.POST.get(
-            "PREMIUM_MENU_DINNER_default_choice",
-            user.PREMIUM_MENU_DINNER_default_choice,
-        )
+        user.default_meal_choice = request.POST.get("default_meal_choice")
+        user.FLAGSHIP_MENU_LUNCH_default_choice = request.POST.get("FLAGSHIP_MENU_LUNCH_default_choice")
+        user.FLAGSHIP_MENU_DINNER_default_choice = request.POST.get("FLAGSHIP_MENU_DINNER_default_choice")
+        user.PREMIUM_MENU_LUNCH_default_choice = request.POST.get("PREMIUM_MENU_LUNCH_default_choice")
+        user.PREMIUM_MENU_DINNER_default_choice = request.POST.get("PREMIUM_MENU_DINNER_default_choice")
         user.user_status_active = request.POST.get(
             "user_status_active", user.user_status_active
         )

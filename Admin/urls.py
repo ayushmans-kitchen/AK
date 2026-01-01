@@ -1,11 +1,13 @@
 from django.urls import path, include
 from .backend_views import gen_Dinner_record,gen_Lunch_record,add_admin_message,delete_admin_notice
-from Admin.views import dashboard, service_details, subscribers,add_customer,customer_profile
+from Admin.views import dashboard, service_details, subscribers,add_customer,customer_profile,customer_list
 
 urlpatterns = [
     path('dashboard/',dashboard,name='ayushman_dashboard'),
     path('service-details/',service_details,name='service_details'),
     path('service-details/<str:service>/<str:dayTime>/',service_details, name='service_details'),
+
+    path('customer_lists/<str:types>/',customer_list, name='customer_list'),
 
     path('subscribers/',subscribers,name='subscribers'),
     path('add-customer/',add_customer,name='add_customer'),

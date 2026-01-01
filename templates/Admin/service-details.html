@@ -6,123 +6,197 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Production Detail | Ayushman's Kitchen</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    
+        
     <style>
         :root {
             --color-gold: #d4af37;
+            --color-gold-muted: rgba(212, 175, 55, 0.1);
             --color-bg-deep: #050505;
-            --color-bg-card: #0f0f0f;
+            --color-bg-card: #0c0c0c;
             --color-bg-sidebar: #000000;
             --color-text: #ffffff;
-            --color-text-muted: #888888;
-            --color-border: #1f1f1f;
-            --color-danger: #ff4444;
-            --color-success: #4ade80;
+            --color-text-muted: #a0a0a0;
+            --color-border: #1a1a1a;
             --sb-width: 260px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
         /* RESET & BASE */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--color-bg-deep); color: var(--color-text); line-height: 1.5; overflow-x: hidden; }
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--color-bg-deep); 
+            color: var(--color-text); 
+            line-height: 1.6; 
+            overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--color-bg-deep); }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
 
         /* SIDEBAR TOGGLE LOGIC */
         .nav-toggle { display: none; }
 
-        /* MOBILE HEADER */
-        .mobile-header {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 65px;
-            background: #000; padding: 0 1.5rem; align-items: center; justify-content: space-between;
-            z-index: 2100; border-bottom: 1px solid var(--color-border);
-        }
-        .hamburger { width: 28px; height: 18px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
-        .hamburger span { height: 3px; width: 100%; background: var(--color-gold); border-radius: 10px; transition: var(--transition); }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: var(--sb-width); height: 100vh; position: fixed; left: 0; top: 0;
-            background: var(--color-bg-sidebar); border-right: 1px solid var(--color-border); 
-            display: flex; flex-direction: column; padding: 2rem 1.25rem; z-index: 2000; transition: var(--transition);
-        }
-
         /* MAIN CONTENT AREA */
-        .main-content { margin-left: var(--sb-width); padding: 2rem 2.5rem; transition: var(--transition); min-height: 100vh; }
+        .main-content { 
+            margin-left: var(--sb-width); 
+            padding: 3rem; 
+            transition: var(--transition); 
+            min-height: 100vh; 
+        }
 
         /* PAGE SPECIFIC HEADER */
         .detail-header {
-            display: flex; justify-content: space-between; align-items: flex-end;
-            margin-bottom: 2rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1.5rem;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end;
+            margin-bottom: 3rem; 
+            border-bottom: 1px solid var(--color-border); 
+            padding-bottom: 1.5rem;
         }
-        .detail-header h1 { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: clamp(1.5rem, 4vw, 2.2rem); }
-        .back-link { color: var(--color-gold); text-decoration: none; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: block; margin-bottom: 0.5rem; }
+        .detail-header h1 { 
+            font-family: 'Playfair Display', serif; 
+            color: var(--color-gold); 
+            font-size: 2.5rem; 
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        .back-link { 
+            color: var(--color-gold); 
+            text-decoration: none; 
+            font-size: 0.7rem; 
+            text-transform: uppercase; 
+            font-weight: 800;
+            letter-spacing: 2px; 
+            cursor: pointer; 
+            display: block; 
+            margin-bottom: 0.5rem; 
+            transition: 0.3s;
+        }
+        .back-link:hover { opacity: 0.7; transform: translateX(-5px); }
 
-        /* SEARCH & FILTERS */
-        .search-container { margin-bottom: 1.5rem; }
+        /* SEARCH BAR */
+        .search-container { margin-bottom: 2rem; }
         .search-input {
-            width: 100%; padding: 12px 20px; background: var(--color-bg-card); border: 1px solid var(--color-border);
-            color: white; border-radius: 8px; font-family: 'Montserrat', sans-serif; outline: none; transition: 0.3s;
+            width: 100%; 
+            padding: 16px 24px; 
+            background: var(--color-bg-card); 
+            border: 1px solid var(--color-border);
+            color: white; 
+            border-radius: 12px; 
+            font-family: inherit; 
+            font-size: 0.9rem;
+            outline: none; 
+            transition: var(--transition);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
         }
-        .search-input:focus { border-color: var(--color-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.1); }
+        .search-input:focus { 
+            border-color: var(--color-gold); 
+            background: #111;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); 
+        }
 
-        .summary-strip { display: flex; gap: 10px; margin-bottom: 2rem; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
-        .summary-strip::-webkit-scrollbar { height: 3px; }
-        .summary-strip::-webkit-scrollbar-thumb { background: var(--color-gold); }
-
+        /* PROTEIN PILLS */
+        .summary-strip { 
+            display: flex; 
+            gap: 12px; 
+            margin-bottom: 2.5rem; 
+            overflow-x: auto; 
+            padding-bottom: 12px; 
+        }
         .protein-pill {
-            background: #111; border: 1px solid var(--color-border); padding: 8px 18px; border-radius: 50px;
-            white-space: nowrap; cursor: pointer; font-size: 0.7rem; color: var(--color-text-muted); font-weight: 600; transition: var(--transition);
+            background: var(--glass); 
+            border: 1px solid var(--color-border); 
+            padding: 10px 22px; 
+            border-radius: 50px;
+            white-space: nowrap; 
+            cursor: pointer; 
+            font-size: 0.65rem; 
+            color: var(--color-text-muted); 
+            font-weight: 700; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
         }
-        .protein-pill.active { border-color: var(--color-gold); background: rgba(212, 175, 55, 0.1); color: var(--color-gold); }
+        .protein-pill:hover { background: rgba(255,255,255,0.08); border-color: #444; color: #fff; }
+        .protein-pill.active { 
+            border-color: var(--color-gold); 
+            background: var(--color-gold-muted); 
+            color: var(--color-gold); 
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+        }
 
         /* TABLE STYLES */
-        .table-container { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; }
+        .table-container { 
+            background: var(--color-bg-card); 
+            border: 1px solid var(--color-border); 
+            border-radius: 16px; 
+            overflow: hidden; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; background: #080808; padding: 18px 15px; color: var(--color-gold); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--color-border); }
-        td { padding: 18px 15px; border-bottom: 1px solid var(--color-border); font-size: 0.85rem; color: var(--color-text); }
-        tr.completed td { opacity: 0.4; }
-
-        .service-tag { padding: 4px 10px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; }
-        .tag-dinein { background: rgba(74, 163, 222, 0.1); color: #4aa3de; }
-        .tag-delivery { background: rgba(222, 158, 74, 0.1); color: #de9e4a; }
-
-        .btn-check { 
-            background: transparent; border: 1px solid #444; color: #888; 
-            padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.3s;
+        th { 
+            text-align: left; 
+            background: #0a0a0a; 
+            padding: 20px 24px; 
+            color: var(--color-gold); 
+            font-size: 0.65rem; 
+            text-transform: uppercase; 
+            font-weight: 800;
+            letter-spacing: 2px; 
+            border-bottom: 1px solid var(--color-border); 
         }
-        .btn-check.ready { border-color: var(--color-success); color: var(--color-success); background: rgba(74, 222, 128, 0.05); }
-
-        /* RESPONSIVE TABLE (Card View on Mobile) */
-        @media (max-width: 768px) {
-            table, thead, tbody, th, td, tr { display: block; }
-            thead tr { position: absolute; top: -9999px; left: -9999px; }
-            tr { border-bottom: 2px solid var(--color-border); padding: 15px 5px; }
-            td { border: none; position: relative; padding-left: 50% !important; text-align: right; padding-bottom: 10px; }
-            td:before { 
-                content: attr(data-label); position: absolute; left: 15px; width: 45%; 
-                padding-right: 10px; white-space: nowrap; text-align: left; 
-                font-weight: 700; color: var(--color-gold); font-size: 0.7rem; text-transform: uppercase;
-            }
-            .btn-check { width: 100%; margin-top: 10px; }
+        td { 
+            padding: 18px 24px; 
+            border-bottom: 1px solid var(--color-border); 
+            font-size: 0.85rem; 
+            color: #e0e0e0; 
+            transition: 0.2s;
         }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(212, 175, 55, 0.02); color: #fff; }
 
-        /* MEDIA QUERIES FOR SIDEBAR */
+        /* Links inside table */
+        td a { color: inherit; text-decoration: none; transition: 0.3s; }
+        td a:hover { color: var(--color-gold); }
+
+        /* Responsive Mobile Header for Sidebar (Keep existing logic) */
         @media (max-width: 1024px) {
-            .mobile-header { display: flex; }
-            .sidebar { transform: translateX(-100%); padding-top: 5rem; }
-            .main-content { margin-left: 0; padding: 6.5rem 1.25rem 2rem 1.25rem; }
-            
-            .nav-toggle:checked ~ .sidebar { transform: translateX(0); }
-            .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-            .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(2) { opacity: 0; }
-            .nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+            .mobile-header { display: flex; height: 70px; background: #000; z-index: 2500; }
+            .main-content { margin-left: 0; padding: 7rem 1.5rem 2rem 1.5rem; }
+            .sidebar { transform: translateX(-100%); width: 280px; }
+            .detail-header h1 { font-size: 1.8rem; }
         }
 
         .hidden { display: none !important; }
+
+        /* PRINT BUTTON */
         .print-fab {
-            position: fixed; bottom: 25px; right: 25px;
+            position: fixed; bottom: 30px; right: 30px;
             background: var(--color-gold); color: #000;
-            padding: 14px 28px; border-radius: 50px; font-weight: 800; font-size: 0.85rem;
-            border: none; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 2200;
+            padding: 16px 32px; border-radius: 12px; 
+            font-weight: 900; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 1px;
+            border: none; cursor: pointer; 
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3); 
+            z-index: 2200;
+            transition: 0.3s;
+        }
+        .print-fab:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4); }
+
+        @media print {
+            .sidebar, .print-fab, .search-container, .summary-strip, .back-link, .mobile-header { display: none !important; }
+            .main-content { margin-left: 0 !important; padding: 0 !important; }
+            .table-container { border: none; }
+            body { background: white; color: black; }
+            th { background: #eee; color: black; border-bottom: 2px solid black; }
+            td { color: black; border-bottom: 1px solid #ccc; }
+            .detail-header h1 { color: black; }
         }
     </style>
 </head>
@@ -144,7 +218,7 @@
             <header class="detail-header">
                 <div>
                     <span class="back-link" onclick="window.history.back()">← Back to Dashboard</span>
-                    <h1>{{dayTime}} {{service}}</h1>
+                    <h1>{{dayTime}} {% if service == "DE" %}Default Entries{% else %}{{service}}{% endif %}</h1>
                 </div>
                 <div style="text-align: right;">
                     <p id="current-date" style="color: var(--color-text-muted); font-size: 0.8rem; font-weight: 600;"></p>
@@ -152,27 +226,29 @@
             </header>
 
             <div class="search-container">
-                <input type="text" id="orderSearch" class="search-input" placeholder="Search name, room, or table...">
+                <input type="text" id="orderSearch" class="search-input" placeholder="Search customer name...">
             </div>
 
             <div class="summary-strip" id="filter-container">
                 <div class="protein-pill active" data-filter="all">ALL</div>
-                {% if cancelled_page %}
-                {% else %}
-                {% if dayTime == "Lunch" %}
-                    {% for key,label in all_menus_lunch %}
-                        <div class="protein-pill" data-filter="{{ key|lower }}">
-                            {{ label }}
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    {% for key, label in all_menus_dinner %}
-                        <div class="protein-pill" data-filter="{{ key|lower }}">
-                            {{ label }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                {% endif %}
+            {% if cancelled_page or service == "DE" %}
+            {# intentionally empty – nothing to render #}
+
+            {% elif dayTime == "Lunch" %}
+                {% for key, label in all_menus_lunch %}
+                    <div class="protein-pill" data-filter="{{ key|lower }}">
+                        {{ label }}
+                    </div>
+                {% endfor %}
+
+            {% else %}
+                {% for key, label in all_menus_dinner %}
+                    <div class="protein-pill" data-filter="{{ key|lower }}">
+                        {{ label }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
             </div>
 
 
@@ -189,10 +265,24 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        
+                        {% if service == "DE" %}
                         {% for r in  records %}
                             <tr data-protein="chicken">
-                                {% comment %} <td data-label="User" class="user-name"><strong><a href="{% url "" %}">{{r.customer.name}}</a></strong></td> {% endcomment %}
+                                <td data-label="User" class="user-name"><strong><a href="{% url "customer_profile" r.id %}">{{r.name}}</a></strong></td>
+                                {% if dayTime == "Lunch" %}
+                                <td data-label="Meal Choice">{% firstof r.default_meal_choice r.FLAGSHIP_MENU_LUNCH_default_choice  r.PREMIUM_MENU_LUNCH_default_choice %}</td>
+                                {% else %}
+                                <td data-label="Meal Choice">{% firstof r.default_meal_choice  r.FLAGSHIP_MENU_DINNER_default_choice r.PREMIUM_MENU_DINNER_default_choice %}</td>
+                                {% endif %}
+                                <td data-label="Subscription Choice">{{r.subscription_choice}}</td>
+                                <td data-label="Phone" class="Phone">{{r.phone}}</td>
+                                <td data-label="Address" class="Address">{{r.address}}</td>
+                                <td data-label="balance" class="balance">{{r.meal_balance}}</td>
+                            </tr>
+                        {% endfor %}
+                        {% else %}
+                        {% for r in  records %}
+                            <tr data-protein="chicken">
                                 <td data-label="User" class="user-name"><strong><a href="{% url "customer_profile" r.customer.id %}">{{r.customer.name}}</a></strong></td>
                                 <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td>
                                 <td data-label="Subscription Choice">{{r.customer.subscription_choice}}</td>
@@ -201,7 +291,7 @@
                                 <td data-label="balance" class="balance">{{r.customer.meal_balance}}</td>
                             </tr>
                         {% endfor %}
-                        
+                        {% endif %}
                     </tbody>
                 </table>
                 <div id="no-results" class="hidden" style="padding: 40px; text-align: center; color: var(--color-text-muted); font-size: 0.9rem;">
@@ -213,27 +303,67 @@
 
     <button class="print-fab" onclick="window.print()">Print List</button>
 <script>
+    const searchInput = document.getElementById('orderSearch');
     const rows = document.querySelectorAll('#table-body tr');
     const pills = document.querySelectorAll('.protein-pill');
     const noResults = document.getElementById('no-results');
+
+    function filterTable() {
+        const searchText = searchInput.value.toLowerCase().trim();
+        const activePill = document.querySelector('.protein-pill.active');
+        const pillFilter = activePill ? activePill.innerText.trim().toUpperCase() : 'ALL';
+        
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            // Get content from specific columns
+            const userName = row.querySelector('.user-name').innerText.toLowerCase();
+            const mealChoice = row.children[1].innerText.trim().toUpperCase(); 
+            const phone = row.querySelector('.Phone').innerText.toLowerCase();
+            const location = row.querySelector('.Address').innerText.toLowerCase();
+
+            // Check Search Logic (Matches Name, Phone, or Address)
+            const matchesSearch = userName.includes(searchText) || 
+                                  phone.includes(searchText) || 
+                                  location.includes(searchText);
+
+            // Check Pill Logic
+            const matchesPill = pillFilter === 'ALL' || mealChoice === pillFilter;
+
+            // Combine filters
+            if (matchesSearch && matchesPill) {
+                row.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                row.classList.add('hidden');
+            }
+        });
+
+        // Toggle "No Results" message
+        if (noResults) {
+            noResults.classList.toggle('hidden', visibleCount > 0);
+        }
+    }
+
+    // Automated Search Event Listener
+    searchInput.addEventListener('input', filterTable);
+
+    // Pill Filter Event Listeners
     pills.forEach(pill => {
         pill.addEventListener('click', () => {
-            // Active state
             pills.forEach(p => p.classList.remove('active'));
             pill.classList.add('active');
-            const filter = pill.innerText.trim(); // EXACT text
-            let visible = 0;
-            rows.forEach(row => {
-                const mealText = row.children[1].innerText.trim(); // EXACT text
-                const show =
-                    filter === 'ALL' ||
-                    mealText === filter;
-                row.classList.toggle('hidden', !show);
-                if (show) visible++;
-            });
-            noResults.classList.toggle('hidden', visible !== 0);
+            filterTable();
         });
     });
+
+    // Set Header Date
+    const dateDisplay = document.getElementById('current-date');
+    if (dateDisplay) {
+        dateDisplay.innerText = new Date().toLocaleDateString('en-GB', {
+            weekday: 'long', day: 'numeric', month: 'short', year: 'numeric'
+        });
+    }
 </script>
 
 </body>
