@@ -297,3 +297,14 @@ def customer_profile(request, uid):
     }
 
     return render(request, "Admin/customer_profile.html", context)
+
+
+def meal_record(request):
+    return render(redirect,"Admin/meal-record.html")
+
+
+
+def track_subscription(request):
+    return render(redirect,"Admin/track-subscription.html")
+
+

@@ -1,6 +1,10 @@
 from django.urls import path, include
 from .backend_views import gen_Dinner_record,gen_Lunch_record,add_admin_message,delete_admin_notice
+<<<<<<< Updated upstream
 from Admin.views import dashboard, service_details, subscribers,add_customer,customer_profile,customer_list
+=======
+from Admin.views import dashboard, service_details, subscribers,add_customer,customer_profile,meal_record,track_subscription
+>>>>>>> Stashed changes
 
 urlpatterns = [
     path('dashboard/',dashboard,name='ayushman_dashboard'),
@@ -12,6 +16,10 @@ urlpatterns = [
     path('subscribers/',subscribers,name='subscribers'),
     path('add-customer/',add_customer,name='add_customer'),
     path('customer_profile/<int:uid>/',customer_profile, name='customer_profile'),
+
+
+    path('meal-record/',meal_record, name='meal_record'),
+    path('track-subscription/',track_subscription, name='track_subscription'),
     
     
     path('gen_Lunch_record/',gen_Lunch_record,name='gen_Lunch_record'),

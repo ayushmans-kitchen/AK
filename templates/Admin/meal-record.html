@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Records | Ayushman's Kitchen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-gold: #d4af37;
+            --color-bg-deep: #050505;
+            --color-bg-card: #0f0f0f;
+            --color-bg-sidebar: #000000;
+            --color-text: #ffffff;
+            --color-text-muted: #888888;
+            --color-border: #1f1f1f;
+            --sb-width: 260px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--color-bg-deep); 
+            color: var(--color-text); 
+            line-height: 1.5; 
+            overflow-x: hidden; 
+        }
+
+        /* MOBILE HEADER & TOGGLE */
+        #nav-toggle { display: none; }
+
+        .mobile-header {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 65px;
+            background: #000; padding: 0 1.5rem; align-items: center; justify-content: space-between;
+            z-index: 2100; border-bottom: 1px solid var(--color-border);
+        }
+        .hamburger { width: 28px; height: 18px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
+        .hamburger span { height: 3px; width: 100%; background: var(--color-gold); border-radius: 10px; transition: var(--transition); }
+
+        /* MAIN CONTENT AREA */
+        .main-content { 
+            margin-left: var(--sb-width); 
+            padding: 2rem 2.5rem; 
+            transition: var(--transition); 
+            min-height: 100vh; 
+        }
+
+        /* PAGE HEADER */
+        .detail-header {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 2rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1.5rem;
+        }
+        .detail-header h1 { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: clamp(1.5rem, 4vw, 2.2rem); }
+        .back-link { color: var(--color-gold); text-decoration: none; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: block; margin-bottom: 0.5rem; }
+
+        /* FILTERS */
+        .filter-card { background: var(--color-bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--color-border); margin-bottom: 2rem; }
+        .filter-row { display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-end; }
+        .filter-group { display: flex; flex-direction: column; gap: 8px; }
+        .filter-label { font-size: 0.65rem; color: var(--color-gold); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+
+        .search-input, .form-input {
+            background: #111; border: 1px solid var(--color-border); color: white;
+            padding: 12px 15px; border-radius: 8px; font-family: inherit; outline: none; transition: 0.3s;
+        }
+        .search-input:focus, .form-input:focus { border-color: var(--color-gold); }
+
+        /* MEAL PILLS */
+        .summary-strip { display: flex; gap: 10px; }
+        .protein-pill {
+            background: #111; border: 1px solid var(--color-border); padding: 10px 20px; 
+            border-radius: 50px; cursor: pointer; font-size: 0.7rem; color: var(--color-text-muted); 
+            font-weight: 600; transition: var(--transition); display: flex; align-items: center;
+        }
+        .protein-pill input[type="radio"] { margin-right: 8px; accent-color: var(--color-gold); }
+        .protein-pill:has(input:checked) { 
+            border-color: var(--color-gold); 
+            background: rgba(212, 175, 55, 0.1); 
+            color: var(--color-gold); 
+        }
+
+        .btn-filter {
+            background: var(--color-gold); color: #000; border: none;
+            padding: 12px 30px; border-radius: 8px; font-weight: 800;
+            text-transform: uppercase; font-size: 0.75rem; cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* TABLE */
+        .table-container { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; background: #080808; padding: 18px 15px; color: var(--color-gold); font-size: 0.7rem; text-transform: uppercase; border-bottom: 2px solid var(--color-border); }
+        td { padding: 18px 15px; border-bottom: 1px solid var(--color-border); font-size: 0.85rem; color: var(--color-text); }
+
+        /* HAMBURGER TOGGLE LOGIC */
+        @media (max-width: 1024px) {
+            .mobile-header { display: flex; }
+            .sidebar { transform: translateX(-100%); z-index: 2000; padding-top: 5rem; }
+            .main-content { margin-left: 0; padding: 6.5rem 1.25rem 2rem 1.25rem; }
+            
+            /* Logic to show sidebar and animate hamburger when checked */
+            #nav-toggle:checked ~ .sidebar { transform: translateX(0); }
+            #nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+            #nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(2) { opacity: 0; }
+            #nav-toggle:checked ~ .mobile-header .hamburger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+        }
+
+        @media (max-width: 768px) {
+            .filter-row { flex-direction: column; align-items: stretch; }
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { border-bottom: 2px solid var(--color-border); padding: 15px 5px; }
+            td { border: none; position: relative; padding-left: 50% !important; text-align: right; }
+            td:before { 
+                content: attr(data-label); position: absolute; left: 15px; width: 45%; 
+                text-align: left; font-weight: 700; color: var(--color-gold); font-size: 0.7rem; text-transform: uppercase;
+            }
+        }
+
+        .hidden { display: none !important; }
+        .print-fab { position: fixed; bottom: 25px; right: 25px; background: var(--color-gold); color: #000; padding: 14px 28px; border-radius: 50px; font-weight: 800; border: none; cursor: pointer; z-index: 2200; }
+    </style>
+</head>
+<body>
+
+    <input type="checkbox" id="nav-toggle">
+
+    <header class="mobile-header">
+        <div class="logo" style="font-family: 'Playfair Display'; color: var(--color-gold); font-weight: 900; font-size: 1.1rem;">AK ADMIN</div>
+        <label for="nav-toggle" class="hamburger">
+            <span></span><span></span><span></span>
+        </label>
+    </header>
+
+    {% include "Admin/sidebar.html" %}
+
+    <div class="admin-wrapper">
+        <main class="main-content">
+            <header class="detail-header">
+                <div>
+                   
+                    <h1>Daily Records</h1>
+                </div>
+                <div style="text-align: right;">
+                    <p id="current-date" style="color: var(--color-text-muted); font-size: 0.8rem; font-weight: 600;"></p>
+                </div>
+            </header>
+
+            <section class="filter-card">
+                <form method="GET">
+                    <div class="filter-row">
+                        <div class="filter-group" style="flex: 1.5; min-width: 200px;">
+                            <label class="filter-label">Search</label>
+                            <input type="text" id="orderSearch" class="search-input" placeholder="Name or choice...">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Date</label>
+                            <input type="date" name="target_date" class="form-input" value="{{ request.GET.target_date }}">
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">Meal Time</label>
+                            <div class="summary-strip">
+                                <label class="protein-pill">
+                                    <input type="radio" name="meal_time" value="lunch" {% if request.GET.meal_time == 'lunch' or not request.GET.meal_time %}checked{% endif %}> 
+                                    LUNCH
+                                </label>
+                                <label class="protein-pill">
+                                    <input type="radio" name="meal_time" value="dinner" {% if request.GET.meal_time == 'dinner' %}checked{% endif %}> 
+                                    DINNER
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-filter">Apply</button>
+                    </div>
+                </form>
+            </section>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Meals Used</th>
+                            <th>Service</th>
+                            <th>Choice</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        {% for r in records %}
+                        <tr class="record-row">
+                            <td data-label="Customer"><strong>{{ r.customer.name }}</strong></td>
+                            <td data-label="Meals Used">{{ r.meal_num_used }}</td>
+                            <td data-label="Service">{{ r.service_choice }}</td>
+                            <td data-label="Choice">{{ r.meal_choice }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--color-text-muted);">No records found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div id="no-results" class="hidden" style="padding: 40px; text-align: center; color: var(--color-text-muted);">No results found.</div>
+            </div>
+        </main>
+    </div>
+
+    <button class="print-fab" onclick="window.print()">Print</button>
+
+    <script>
+        document.getElementById('orderSearch').addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.record-row');
+            let visible = 0;
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(filter)) { row.classList.remove('hidden'); visible++; } 
+                else { row.classList.add('hidden'); }
+            });
+            document.getElementById('no-results').classList.toggle('hidden', visible > 0);
+        });
+
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-GB', {
+            weekday: 'long', day: 'numeric', month: 'short', year: 'numeric'
+        });
+    </script>
+</body>
+</html>
