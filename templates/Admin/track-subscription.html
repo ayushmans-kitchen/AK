@@ -203,7 +203,7 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        {% for sub in subscriptions %}
+                        {% for sub in result %}
                         <tr class="record-row">
                             <td data-label="Customer"><strong>{{ sub.customer.name }}</strong></td>
                             <td data-label="Plan Choice" class="{% if 'Premium' in sub.subscription_choice %}plan-premium{% elif 'Flagship' in sub.subscription_choice %}plan-flagship{% endif %}">
@@ -213,9 +213,8 @@
                             <td data-label="Start Date">{{ sub.start_date|date:"d M Y" }}</td>
                             <td data-label="End Date">{{ sub.end_date|date:"d M Y" }}</td>
                             <td data-label="Actions" style="text-align: center;">
-                                <form action="{% url 'delete_subscription' sub.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this subscription record?');">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn-delete" title="Delete Subscription">🗑️</button>
+                                <form action="#" method="POST">
+                                    <button type="submit" class="btn-delete" title="View Details">Details</button>
                                 </form>
                             </td>
                         </tr>

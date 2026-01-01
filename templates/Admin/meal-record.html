@@ -127,14 +127,14 @@
 </head>
 <body>
 
-    <input type="checkbox" id="nav-toggle">
+    {% comment %} <input type="checkbox" id="nav-toggle"> {% endcomment %}
 
-    <header class="mobile-header">
+    {% comment %} <header class="mobile-header">
         <div class="logo" style="font-family: 'Playfair Display'; color: var(--color-gold); font-weight: 900; font-size: 1.1rem;">AK ADMIN</div>
         <label for="nav-toggle" class="hamburger">
             <span></span><span></span><span></span>
         </label>
-    </header>
+    </header> {% endcomment %}
 
     {% include "Admin/sidebar.html" %}
 
@@ -151,7 +151,8 @@
             </header>
 
             <section class="filter-card">
-                <form method="GET">
+                <form method="POST" action="{% url "meal_record" %}">
+                    {% csrf_token %}
                     <div class="filter-row">
                         <div class="filter-group" style="flex: 1.5; min-width: 200px;">
                             <label class="filter-label">Search</label>
@@ -160,18 +161,21 @@
                         
                         <div class="filter-group">
                             <label class="filter-label">Date</label>
-                            <input type="date" name="target_date" class="form-input" value="{{ request.GET.target_date }}">
+                            <input type="date" name="target_date" class="form-input" value="{{ selected_date }}">
                         </div>
 
                         <div class="filter-group">
                             <label class="filter-label">Meal Time</label>
                             <div class="summary-strip">
                                 <label class="protein-pill">
-                                    <input type="radio" name="meal_time" value="lunch" {% if request.GET.meal_time == 'lunch' or not request.GET.meal_time %}checked{% endif %}> 
+                                    <input type="radio" name="meal_time" value="Lunch"
+                                        {% if selected_meal == "Lunch" %}checked{% endif %}>
                                     LUNCH
                                 </label>
+
                                 <label class="protein-pill">
-                                    <input type="radio" name="meal_time" value="dinner" {% if request.GET.meal_time == 'dinner' %}checked{% endif %}> 
+                                    <input type="radio" name="meal_time" value="Dinner"
+                                        {% if selected_meal == "Dinner" %}checked{% endif %}>
                                     DINNER
                                 </label>
                             </div>
@@ -193,6 +197,7 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
+                        {% if records %}
                         {% for r in records %}
                         <tr class="record-row">
                             <td data-label="Customer"><strong>{{ r.customer.name }}</strong></td>
@@ -203,6 +208,7 @@
                         {% empty %}
                         <tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--color-text-muted);">No records found.</td></tr>
                         {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
                 <div id="no-results" class="hidden" style="padding: 40px; text-align: center; color: var(--color-text-muted);">No results found.</div>

@@ -18,7 +18,7 @@ class AdminNotice(models.Model):
         return f"{self.message} - {self.date}"
     
 
-class MealHistory(models.Model):
+class SubscriptionHistory(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_history")
     subscription_choice = models.CharField(max_length=20, choices=SUBSCRIPTION_TYPE, default="NORMAL60")
     subscription_phase=models.IntegerField()

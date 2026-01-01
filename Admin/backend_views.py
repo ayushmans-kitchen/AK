@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from Customers.models import Customer, LunchRecord, DinnerRecord
 
-from .models import MealHistory,AdminNotice
+from .models import SubscriptionHistory,AdminNotice
 from django.shortcuts import render,redirect
 
 today = timezone.localdate()
@@ -170,15 +170,13 @@ def create_customer_history(customer):
             else dr.meal_choice or dr.FLAGSHIP_choice or dr.PREMIUM_choice or "UNKNOWN"
         )
 
-    MealHistory.objects.update_or_create(
+    SubscriptionHistory.objects.create(
         customer=customer,
-        defaults={
-            "subscription_choice": customer.subscription_choice,
-            "subscription_phase": customer.subscription_phase,
-            "start_date": customer.date_joined,
-            "end_date": customer.profile_updated_at,
-            "meal_history": history,
-        }
+        subscription_choice= customer.subscription_choice,
+        subscription_phase= customer.subscription_phase,
+        start_date= customer.date_joined,
+        end_date= customer.profile_updated_at,
+        meal_history= history,
     )
 
     return "created"

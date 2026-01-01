@@ -7,12 +7,12 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from Customers.models import Customer, LunchRecord, DinnerRecord, SERVICE_TYPE,SUBSCRIPTION_TYPE
-from .models import AdminNotice
+from .models import AdminNotice,SubscriptionHistory
 from django.shortcuts import render,redirect
 from Customers.models import MEAL_MENU,FLAGSHIP_MENU_LUNCH,FLAGSHIP_MENU_DINNER,PREMIUM_MENU_LUNCH,PREMIUM_MENU_DINNER
 from .backend_views import gen_Lunch_record,gen_Dinner_record,create_customer_history
 today = timezone.localdate()
-
+from datetime import date
 
 from django.contrib.auth import update_session_auth_hash
 
@@ -300,11 +300,30 @@ def customer_profile(request, uid):
 
 
 def meal_record(request):
-    return render(redirect,"Admin/meal-record.html")
+    records = None
+    meal_time = "Lunch"
+    target_date = date.today()
 
+    if request.method == "POST":
+        meal_time = request.POST.get("meal_time", "Lunch")
+        target_date = request.POST.get("target_date") or date.today()
+
+        if meal_time == "Lunch":
+            records = LunchRecord.objects.filter(for_date=target_date)
+        elif meal_time == "Dinner":
+            records = DinnerRecord.objects.filter(for_date=target_date)
+
+    context = {
+        "records": records,
+        "selected_meal": meal_time,
+        "selected_date": target_date,
+    }
+    return render(request, "Admin/meal-record.html", context)
 
 
 def track_subscription(request):
-    return render(redirect,"Admin/track-subscription.html")
+    result=SubscriptionHistory.objects.all()
+    context={'result':result}
+    return render(redirect,"Admin/track-subscription.html",context)
 
 
