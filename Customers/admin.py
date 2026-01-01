@@ -66,6 +66,7 @@ class CustomerAdmin(UserAdmin):
                 "default_lunch_service_choice",
                 "default_dinner_service_choice",
                 "default_meal_choice",
+                "default_sunday_choice",
             )
         }),
 

@@ -192,6 +192,10 @@
                 </div>
                 {% else %}
                 <div class="input-group">
+                    <label>Meals Left</label>
+                    <input type="number" value="{{user.meal_balance}}" style="color: var(--color-danger); font-weight: bold;" name="meal_balance">
+                </div>
+                <div class="input-group">
                     <label>Default Lunch</label>
                     <select name="{{lunch_v}}">
                         {% for key,value in lmenu %}
@@ -208,10 +212,6 @@
                     </select>
                 </div>
                 {% endif %}
-                <div class="input-group">
-                    <label>Meals Left</label>
-                    <input type="number" value="{{user.meal_balance}}" style="color: var(--color-danger); font-weight: bold;" name="meal_balance">
-                </div>
                 
                 <div class="input-group">
                     <label>Default Lunch Service</label>
@@ -229,6 +229,13 @@
                         <option {% if user.default_dinner_service_choice == "PickUp" %}selected{% endif %} >PickUp</option>
                     </select>
                 </div>
+            </div>
+            <div class="input-group">
+                <label>Default Sunday</label>
+                <select name="default_sunday_choice">    
+                    <option {% if user.default_sunday_choice == "VEG" %}selected{% endif %}>VEG</option>
+                    <option {% if user.default_sunday_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
+                </select>
             </div>
             <div class="field-group">
                 <label class="field-label">Account States</label>

@@ -258,6 +258,7 @@
                         <tr>
                             <th>User</th>
                             <th>Meal Choice</th>
+                            <th>Service Choice</th>
                             <th>Subscription Type</th>
                             <th>Phone No.</th>
                             <th>Location</th>
@@ -270,10 +271,11 @@
                             <tr data-protein="chicken">
                                 <td data-label="User" class="user-name"><strong><a href="{% url "customer_profile" r.id %}">{{r.name}}</a></strong></td>
                                 {% if dayTime == "Lunch" %}
-                                <td data-label="Meal Choice">{% firstof r.default_meal_choice r.FLAGSHIP_MENU_LUNCH_default_choice  r.PREMIUM_MENU_LUNCH_default_choice %}</td>
+                                <td data-label="Meal Choice">{% firstof r.default_meal_choice r.default_sunday_choice r.FLAGSHIP_MENU_LUNCH_default_choice  r.PREMIUM_MENU_LUNCH_default_choice %}</td>
                                 {% else %}
                                 <td data-label="Meal Choice">{% firstof r.default_meal_choice  r.FLAGSHIP_MENU_DINNER_default_choice r.PREMIUM_MENU_DINNER_default_choice %}</td>
                                 {% endif %}
+                                <td data-label="service Choice">{{r.service_choice}}</td>
                                 <td data-label="Subscription Choice">{{r.subscription_choice}}</td>
                                 <td data-label="Phone" class="Phone">{{r.phone}}</td>
                                 <td data-label="Address" class="Address">{{r.address}}</td>
@@ -284,7 +286,8 @@
                         {% for r in  records %}
                             <tr data-protein="chicken">
                                 <td data-label="User" class="user-name"><strong><a href="{% url "customer_profile" r.customer.id %}">{{r.customer.name}}</a></strong></td>
-                                <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td>
+                                <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice r.sunday_choice%}</td>
+                                <td data-label="service Choice">{{r.service_choice}}</td>
                                 <td data-label="Subscription Choice">{{r.customer.subscription_choice}}</td>
                                 <td data-label="Phone" class="Phone">{{r.customer.phone}}</td>
                                 <td data-label="Address" class="Address">{{r.customer.address}}</td>

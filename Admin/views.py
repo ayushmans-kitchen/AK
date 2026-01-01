@@ -13,7 +13,9 @@ from Customers.models import MEAL_MENU,FLAGSHIP_MENU_LUNCH,FLAGSHIP_MENU_DINNER,
 from .backend_views import gen_Lunch_record,gen_Dinner_record,create_customer_history
 today = timezone.localdate()
 from datetime import date
-
+from datetime import timedelta,time
+from django.utils import timezone
+now = timezone.localtime()
 from django.contrib.auth import update_session_auth_hash
 
 
@@ -25,9 +27,10 @@ all_menus_dinner = list(dict.fromkeys(MEAL_MENU + FLAGSHIP_MENU_DINNER + PREMIUM
 def dashboard(request):
     customers = Customer.objects.filter(is_staff=False,is_superuser=False)
     lunch_record = LunchRecord.objects.filter(for_date=today)
+    sunday_lunch_record = LunchRecord.objects.filter(for_date=today + timedelta(days=1),)
     dinner_record = DinnerRecord.objects.filter(for_date=today)
     admin_messgaes = AdminNotice.objects.all()
-
+    tsunday= today.isoweekday() == 5
 
     menu_lunch_count = {}
     menu_dinner_count = {}
@@ -54,21 +57,30 @@ def dashboard(request):
         'total_customers':customers.count(),
         'total_inactive_customers':customers.filter(user_status_active=False,paused_subscription=False).count(),
         'total_plan_end_customers':customers.filter(paused_subscription=True,is_staff=False,is_superuser=False).count(),
+        'tsunday':tsunday,
 
         'total_lunch':lunch_record.exclude(service_choice="Cancel").count(),
         'lunch_dinein':lunch_record.filter(service_choice="DineIn").count(),
         'lunch_delivery':lunch_record.filter(service_choice="Delivery").count(),
         'lunch_pickup':lunch_record.filter(service_choice="PickUp").count(),
         'lunch_cancelled':lunch_record.filter(service_choice="Cancel").count(),
-        'lunch_inactive':customers.filter(lunch_status_active=True,user_status_active=False,paused_subscription=False).count(),
+        # 'lunch_inactive':customers.filter(lunch_status_active=True,user_status_active=False,paused_subscription=False).count(),
         'lunch_default_need':customers.filter(user_status_active=True,lunch_status_active=True).exclude(lunch_records__for_date=today).count(),
+        
+        'sunday_total_lunch':sunday_lunch_record.exclude(service_choice="Cancel").count(),
+        'sunday_lunch_dinein':sunday_lunch_record.filter(service_choice="DineIn").count(),
+        'sunday_lunch_delivery':sunday_lunch_record.filter(service_choice="Delivery").count(),
+        'sunday_lunch_pickup':sunday_lunch_record.filter(service_choice="PickUp").count(),
+        'sunday_lunch_cancelled':sunday_lunch_record.filter(service_choice="Cancel").count(),
+        # 'sunday_lunch_inactive':customers.filter(lunch_status_active=True,user_status_active=False,paused_subscription=False).count(),
+        'sunday_lunch_default_need':customers.filter(user_status_active=True,lunch_status_active=True).exclude(lunch_records__for_date=today + timedelta(days=1),).count(),
 
         'total_dinner':dinner_record.exclude(service_choice="Cancel").count(),
         'dinner_dinein':dinner_record.filter(service_choice="DineIn").count(),
         'dinner_delivery':dinner_record.filter(service_choice="Delivery").count(),
         'dinner_pickup':dinner_record.filter(service_choice="PickUp").count(),
         'dinner_cancelled':dinner_record.filter(service_choice="Cancel").count(),
-        'dinner_inactive':customers.filter(dinner_status_active=True,user_status_active=False,paused_subscription=False).count(),
+        # 'dinner_inactive':customers.filter(dinner_status_active=True,user_status_active=False,paused_subscription=False).count(),
         'dinner_default_need':customers.filter(user_status_active=True,dinner_status_active=True).exclude(dinner_records__for_date=today).count(),
 
         "menu_lunch_count": menu_lunch_count,
@@ -90,6 +102,13 @@ def service_details(request, dayTime, service):
             result = Customer.objects.filter(user_status_active=True,lunch_status_active=True,is_staff=False).exclude(lunch_records__for_date=today)
         else:
             result = LunchRecord.objects.filter(for_date = today,service_choice=service)
+    if dayTime == "Sunday Lunch":
+        if service=="Total":
+            result = LunchRecord.objects.filter(for_date=today + timedelta(days=1),).exclude(service_choice="Cancel")
+        elif service=="DE":
+            result = Customer.objects.filter(user_status_active=True,lunch_status_active=True,is_staff=False).exclude(lunch_records__for_date=today + timedelta(days=1))
+        else:
+            result = LunchRecord.objects.filter(for_date=today + timedelta(days=1),service_choice=service)
 
     if dayTime == "Dinner":
         if service=="Total":
@@ -224,6 +243,7 @@ def customer_profile(request, uid):
         user.default_dinner_service_choice = request.POST.get(
             "default_dinner_service_choice", user.default_dinner_service_choice
         )
+        user.default_sunday_choice = request.POST.get("default_sunday_choice")
         user.default_meal_choice = request.POST.get("default_meal_choice")
         user.FLAGSHIP_MENU_LUNCH_default_choice = request.POST.get("FLAGSHIP_MENU_LUNCH_default_choice")
         user.FLAGSHIP_MENU_DINNER_default_choice = request.POST.get("FLAGSHIP_MENU_DINNER_default_choice")

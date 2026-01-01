@@ -10,7 +10,11 @@ from Customers.models import Customer, LunchRecord, DinnerRecord
 
 from .models import SubscriptionHistory,AdminNotice
 from django.shortcuts import render,redirect
+from datetime import timedelta,time
+from django.utils import timezone
 
+today=timezone.localdate()
+now = timezone.localtime()
 today = timezone.localdate()
 
 logger = logging.getLogger(__name__)
@@ -18,116 +22,194 @@ CONSUMING_SERVICES = ("DineIn", "PickUp", "Delivery")
 
 
 
-@staff_member_required(login_url='/login/')
-def gen_Lunch_record(request=None):
+@staff_member_required(login_url="/login/")
+def gen_Lunch_record(request):
+    today = timezone.localdate()
+
     customers_no_record = Customer.objects.filter(
         user_status_active=True,
-        lunch_status_active=True
+        lunch_status_active=True,
+        meal_balance__gt=0
     ).exclude(lunch_records__for_date=today)
 
-    logger.debug("gen_Lunch_record: customers without record count=%d", customers_no_record.count())
+    lunch_records = [
+        LunchRecord(
+            customer=c,
+            for_date=today,
+            meal_num_used=c.meal_balance,
+            service_choice=c.default_lunch_service_choice,
+            sunday_choice=None,
+            meal_choice=(
+                c.default_meal_choice
+                if c.subscription_choice in ["NORMAL30", "NORMAL60"]
+                else None
+            ),
 
-    lunch_records_to_create = []
-    for c in customers_no_record:
-        logger.debug("creating lunch record for: %s", c.email)
-        lunch_records_to_create.append(
-            LunchRecord(
-                customer=c,
-                for_date=today,
-                meal_num_used=c.meal_balance,
-                service_choice=c.default_lunch_service_choice,
-                meal_choice=c.default_meal_choice,
-                FLAGSHIP_choice=c.FLAGSHIP_MENU_LUNCH_default_choice,
-                PREMIUM_choice=c.PREMIUM_MENU_LUNCH_default_choice
-            )
+            FLAGSHIP_choice=(
+                c.FLAGSHIP_MENU_LUNCH_default_choice
+                if c.subscription_choice in ["FLAGSHIP30", "FLAGSHIP60"]
+                else None
+            ),
+
+            PREMIUM_choice=(
+                c.PREMIUM_MENU_LUNCH_default_choice
+                if c.subscription_choice in ["PREMIUM30", "PREMIUM60"]
+                else None
+            ),
         )
-    print(lunch_records_to_create)    
-    created_count = 0
+        for c in customers_no_record
+    ]
 
     try:
         with transaction.atomic():
-            if lunch_records_to_create:
-                LunchRecord.objects.bulk_create(lunch_records_to_create, ignore_conflicts=True)
-                created_count = len(lunch_records_to_create)
+            LunchRecord.objects.bulk_create(lunch_records, ignore_conflicts=True)
 
-            customers_to_decrement = Customer.objects.filter(
-                lunch_records__for_date=today,
-                lunch_records__service_choice__in=CONSUMING_SERVICES,
-                lunch_records__decrement_done=False
-            ).distinct()
-
-            customers_to_decrement.update(meal_balance=Greatest(F("meal_balance") - 1, 0))
-
-            LunchRecord.objects.filter(
+            consuming_records = LunchRecord.objects.filter(
                 for_date=today,
-                service_choice__in=("DineIn", "PickUp", "Delivery"),
+                service_choice__in=CONSUMING_SERVICES,
                 decrement_done=False
-            ).update(decrement_done=True)
+            )
 
-            Customer.objects.filter(meal_balance__lte=0).update(user_status_active=False,paused_subscription=True)
+            customer_ids = consuming_records.values_list("customer_id", flat=True)
+
+            Customer.objects.filter(id__in=customer_ids).update(
+                meal_balance=Greatest(F("meal_balance") - 1, 0)
+            )
+
+            consuming_records.update(decrement_done=True)
+
+            Customer.objects.filter(meal_balance__lte=0).update(
+                user_status_active=False,
+                paused_subscription=True
+            )
 
     except Exception as e:
-        logger.exception("Unexpected error in gen_Lunch_record: %s", e)
+        logger.exception("Lunch generation failed: %s", e)
         return JsonResponse({"error": str(e)}, status=500)
 
-    return redirect('ayushman_dashboard')
+    return redirect("ayushman_dashboard")
 
-
-@staff_member_required(login_url='/login/')
-def gen_Dinner_record(request=None):
-
+@staff_member_required(login_url="/login/")
+def gen_sunday_record(request):
     today = timezone.localdate()
+    sunday = today + timedelta(days=1)
+
     customers_no_record = Customer.objects.filter(
         user_status_active=True,
-        dinner_status_active=True
-    ).exclude(dinner_records__for_date=today)
+        lunch_status_active=True,
+        meal_balance__gt=0
+    ).exclude(lunch_records__for_date=sunday)
 
-    logger.debug("gen_Dinner_record: customers without record count=%d", customers_no_record.count())
+    lunch_records = [
+        LunchRecord(
+            customer=c,
+            for_date=sunday,
+            meal_num_used=c.meal_balance,
+            service_choice=c.default_lunch_service_choice,
 
-    dinner_records_to_create = []
-    for c in customers_no_record:
-        logger.debug("creating dinner record for: %s", c.email)
-        dinner_records_to_create.append(
-            DinnerRecord(
-                customer=c,
-                for_date=today,
-                meal_num_used=c.meal_balance,
-                service_choice=c.default_dinner_service_choice,
-                meal_choice=c.default_meal_choice,
-                FLAGSHIP_choice=c.FLAGSHIP_MENU_DINNER_default_choice,
-                PREMIUM_choice=c.PREMIUM_MENU_DINNER_default_choice
-            )
+            sunday_choice=c.default_sunday_choice,
+            meal_choice=None,
+            FLAGSHIP_choice=None,
+            PREMIUM_choice=None,
         )
-
-    created_count = 0
+        for c in customers_no_record
+    ]
 
     try:
         with transaction.atomic():
-            if dinner_records_to_create:
-                DinnerRecord.objects.bulk_create(dinner_records_to_create, ignore_conflicts=True)
-                created_count = len(dinner_records_to_create)
+            LunchRecord.objects.bulk_create(lunch_records, ignore_conflicts=True)
 
-            customers_to_decrement = Customer.objects.filter(
-                dinner_records__for_date=today,
-                dinner_records__service_choice__in=CONSUMING_SERVICES,
-                dinner_records__decrement_done=False
-            ).distinct()
-
-            customers_to_decrement.update(meal_balance=Greatest(F("meal_balance") - 1, 0))
-
-            DinnerRecord.objects.filter(
-                for_date=today,
-                service_choice__in=("DineIn", "PickUp", "Delivery"),
+            consuming_records = LunchRecord.objects.filter(
+                for_date=sunday,
+                service_choice__in=CONSUMING_SERVICES,
                 decrement_done=False
-            ).update(decrement_done=True)
+            )
 
-            Customer.objects.filter(meal_balance__lte=0).update(user_status_active=False,paused_subscription=True)
+            customer_ids = consuming_records.values_list("customer_id", flat=True)
+
+            Customer.objects.filter(id__in=customer_ids).update(
+                meal_balance=Greatest(F("meal_balance") - 1, 0)
+            )
+
+            consuming_records.update(decrement_done=True)
+
+            Customer.objects.filter(meal_balance__lte=0).update(
+                user_status_active=False,
+                paused_subscription=True
+            )
 
     except Exception as e:
-        logger.exception("Unexpected error in gen_Dinner_record: %s", e)
+        logger.exception("Sunday lunch generation failed: %s", e)
         return JsonResponse({"error": str(e)}, status=500)
 
-    return redirect('ayushman_dashboard')
+    return redirect("ayushman_dashboard")
+@staff_member_required(login_url="/login/")
+def gen_Dinner_record(request):
+    today = timezone.localdate()
+
+    customers_no_record = Customer.objects.filter(
+        user_status_active=True,
+        dinner_status_active=True,
+        meal_balance__gt=0
+    ).exclude(dinner_records__for_date=today)
+
+    dinner_records = [
+        DinnerRecord(
+            customer=c,
+            for_date=today,
+            meal_num_used=c.meal_balance,
+            service_choice=c.default_dinner_service_choice,
+            sunday_choice=None,
+            meal_choice=(
+                c.default_meal_choice
+                if c.subscription_choice in ["NORMAL30", "NORMAL60"]
+                else None
+            ),
+
+            FLAGSHIP_choice=(
+                c.FLAGSHIP_MENU_DINNER_default_choice
+                if c.subscription_choice in ["FLAGSHIP30", "FLAGSHIP60"]
+                else None
+            ),
+
+            PREMIUM_choice=(
+                c.PREMIUM_MENU_DINNER_default_choice
+                if c.subscription_choice in ["PREMIUM30", "PREMIUM60"]
+                else None
+            ),
+        )
+        for c in customers_no_record
+    ]
+
+    try:
+        with transaction.atomic():
+            DinnerRecord.objects.bulk_create(dinner_records, ignore_conflicts=True)
+
+            consuming_records = DinnerRecord.objects.filter(
+                for_date=today,
+                service_choice__in=CONSUMING_SERVICES,
+                decrement_done=False
+            )
+
+            customer_ids = consuming_records.values_list("customer_id", flat=True)
+
+            Customer.objects.filter(id__in=customer_ids).update(
+                meal_balance=Greatest(F("meal_balance") - 1, 0)
+            )
+
+            consuming_records.update(decrement_done=True)
+
+            Customer.objects.filter(meal_balance__lte=0).update(
+                user_status_active=False,
+                paused_subscription=True
+            )
+
+    except Exception as e:
+        logger.exception("Dinner generation failed: %s", e)
+        return JsonResponse({"error": str(e)}, status=500)
+
+    return redirect("ayushman_dashboard")
+
 
 
 @staff_member_required(login_url='/login/')
@@ -158,7 +240,7 @@ def create_customer_history(customer):
 
         history[date_key]["lunch"] = (
             "CANCELLED" if lr.service_choice == "Cancel"
-            else lr.meal_choice or lr.FLAGSHIP_choice or lr.PREMIUM_choice or "UNKNOWN"
+            else lr.meal_choice or lr.FLAGSHIP_choice or lr.PREMIUM_choice or lr.sunday_choice or "UNKNOWN"
         )
 
     for dr in dinners:

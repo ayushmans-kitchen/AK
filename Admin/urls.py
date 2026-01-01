@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .backend_views import gen_Dinner_record,gen_Lunch_record,add_admin_message,delete_admin_notice
+from .backend_views import gen_Dinner_record,gen_Lunch_record,add_admin_message,delete_admin_notice,gen_sunday_record
 from Admin.views import dashboard, service_details, subscribers,add_customer,customer_profile,customer_list,meal_record,track_subscription
 
 urlpatterns = [
@@ -19,6 +19,7 @@ urlpatterns = [
     
     
     path('gen_Lunch_record/',gen_Lunch_record,name='gen_Lunch_record'),
+    path('gen_sunday_record/',gen_sunday_record,name='gen_sunday_record'),
     path('gen_Dinner_record/',gen_Dinner_record,name='gen_Dinner_record'),
     path('admin_notice/',add_admin_message,name='admin_notice'),
     path('admin_notice_delete/<int:mid>/', delete_admin_notice, name='admin_notice_delete'),

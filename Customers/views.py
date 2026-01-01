@@ -34,7 +34,7 @@ def user_dashboard(request):
     admin_notice=AdminNotice.objects.all()
     
     # tsunday= today.isoweekday() == 6  # for sunday use 6 
-    tsunday= today.isoweekday() == 5  # use present date for testing puropose sunday to satur 0-7
+    tsunday= today.isoweekday() == 4  # use present date for testing puropose sunday to satur 0-7
     slunch_record = LunchRecord.objects.filter(customer=user,for_date= today  + timedelta(days=1)).first()
 
     # is_out_of_time_lunch = now.time() >= time(11, 0)
@@ -64,7 +64,6 @@ def user_profile(request):
     if request.method == "POST":
         default_lunch_service = request.POST.get("default_lunch_service")
         default_dinner_service = request.POST.get("default_dinner_service")
-
         status_availability=request.POST.get("status_availability")
         
 
@@ -72,6 +71,7 @@ def user_profile(request):
             user.default_lunch_service_choice=default_lunch_service
             user.default_dinner_service_choice=default_dinner_service
             
+            user.default_sunday_choice=request.POST.get("default_sunday_choice")
             user.default_meal_choice=request.POST.get("default_meal_choice")
             
             user.user_status_active=True if status_availability == "True" else False
@@ -81,7 +81,7 @@ def user_profile(request):
             user.default_lunch_service_choice=default_lunch_service
             user.default_dinner_service_choice=default_dinner_service
 
-            user.default_meal_choice=request.POST.get("default_meal_choice")
+            user.default_sunday_choice=request.POST.get("default_sunday_choice")
             user.FLAGSHIP_MENU_LUNCH_default_choice=request.POST.get("default_flagship_lunch")
             user.FLAGSHIP_MENU_DINNER_default_choice=request.POST.get("default_flagship_dinner")
             
@@ -93,7 +93,7 @@ def user_profile(request):
             user.default_lunch_service_choice=default_lunch_service
             user.default_dinner_service_choice=default_dinner_service
 
-            user.default_meal_choice=request.POST.get("default_meal_choice")
+            user.default_sunday_choice=request.POST.get("default_sunday_choice")
             user.PREMIUM_MENU_LUNCH_default_choice=request.POST.get("default_premium_lunch")
             user.PREMIUM_MENU_DINNER_default_choice=request.POST.get("default_premium_dinner")
             
@@ -160,21 +160,18 @@ def user_sunday_lunch_form(request):
         return redirect("user_dashboard")
 
     customer = request.user
-    service_choice = request.POST.get("lunch_service")
-    FLAGSHIP_choice = None
-    PREMIUM_choice = None
-
-    
-    meal_choice = request.POST.get("meal_choice")
+    service_choice = request.POST.get("lunch_service")   
+    sunday_choice = request.POST.get("sunday_choice")
 
 
     with transaction.atomic():
         lr = LunchRecord.objects.create(
             customer=customer,
             for_date=today + timedelta(days=1),
-            meal_choice=meal_choice,
-            FLAGSHIP_choice=FLAGSHIP_choice,
-            PREMIUM_choice=PREMIUM_choice,
+            sunday_choice=sunday_choice,
+            meal_choice=None,
+            FLAGSHIP_choice=None,
+            PREMIUM_choice=None,
             meal_num_used=customer.meal_balance,
             service_choice=service_choice,
         )

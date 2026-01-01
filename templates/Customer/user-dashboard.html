@@ -99,7 +99,7 @@
                                             <p class="meal-course">Meal Confirmed! *Thank You* </p>
                                         </div>
                                         <div class="meal-status-message">                    
-                                            <p>Food Chosen: *{% firstof lunch_record.meal_choice lunch_record.FLAGSHIP_choice lunch_record.PREMIUM_choice %}*</p>                                                                      
+                                            <p>Food Chosen: *{% firstof lunch_record.meal_choice lunch_record.FLAGSHIP_choice lunch_record.PREMIUM_choice  lunch_record.sunday_choice%}*</p>                                                                      
                                                 <p>Service Chosen: *{{lunch_record.service_choice}}*</p>    
                                         </div> 
                                     {% endif %}            
@@ -300,10 +300,10 @@
                                     {% csrf_token %} 
                                     <div class="meal-details">
                                         <p class="meal-course">Select Food</p>
-                                            <select id="lunchFoodType" class="food-type-dropdown" name="meal_choice">
+                                            <select id="lunchFoodType" class="food-type-dropdown" name="sunday_choice">
                                                 <option value="default" disabled>Choose your food</option>
-                                                <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
-                                                <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
+                                                <option value="VEG" {% if request.user.default_sunday_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                                <option value="NON-VEG" {% if request.user.default_sunday_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
                                             </select>
                                     </div>
 

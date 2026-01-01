@@ -56,19 +56,19 @@
                                 </p>
                             </div>
                         {% else %}
-                            {% comment %} {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %}  {% endcomment %}
-                                <div class="info-group">
-                                    <label for="defaultFood" class="info-label">Default Food Choice</label>
+                        {% if request.user.subscription_choice == "NORMAL30" or request.user.subscription_choice == "NORMAL60" %} 
+                        <div class="info-group">
+                            <label for="defaultFood" class="info-label">Default Food Choice</label>
                                     <select id="defaultFood" class="select-field" name="default_meal_choice">
                                         <option value="default" disabled>Choose your food</option>
                                         <option value="VEG" {% if request.user.default_meal_choice == "VEG" %}selected{% endif %}>VEG</option>
                                         <option value="NON-VEG" {% if request.user.default_meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
                                     </select>
                                 </div>
-                            {% comment %} {% endif %} {% endcomment %}
+                            {% endif %}
                             {% if request.user.subscription_choice == "FLAGSHIP30" or request.user.subscription_choice == "FLAGSHIP60" %} 
-                                {% if request.user.lunch_status_active %}
-                                    <div class="info-group">
+                            {% if request.user.lunch_status_active %}
+                            <div class="info-group">
                                         <label for="defaultLunchFood" class="info-label">Default Lunch Food Type</label>
                                         <select id="defaultLunchFood" class="select-field" name="default_flagship_lunch">
                                             <option value="default" disabled>Choose your food</option>
@@ -107,21 +107,29 @@
                                             <option value="FISH" {% if request.user.PREMIUM_MENU_LUNCH_default_choice == "FISH" %}selected{% endif %}>FISH</option>
                                         </select>
                                     </div>
-                                {% endif %}
-                                {% if request.user.dinner_status_active %}
+                                    {% endif %}
+                                    {% if request.user.dinner_status_active %}
                                     <div class="info-group">
                                         <label for="defaultDinnerFood" class="info-label">Default Dinner Food Type</label>
                                         <select id="defaultDinnerFood" class="select-field" name="default_premium_dinner">
                                             <option value="default" disabled>Choose your food</option>
                                             <option value="PANEER" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "PANEER" %}selected{% endif %}>PANEER</option>
-                                            <option value="MUSHROOM" {% if request.user.request.user.PREMIUM_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
-                                            <option value="CHICKEN" {% if request.user.request.user.PREMIUM_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
-                                            <option value="EGG" {% if request.user.request.user.PREMIUM_MENU_DINNER_default_choice == "EGG" %}selected{% endif %}>EGG</option>
-                                            <option value="VEG" {% if request.user.request.user.PREMIUM_MENU_DINNER_default_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                            <option value="MUSHROOM" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                            <option value="CHICKEN" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                            <option value="EGG" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "EGG" %}selected{% endif %}>EGG</option>
+                                            <option value="VEG" {% if request.user.PREMIUM_MENU_DINNER_default_choice == "VEG" %}selected{% endif %}>VEG</option>
                                         </select>
                                     </div>
-                                {% endif %}
-                            {% endif %}
+                                    {% endif %}
+                                    {% endif %}
+                                    <div class="info-group">
+                                        <label for="defaultFood" class="info-label">Default Sunday Choice</label>
+                                        <select id="defaultFood" class="select-field" name="default_sunday_choice">
+                                            <option value="default" disabled>Choose your food</option>
+                                            <option value="VEG" {% if request.user.default_sunday_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                            <option value="NON-VEG" {% if request.user.default_sunday_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
+                                        </select>
+                                    </div>
 
                             {% if request.user.lunch_status_active %}            
                             <div class="info-group">
@@ -134,30 +142,30 @@
                                     <input type="radio" id="def-lunch-pickup" name="default_lunch_service" value="PickUp"
                                     {% if request.user.default_lunch_service_choice == "PickUp" %}checked{% endif %}>
                                     <label for="def-lunch-pickup" class="radio-label btn-pickup">Pickup</label>
-
+                                    
                                     <input type="radio" id="def-lunch-delivery" name="default_lunch_service" value="Delivery"
                                     {% if request.user.default_lunch_service_choice == "Delivery" %}checked{% endif %}>
                                     <label for="def-lunch-delivery" class="radio-label btn-delivery">Delivery</label>
                                 </div>
                             </div>
                             {% endif %}
-
+                            
                             {% if request.user.dinner_status_active %}
                             <div class="info-group">
                                 <span class="info-label">Default Dinner Service</span>
                                 <div class="default-service-options radio-group">
                                     <input type="radio" id="def-dinner-dining" name="default_dinner_service" value="DineIn"{% if request.user.default_dinner_service_choice == "DineIn" %}checked{% endif %}>
                                     <label for="def-dinner-dining" class="radio-label btn-dining">Dining</label>
-
+                                    
                                     <input type="radio" id="def-dinner-pickup" name="default_dinner_service" value="PickUp" {% if request.user.default_dinner_service_choice == "PickUp" %}checked{% endif %}>
                                     <label for="def-dinner-pickup" class="radio-label btn-pickup">Pickup</label>
-
+                                    
                                     <input type="radio" id="def-dinner-delivery" name="default_dinner_service" value="Delivery" {% if request.user.default_dinner_service_choice == "Delivery" %}checked{% endif %}>
                                     <label for="def-dinner-delivery" class="radio-label btn-delivery">Delivery</label>
                                 </div>
                             </div>
                             {% endif %}
-               
+                            
                             <div class="info-group">
                                 <span class="info-label">Current Meals Status :</span>
                                 <div class="default-service-options radio-group">
@@ -169,8 +177,8 @@
                                     <label for="status-not-available" class="radio-label btn-cancel">Paused</label>
                                 </div>
                             </div>
-                        
-                    </div>
+                            
+                        </div>
                     <div class="profile-actions">
                         <button class="btn btn-primary">Save Profile Changes</button>
                     </div>

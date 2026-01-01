@@ -242,7 +242,41 @@
                 <button class="bento-btn"><a href="{% url 'gen_Dinner_record' %}" style="transform:none;">Generate</a></button>
                 
             </div>
+            {% if tsunday %}
+            <div class="group-title">Sunday Service</div>
+
+            <a href="{% url 'service_details' service='DineIn' dayTime='Sunday Lunch' %}">
+                <div class="bento-card"><span class="stat-label">Dine-In</span><div class="stat-value">{{sunday_lunch_dinein}}</div></div>
+            </a>
+            <a href="{% url 'service_details' service='Delivery' dayTime='Sunday Lunch' %}">
+                <div class="bento-card"><span class="stat-label">Deliveries</span><div class="stat-value">{{sunday_lunch_delivery}}</div></div>
+            </a>
+            <a href="{% url 'service_details' service='PickUp' dayTime='Sunday Lunch' %}">
+                <div class="bento-card"><span class="stat-label">Pick-Up</span><div class="stat-value">{{sunday_lunch_pickup}}</div></div>
+            </a>
+            <a href="{% url 'service_details' service='Total' dayTime='Sunday Lunch' %}">
+                <div class="bento-card" style="background:rgba(212,175,55,0.05)">
+                    <span class="stat-label">Total Sunday Lunch</span>
+                    <div class="stat-value" style="color:var(--gold)">{{sunday_total_lunch}}</div>
+                </div>
+            </a>
+            <a href="{% url 'service_details' service='Cancel' dayTime='Sunday Lunch' %}">
+                <div class="bento-card"><span class="stat-label">Cancelled</span><div class="stat-value">{{sunday_lunch_cancelled}}</div></div>
+            </a>
+            {% comment %}             
+            <a href="{% url 'service_details' service='Inactive' dayTime='Dinner' %}">
+                <div class="bento-card"><span class="stat-label">Inactive</span><div class="stat-value">{{dinner_inactive}}</div></div>
+                </a> {% endcomment %}
+                <a href="{% url 'service_details' service='DE' dayTime='Sunday Lunch' %}">
+                <div class="bento-card"><span class="stat-label">Default Entries</span><div class="stat-value">{{sunday_lunch_default_need}}</div></div>
+            </a>
+            <div class="bento-card">
+                <span class="stat-label">Generate Dinner Record</span>
+                <button class="bento-btn"><a href="{% url 'gen_sunday_record' %}" style="transform:none;">Generate</a></button>
+            </div>
+            {% endif %}
         </div>
+
 
         <div class="dashboard-layout">
             <div class="left-col">

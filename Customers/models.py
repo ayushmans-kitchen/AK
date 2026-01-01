@@ -94,6 +94,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     default_dinner_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
 
     default_meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
+    default_sunday_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
     FLAGSHIP_MENU_LUNCH_default_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_LUNCH,null=True,blank=True)
     FLAGSHIP_MENU_DINNER_default_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_DINNER,null=True,blank=True)
     PREMIUM_MENU_LUNCH_default_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_LUNCH,null=True,blank=True)
@@ -121,6 +122,7 @@ class LunchRecord(models.Model):
     service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
 
     meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
+    sunday_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
     FLAGSHIP_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_LUNCH,null=True,blank=True)
     PREMIUM_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_LUNCH,null=True,blank=True)
     
@@ -142,6 +144,7 @@ class DinnerRecord(models.Model):
     service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
 
     meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
+    sunday_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
     FLAGSHIP_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_DINNER,null=True,blank=True)
     PREMIUM_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_DINNER,null=True,blank=True)
 
