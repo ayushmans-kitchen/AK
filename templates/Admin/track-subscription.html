@@ -213,9 +213,7 @@
                             <td data-label="Start Date">{{ sub.start_date|date:"d M Y" }}</td>
                             <td data-label="End Date">{{ sub.end_date|date:"d M Y" }}</td>
                             <td data-label="Actions" style="text-align: center;">
-                                <form action="#" method="POST">
-                                    <button type="submit" class="btn-delete" title="View Details">Details</button>
-                                </form>
+                                <a href="{% url "track_subscription_details" sub.id %}"><button type="submit" class="btn-delete" title="View Details">Details</button></a>
                             </td>
                         </tr>
                         {% empty %}

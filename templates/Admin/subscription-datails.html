@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meal History | {{ user.name }}</title>
+    <title>Meal History | {{ record.customer.name }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -80,23 +80,23 @@
             <div class="info-grid">
                 <div class="info-item">
                     <label>Customer Name</label>
-                    <span>{{ user.name }}</span>
+                    <span>{{ record.customer.name }}</span>
                 </div>
                 <div class="info-item">
                     <label>Subscription Type</label>
-                    <span>{{ user.subscription_choice }}</span>
+                    <span>{{ record.subscription_choice }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Subscription Phase</label>
+                    <span style="color: var(--color-danger);">{{ record.subscription_phase }}</span>
                 </div>
                 <div class="info-item">
                     <label>Phase Start</label>
-                    <span>{{ history.start_date|date:"d M Y"|default:"--" }}</span>
+                    <span>{{ record.start_date|date:"d M Y"|default:"--" }}</span>
                 </div>
                 <div class="info-item">
                     <label>Completion Date</label>
-                    <span>{{ history.end_date|date:"d M Y"|default:"--" }}</span>
-                </div>
-                <div class="info-item">
-                    <label>Balance</label>
-                    <span style="color: var(--color-danger);">{{ user.meal_balance }} Left</span>
+                    <span>{{ record.end_date|date:"d M Y"|default:"--" }}</span>
                 </div>
             </div>
         </header>
@@ -107,8 +107,16 @@
         </section>
 
         <div class="history-grid">
+
+            <!-- ========================= -->
+            <!-- ☀️ LUNCH LOG -->
+            <!-- ========================= -->
             <div class="table-column">
-                <h2>☀️ Lunch Log <span class="count-bracket">({{ l_count }})</span></h2>
+                <h2>
+                    ☀️ Lunch Log
+                    <span class="count-bracket">({{ l_count }})</span>
+                </h2>
+
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -119,28 +127,54 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for r in lunch_records %}
-                            <tr class="history-row">
-                                <td class="record-date" style="font-weight: 700;">{{ r.for_date|date:"d M Y" }}</td>
-                                <td>{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td>
-                                <td>
-                                    {% if r.service_choice == "Cancel" %}
-                                        <span class="badge badge-cancelled">Cancelled</span>
-                                    {% else %}
-                                        <span class="badge badge-active">{{ r.service_choice }}</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
+
+                            {% for date, meals in record.meal_history.items %}
+                                {% if meals.lunch %}
+                                <tr class="history-row">
+                                    <td class="record-date" style="font-weight:700;">
+                                        {{ date }}
+                                    </td>
+
+                                    <td>
+                                        {% if meals.lunch == "CANCELLED" %}
+                                            —
+                                        {% else %}
+                                            {{ meals.lunch }}
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if meals.lunch == "CANCELLED" %}
+                                            <span class="badge badge-cancelled">Cancelled</span>
+                                        {% else %}
+                                            <span class="badge badge-active">Active</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endif %}
                             {% empty %}
-                            <tr><td colspan="3" style="text-align: center; color: var(--color-text-muted); padding: 20px;">No lunch records.</td></tr>
+                                <tr>
+                                    <td colspan="3"
+                                        style="text-align:center; color:var(--color-text-muted); padding:20px;">
+                                        No lunch records.
+                                    </td>
+                                </tr>
                             {% endfor %}
+
                         </tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- ========================= -->
+            <!-- 🌙 DINNER LOG -->
+            <!-- ========================= -->
             <div class="table-column">
-                <h2>🌙 Dinner Log <span class="count-bracket">({{ d_count }})</span></h2>
+                <h2>
+                    🌙 Dinner Log
+                    <span class="count-bracket">({{ d_count }})</span>
+                </h2>
+
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -151,26 +185,47 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for r in dinner_records %}
-                            <tr class="history-row">
-                                <td class="record-date" style="font-weight: 700;">{{ r.for_date|date:"d M Y" }}</td>
-                                <td>{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td>
-                                <td>
-                                    {% if r.service_choice == "Cancel" %}
-                                        <span class="badge badge-cancelled">Cancelled</span>
-                                    {% else %}
-                                        <span class="badge badge-active">{{ r.service_choice }}</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
+
+                            {% for date, meals in record.meal_history.items %}
+                                {% if meals.dinner %}
+                                <tr class="history-row">
+                                    <td class="record-date" style="font-weight:700;">
+                                        {{ date }}
+                                    </td>
+
+                                    <td>
+                                        {% if meals.dinner == "CANCELLED" %}
+                                            —
+                                        {% else %}
+                                            {{ meals.dinner }}
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if meals.dinner == "CANCELLED" %}
+                                            <span class="badge badge-cancelled">Cancelled</span>
+                                        {% else %}
+                                            <span class="badge badge-active">Active</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endif %}
                             {% empty %}
-                            <tr><td colspan="3" style="text-align: center; color: var(--color-text-muted); padding: 20px;">No dinner records.</td></tr>
+                                <tr>
+                                    <td colspan="3"
+                                        style="text-align:center; color:var(--color-text-muted); padding:20px;">
+                                        No dinner records.
+                                    </td>
+                                </tr>
                             {% endfor %}
+
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </div>
+
     </main>
 
     <script>

@@ -306,6 +306,37 @@ def customer_profile(request, uid):
         df_lunch = df_dinner = None
         lunch_v = dinner_v = None
 
+
+
+    lunch_records = LunchRecord.objects.filter(
+        customer=user
+    ).order_by("-for_date")
+
+    dinner_records = DinnerRecord.objects.filter(
+        customer=user
+    ).order_by("-for_date")
+
+    history = []
+
+    # Add lunch records
+    for record in lunch_records:
+        history.append({
+            "date": record.for_date,
+            "meal_type": "Lunch",
+            "service": record.service_choice,
+            "status": "Cancelled" if record.service_choice == "Cancel" else "Completed",
+            "meal_no": record.meal_num_used,
+        })
+
+    # Add dinner records
+    for record in dinner_records:
+        history.append({
+            "date": record.for_date,
+            "meal_type": "Dinner",
+            "service": record.service_choice,
+            "status": "Cancelled" if record.service_choice == "Cancel" else "Completed",
+            "meal_no": record.meal_num_used,
+        })
     context = {
         "user": user,
         "lmenu": lmenu,
@@ -314,11 +345,15 @@ def customer_profile(request, uid):
         "df_dinner": df_dinner,
         "lunch_v": lunch_v,
         "dinner_v": dinner_v,
+        "subs_history":SubscriptionHistory.objects.filter(customer=user).order_by('subscription_phase'),
+        "current_meal_history":history,
+
     }
 
     return render(request, "Admin/customer_profile.html", context)
 
 
+@staff_member_required(login_url="/login/")
 def meal_record(request):
     records = None
     meal_time = "Lunch"
@@ -341,9 +376,13 @@ def meal_record(request):
     return render(request, "Admin/meal-record.html", context)
 
 
+@staff_member_required(login_url="/login/")
 def track_subscription(request):
     result=SubscriptionHistory.objects.all()
     context={'result':result}
     return render(redirect,"Admin/track-subscription.html",context)
 
-
+@staff_member_required(login_url="/login/")
+def track_subscription_details(request,sid):
+    result=get_object_or_404(SubscriptionHistory,pk=sid)
+    return render(request,"Admin/subscription-datails.html",{'record':result})

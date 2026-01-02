@@ -159,7 +159,6 @@ def gen_Dinner_record(request):
             for_date=today,
             meal_num_used=c.meal_balance,
             service_choice=c.default_dinner_service_choice,
-            sunday_choice=None,
             meal_choice=(
                 c.default_meal_choice
                 if c.subscription_choice in ["NORMAL30", "NORMAL60"]
@@ -227,6 +226,7 @@ def delete_admin_notice(request,mid):
 
 
 
+from django.db.models import Min
 
 def create_customer_history(customer):
     lunches = LunchRecord.objects.filter(customer=customer)
@@ -239,8 +239,13 @@ def create_customer_history(customer):
         history.setdefault(date_key, {})
 
         history[date_key]["lunch"] = (
-            "CANCELLED" if lr.service_choice == "Cancel"
-            else lr.meal_choice or lr.FLAGSHIP_choice or lr.PREMIUM_choice or lr.sunday_choice or "UNKNOWN"
+            "CANCELLED"
+            if lr.service_choice == "Cancel"
+            else lr.meal_choice
+            or lr.FLAGSHIP_choice
+            or lr.PREMIUM_choice
+            or lr.sunday_choice
+            or "UNKNOWN"
         )
 
     for dr in dinners:
@@ -248,17 +253,29 @@ def create_customer_history(customer):
         history.setdefault(date_key, {})
 
         history[date_key]["dinner"] = (
-            "CANCELLED" if dr.service_choice == "Cancel"
-            else dr.meal_choice or dr.FLAGSHIP_choice or dr.PREMIUM_choice or "UNKNOWN"
+            "CANCELLED"
+            if dr.service_choice == "Cancel"
+            else dr.meal_choice
+            or dr.FLAGSHIP_choice
+            or dr.PREMIUM_choice
+            or "UNKNOWN"
         )
+
+    lunch_start = lunches.aggregate(Min("for_date"))["for_date__min"]
+    dinner_start = dinners.aggregate(Min("for_date"))["for_date__min"]
+
+    dates = [d for d in (lunch_start, dinner_start) if d is not None]
+    start_date = min(dates) if dates else customer.profile_updated_at
+
 
     SubscriptionHistory.objects.create(
         customer=customer,
-        subscription_choice= customer.subscription_choice,
-        subscription_phase= customer.subscription_phase,
-        start_date= customer.date_joined,
-        end_date= customer.profile_updated_at,
-        meal_history= history,
+        subscription_choice=customer.subscription_choice,
+        subscription_phase=customer.subscription_phase,
+        start_date=start_date,
+        end_date=customer.profile_updated_at,
+        meal_history=history,
     )
 
     return "created"
+
