@@ -42,7 +42,7 @@ def dashboard(request):
         menu_dinner_count[key] = 0
 
     for l in lunch_record:
-        choice = l.meal_choice or l.FLAGSHIP_choice or l.PREMIUM_choice
+        choice = l.meal_choice or l.FLAGSHIP_choice or l.PREMIUM_choice or l.sunday_choice
         # print(choice)
         if choice in menu_lunch_count:
             menu_lunch_count[choice] += 1

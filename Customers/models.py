@@ -144,7 +144,6 @@ class DinnerRecord(models.Model):
     service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
 
     meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
-    sunday_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
     FLAGSHIP_choice = models.CharField(max_length=20, choices=FLAGSHIP_MENU_DINNER,null=True,blank=True)
     PREMIUM_choice = models.CharField(max_length=20, choices=PREMIUM_MENU_DINNER,null=True,blank=True)
 
