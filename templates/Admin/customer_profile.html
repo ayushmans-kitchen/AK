@@ -273,6 +273,7 @@
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Plan Type</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -283,6 +284,9 @@
                                 <td>{{sub.start_date}}</td>
                                 <td>{{sub.end_date}}</td>
                                 <td><span class="badge badge-plan">{{sub.subscription_choice}}</span></td>
+                                <td data-label="Actions" style="text-align: center;">
+                                <a href="{% url "track_subscription_details" sub.id %}"><button type="submit" class="btn-delete" title="View Details">Details</button></a>
+                            </td>
                             </tr>
                             {% endfor %}
                         </tbody>
