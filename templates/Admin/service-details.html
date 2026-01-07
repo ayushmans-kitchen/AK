@@ -310,7 +310,6 @@ td a:hover { color: var(--color-gold); }
                 <div class="protein-pill" data-filter="all">MUSHROOM</div>
                 <div class="protein-pill" data-filter="all">CHICKEN</div>
                 <div class="protein-pill" data-filter="all">EGG</div>
-
             {% endif %}
 
             </div>
@@ -337,11 +336,19 @@ td a:hover { color: var(--color-gold); }
                                 <td>{{forloop.counter}}</td>
                                 <td data-label="User" class="user-name"><strong><a href="{% url "customer_profile" r.id %}">{{r.name}}</a></strong></td>
                                 {% if dayTime == "Lunch" %}
-                                <td data-label="Meal Choice">{% firstof r.default_meal_choice r.default_sunday_choice r.FLAGSHIP_MENU_LUNCH_default_choice  r.PREMIUM_MENU_LUNCH_default_choice %}</td>
-                                {% else %}
-                                <td data-label="Meal Choice">{% firstof r.default_meal_choice  r.FLAGSHIP_MENU_DINNER_default_choice r.PREMIUM_MENU_DINNER_default_choice %}</td>
+                                <td data-label="Meal Choice">{% firstof r.default_meal_choice r.FLAGSHIP_MENU_LUNCH_default_choice  r.PREMIUM_MENU_LUNCH_default_choice %}</td>
+                                <td data-label="service Choice">{{r.default_lunch_service_choice}}</td>
                                 {% endif %}
-                                <td data-label="service Choice">{{r.service_choice}}</td>
+                                {% if dayTime == "Sunday Lunch" %}
+
+                                <td data-label="Meal Choice">{{r.default_sunday_choice}}</td>
+                                <td data-label="service Choice">{{r.default_lunch_service_choice}}</td>
+                                
+                                {% endif %}
+                                {% if dayTime == "Dinner" %}
+                                <td data-label="Meal Choice">{% firstof r.default_meal_choice  r.FLAGSHIP_MENU_DINNER_default_choice r.PREMIUM_MENU_DINNER_default_choice %}</td>
+                                <td data-label="service Choice">{{r.default_dinner_service_choice}}</td>
+                                {% endif %}
                                 <td data-label="Subscription Choice">{{r.subscription_choice}}</td>
                                 <td data-label="Phone" class="Phone">{{r.phone}}</td>
                                 <td data-label="Address" class="Address">{{r.address}}</td>

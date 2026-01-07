@@ -32,7 +32,7 @@ def dashboard(request):
     sunday_lunch_record = LunchRecord.objects.filter(for_date=today + timedelta(days=1),)
     dinner_record = DinnerRecord.objects.filter(for_date=today)
     admin_messgaes = AdminNotice.objects.all()
-    tsunday= today.isoweekday() == 3
+    tsunday= today.isoweekday() == 4
 
     menu_lunch_count = {}
     menu_sunday_count = {}
