@@ -296,11 +296,14 @@
             </div>
 
             <div class="right-col">
+                {% if tsunday %}
                 <div class="card">
                     <div class="card-header"><h3>Sunday Lunch Kitchen Prep</h3></div>
-                        <div class="row"><span>VEG</span><span class="qty">0</span></div>
-                        <div class="row"><span>NON-VEG</span><span class="qty">0</span></div>
+                    {% for key,value in menu_sunday_count.items %}
+                        <div class="row"><span>{{key}}</span><span class="qty">{{ value }}</span></div>
+                    {% endfor %}
                 </div>
+                {% endif %}
                 <div class="card">
                     <div class="card-header"><h3>Low Meals Alert</h3></div>
                     <div class="scroll-container alert-area">

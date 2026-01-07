@@ -21,6 +21,7 @@ from django.contrib.auth import update_session_auth_hash
 
 all_menus_lunch = list(dict.fromkeys(MEAL_MENU + FLAGSHIP_MENU_LUNCH + PREMIUM_MENU_LUNCH))
 all_menus_dinner = list(dict.fromkeys(MEAL_MENU + FLAGSHIP_MENU_DINNER + PREMIUM_MENU_DINNER))
+all_menus_sunday = list(dict.fromkeys(MEAL_MENU))
 
 
 @staff_member_required(login_url='/login/')
@@ -30,13 +31,17 @@ def dashboard(request):
     sunday_lunch_record = LunchRecord.objects.filter(for_date=today + timedelta(days=1),)
     dinner_record = DinnerRecord.objects.filter(for_date=today)
     admin_messgaes = AdminNotice.objects.all()
-    tsunday= today.isoweekday() == 5
+    tsunday= today.isoweekday() == 3
 
     menu_lunch_count = {}
+    menu_sunday_count = {}
     menu_dinner_count = {}
 
     for key, _ in all_menus_lunch:
         menu_lunch_count[key] = 0
+
+    for key, _ in all_menus_sunday:
+        menu_sunday_count[key] = 0
 
     for key, _ in all_menus_dinner:
         menu_dinner_count[key] = 0
@@ -46,6 +51,12 @@ def dashboard(request):
         # print(choice)
         if choice in menu_lunch_count:
             menu_lunch_count[choice] += 1
+
+    for sl in sunday_lunch_record:
+        choice = sl.sunday_choice
+        # print(choice)
+        if choice in menu_lunch_count:
+            menu_sunday_count[choice] += 1
 
     for d in dinner_record:
         choice = d.meal_choice or d.FLAGSHIP_choice or d.PREMIUM_choice
@@ -85,6 +96,7 @@ def dashboard(request):
 
         "menu_lunch_count": menu_lunch_count,
         "menu_dinner_count": menu_dinner_count,
+        "menu_sunday_count": menu_sunday_count,
 
         'low_balance_customer':customers.filter(meal_balance__lte=6),
         'admin_messgaes':admin_messgaes,
