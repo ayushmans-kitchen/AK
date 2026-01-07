@@ -347,7 +347,7 @@ def customer_profile(request, uid):
             "date": record.for_date,
             "meal_type": "Dinner",
             "service": record.service_choice,
-            "meal_choice": record.meal_choice or record.FLAGSHIP_choice or record.PREMIUM_choice or record.sunday_choice or "UNKNOWN", 
+          "meal_choice": record.meal_choice or record.FLAGSHIP_choice or record.PREMIUM_choice  or "UNKNOWN", 
             "meal_no": record.meal_num_used,
         })
 

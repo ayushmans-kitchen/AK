@@ -8,196 +8,258 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
         
     <style>
-        :root {
-            --color-gold: #d4af37;
-            --color-gold-muted: rgba(212, 175, 55, 0.1);
-            --color-bg-deep: #050505;
-            --color-bg-card: #0c0c0c;
-            --color-bg-sidebar: #000000;
-            --color-text: #ffffff;
-            --color-text-muted: #a0a0a0;
-            --color-border: #1a1a1a;
-            --sb-width: 260px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --glass: rgba(255, 255, 255, 0.03);
-        }
+:root {
+    --color-gold: #d4af37;
+    --color-gold-muted: rgba(212, 175, 55, 0.1);
+    --color-bg-deep: #050505;
+    --color-bg-card: #0c0c0c;
+    --color-bg-sidebar: #000000;
+    --color-text: #ffffff;
+    --color-text-muted: #a0a0a0;
+    --color-border: #1a1a1a;
+    --sb-width: 260px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --glass: rgba(255, 255, 255, 0.03);
+}
 
-        /* RESET & BASE */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            background-color: var(--color-bg-deep); 
-            color: var(--color-text); 
-            line-height: 1.6; 
-            overflow-x: hidden; 
-            -webkit-font-smoothing: antialiased;
-        }
+/* RESET & BASE */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
 
-        /* CUSTOM SCROLLBAR */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: var(--color-bg-deep); }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
+body { 
+    font-family: 'Montserrat', sans-serif; 
+    background-color: var(--color-bg-deep); 
+    color: var(--color-text); 
+    line-height: 1.6; 
+    overflow-x: hidden; 
+    -webkit-font-smoothing: antialiased;
+}
 
-        /* SIDEBAR TOGGLE LOGIC */
-        .nav-toggle { display: none; }
+/* CUSTOM SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-deep); }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
 
-        /* MAIN CONTENT AREA */
-        .main-content { 
-            margin-left: var(--sb-width); 
-            padding: 3rem; 
-            transition: var(--transition); 
-            min-height: 100vh; 
-        }
+/* MAIN CONTENT AREA */
+.main-content { 
+    margin-left: var(--sb-width); 
+    padding: 3rem; 
+    transition: var(--transition); 
+    min-height: 100vh; 
+}
 
-        /* PAGE SPECIFIC HEADER */
-        .detail-header {
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-end;
-            margin-bottom: 3rem; 
-            border-bottom: 1px solid var(--color-border); 
-            padding-bottom: 1.5rem;
-        }
-        .detail-header h1 { 
-            font-family: 'Playfair Display', serif; 
-            color: var(--color-gold); 
-            font-size: 2.5rem; 
-            font-weight: 900;
-            letter-spacing: -1px;
-        }
-        .back-link { 
-            color: var(--color-gold); 
-            text-decoration: none; 
-            font-size: 0.7rem; 
-            text-transform: uppercase; 
-            font-weight: 800;
-            letter-spacing: 2px; 
-            cursor: pointer; 
-            display: block; 
-            margin-bottom: 0.5rem; 
-            transition: 0.3s;
-        }
-        .back-link:hover { opacity: 0.7; transform: translateX(-5px); }
+/* PAGE SPECIFIC HEADER */
+.detail-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end;
+    margin-bottom: 3rem; 
+    border-bottom: 1px solid var(--color-border); 
+    padding-bottom: 1.5rem;
+}
 
-        /* SEARCH BAR */
-        .search-container { margin-bottom: 2rem; }
-        .search-input {
-            width: 100%; 
-            padding: 16px 24px; 
-            background: var(--color-bg-card); 
-            border: 1px solid var(--color-border);
-            color: white; 
-            border-radius: 12px; 
-            font-family: inherit; 
-            font-size: 0.9rem;
-            outline: none; 
-            transition: var(--transition);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-        .search-input:focus { 
-            border-color: var(--color-gold); 
-            background: #111;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); 
-        }
+.detail-header h1 { 
+    font-family: 'Playfair Display', serif; 
+    color: var(--color-gold); 
+    font-size: 2.5rem; 
+    font-weight: 900;
+    letter-spacing: -1px;
+}
 
-        /* PROTEIN PILLS */
-        .summary-strip { 
-            display: flex; 
-            gap: 12px; 
-            margin-bottom: 2.5rem; 
-            overflow-x: auto; 
-            padding-bottom: 12px; 
-        }
-        .protein-pill {
-            background: var(--glass); 
-            border: 1px solid var(--color-border); 
-            padding: 10px 22px; 
-            border-radius: 50px;
-            white-space: nowrap; 
-            cursor: pointer; 
-            font-size: 0.65rem; 
-            color: var(--color-text-muted); 
-            font-weight: 700; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: var(--transition);
-        }
-        .protein-pill:hover { background: rgba(255,255,255,0.08); border-color: #444; color: #fff; }
-        .protein-pill.active { 
-            border-color: var(--color-gold); 
-            background: var(--color-gold-muted); 
-            color: var(--color-gold); 
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
-        }
+.back-link { 
+    color: var(--color-gold); 
+    text-decoration: none; 
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    font-weight: 800;
+    letter-spacing: 2px; 
+    cursor: pointer; 
+    display: block; 
+    margin-bottom: 0.5rem; 
+    transition: 0.3s;
+}
 
-        /* TABLE STYLES */
-        .table-container { 
-            background: var(--color-bg-card); 
-            border: 1px solid var(--color-border); 
-            border-radius: 16px; 
-            overflow: hidden; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        table { width: 100%; border-collapse: collapse; }
-        th { 
-            text-align: left; 
-            background: #0a0a0a; 
-            padding: 20px 24px; 
-            color: var(--color-gold); 
-            font-size: 0.65rem; 
-            text-transform: uppercase; 
-            font-weight: 800;
-            letter-spacing: 2px; 
-            border-bottom: 1px solid var(--color-border); 
-        }
-        td { 
-            padding: 18px 24px; 
-            border-bottom: 1px solid var(--color-border); 
-            font-size: 0.85rem; 
-            color: #e0e0e0; 
-            transition: 0.2s;
-        }
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(212, 175, 55, 0.02); color: #fff; }
+.back-link:hover { opacity: 0.7; transform: translateX(-5px); }
 
-        /* Links inside table */
-        td a { color: inherit; text-decoration: none; transition: 0.3s; }
-        td a:hover { color: var(--color-gold); }
+/* SEARCH BAR */
+.search-container { margin-bottom: 2rem; }
+.search-input {
+    width: 100%; 
+    padding: 16px 24px; 
+    background: var(--color-bg-card); 
+    border: 1px solid var(--color-border);
+    color: white; 
+    border-radius: 12px; 
+    font-family: inherit; 
+    font-size: 0.9rem;
+    outline: none; 
+    transition: var(--transition);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}
 
-        /* Responsive Mobile Header for Sidebar (Keep existing logic) */
-        @media (max-width: 1024px) {
-            .mobile-header { display: flex; height: 70px; background: #000; z-index: 2500; }
-            .main-content { margin-left: 0; padding: 7rem 1.5rem 2rem 1.5rem; }
-            .sidebar { transform: translateX(-100%); width: 280px; }
-            .detail-header h1 { font-size: 1.8rem; }
-        }
+.search-input:focus { 
+    border-color: var(--color-gold); 
+    background: #111;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); 
+}
 
-        .hidden { display: none !important; }
+/* PILL FILTERS */
+.summary-strip { 
+    display: flex; 
+    gap: 12px; 
+    margin-bottom: 2.5rem; 
+    overflow-x: auto; 
+    padding-bottom: 12px; 
+}
 
-        /* PRINT BUTTON */
-        .print-fab {
-            position: fixed; bottom: 30px; right: 30px;
-            background: var(--color-gold); color: #000;
-            padding: 16px 32px; border-radius: 12px; 
-            font-weight: 900; font-size: 0.8rem;
-            text-transform: uppercase; letter-spacing: 1px;
-            border: none; cursor: pointer; 
-            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3); 
-            z-index: 2200;
-            transition: 0.3s;
-        }
-        .print-fab:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4); }
+.protein-pill {
+    background: var(--glass); 
+    border: 1px solid var(--color-border); 
+    padding: 10px 22px; 
+    border-radius: 50px;
+    white-space: nowrap; 
+    cursor: pointer; 
+    font-size: 0.65rem; 
+    color: var(--color-text-muted); 
+    font-weight: 700; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+}
 
-        @media print {
-            .sidebar, .print-fab, .search-container, .summary-strip, .back-link, .mobile-header { display: none !important; }
-            .main-content { margin-left: 0 !important; padding: 0 !important; }
-            .table-container { border: none; }
-            body { background: white; color: black; }
-            th { background: #eee; color: black; border-bottom: 2px solid black; }
-            td { color: black; border-bottom: 1px solid #ccc; }
-            .detail-header h1 { color: black; }
-        }
+.protein-pill.active { 
+    border-color: var(--color-gold); 
+    background: var(--color-gold-muted); 
+    color: var(--color-gold); 
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+}
+
+/* EXCEL-STYLE TABLE GRID */
+.table-container { 
+    background: var(--color-bg-card); 
+    border: 1px solid var(--color-border); 
+    border-radius: 16px; 
+    overflow: hidden; 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse !important; /* Critical for gridlines */
+}
+
+th, td { 
+    padding: 18px 24px; 
+    border: 1px solid var(--color-border); /* Explicit borders for every cell */
+    font-size: 0.85rem; 
+    color: #e0e0e0; 
+    transition: 0.2s;
+    text-align: left;
+}
+
+th { 
+    background: #0a0a0a; 
+    color: var(--color-gold); 
+    font-size: 0.65rem; 
+    text-transform: uppercase; 
+    font-weight: 800;
+    letter-spacing: 2px; 
+    border-bottom: 2px solid var(--color-gold); 
+}
+
+tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.01); }
+tbody tr:hover td { background: rgba(212, 175, 55, 0.03); color: #fff; }
+
+/* TABLE LINKS */
+td a { 
+    color: inherit; 
+    text-decoration: none; 
+    transition: 0.3s; 
+    font-weight: 600;
+}
+td a:hover { color: var(--color-gold); }
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 1024px) {
+    .mobile-header { display: flex; height: 70px; background: #000; z-index: 2500; }
+    .main-content { margin-left: 0; padding: 7rem 1.5rem 2rem 1.5rem; }
+    .sidebar { transform: translateX(-100%); width: 280px; }
+    .detail-header h1 { font-size: 1.8rem; }
+    
+    /* Table Responsive Adjustments */
+    td { padding: 12px 15px; }
+}
+
+.hidden { display: none !important; }
+
+/* PRINT BUTTON */
+.print-fab {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--color-gold); color: #000;
+    padding: 16px 32px; border-radius: 12px; 
+    font-weight: 900; font-size: 0.8rem;
+    text-transform: uppercase; letter-spacing: 1px;
+    border: none; cursor: pointer; 
+    box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3); 
+    z-index: 2200;
+    transition: 0.3s;
+}
+.print-fab:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4); }
+
+/* ------------------------------------------------ */
+/* EXCEL SPREADSHEET PRINT FORMAT (Physical Print) */
+/* ------------------------------------------------ */
+@media print {
+    .sidebar, .print-fab, .search-container, .summary-strip, .back-link, .mobile-header, #nav-toggle { 
+        display: none !important; 
+    }
+
+    @page { margin: 1cm; size: landscape; }
+
+    .main-content { margin-left: 0 !important; padding: 0 !important; }
+
+    body { 
+        background: white !important; 
+        color: black !important;
+        font-size: 10pt;
+    }
+
+    .table-container { border: none !important; box-shadow: none !important; overflow: visible !important; }
+
+    table { 
+        width: 100%; 
+        border-collapse: collapse !important;
+        border: 1px solid #000 !important; 
+    }
+
+    th, td { 
+        border: 1px solid #ccc !important; 
+        color: black !important;
+        padding: 6px 8px !important;
+        background: transparent !important;
+    }
+
+    thead th { 
+        background-color: #f2f2f2 !important; 
+        font-weight: bold !important;
+        text-transform: uppercase;
+        border-bottom: 2px solid #000 !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+    thead { display: table-header-group; } /* Repeats header on every page */
+
+    tr:nth-child(even) td {
+        background-color: #fafafa !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .detail-header h1 { color: black !important; font-size: 18pt; margin-bottom: 10px; }
+}
     </style>
 </head>
 <body>
@@ -317,26 +379,33 @@
     function filterTable() {
         const searchText = searchInput.value.toLowerCase().trim();
         const activePill = document.querySelector('.protein-pill.active');
+        
+        // Get the filter text (e.g., "PANEER", "CHICKEN")
         const pillFilter = activePill ? activePill.innerText.trim().toUpperCase() : 'ALL';
         
         let visibleCount = 0;
 
         rows.forEach(row => {
-            // Get content from specific columns
+            // 1. Column-specific data extraction
             const userName = row.querySelector('.user-name').innerText.toLowerCase();
-            const mealChoice = row.children[1].innerText.trim().toUpperCase(); 
+            
+            // The "Meal Choice" is the 3rd <td> (index 2)
+            const mealChoiceCell = row.cells[2]; 
+            const mealChoiceText = mealChoiceCell ? mealChoiceCell.innerText.trim().toUpperCase() : "";
+            
             const phone = row.querySelector('.Phone').innerText.toLowerCase();
             const location = row.querySelector('.Address').innerText.toLowerCase();
 
-            // Check Search Logic (Matches Name, Phone, or Address)
+            // 2. Search Logic: Matches Name, Phone, or Address
             const matchesSearch = userName.includes(searchText) || 
-                                  phone.includes(searchText) || 
-                                  location.includes(searchText);
+                                 phone.includes(searchText) || 
+                                 location.includes(searchText);
 
-            // Check Pill Logic
-            const matchesPill = pillFilter === 'ALL' || mealChoice === pillFilter;
+            // 3. Pill Logic: Matches the selected protein/menu item
+            // Handles "ALL" logic and specific matches
+            const matchesPill = (pillFilter === 'ALL') || (mealChoiceText === pillFilter);
 
-            // Combine filters
+            // 4. Final combined visibility toggle
             if (matchesSearch && matchesPill) {
                 row.classList.remove('hidden');
                 visibleCount++;
@@ -345,29 +414,35 @@
             }
         });
 
-        // Toggle "No Results" message
+        // Toggle "No Results" message visibility
         if (noResults) {
             noResults.classList.toggle('hidden', visibleCount > 0);
         }
     }
 
-    // Automated Search Event Listener
+    // Event Listener for typing in the search box
     searchInput.addEventListener('input', filterTable);
 
-    // Pill Filter Event Listeners
+    // Event Listeners for clicking the protein pills
     pills.forEach(pill => {
-        pill.addEventListener('click', () => {
+        pill.addEventListener('click', function() {
+            // UI Update: Toggle active class
             pills.forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
+            this.classList.add('active');
+            
+            // Trigger the combined filter
             filterTable();
         });
     });
 
-    // Set Header Date
+    // Initialize the Header Date
     const dateDisplay = document.getElementById('current-date');
     if (dateDisplay) {
         dateDisplay.innerText = new Date().toLocaleDateString('en-GB', {
-            weekday: 'long', day: 'numeric', month: 'short', year: 'numeric'
+            weekday: 'long', 
+            day: 'numeric', 
+            month: 'short', 
+            year: 'numeric'
         });
     }
 </script>

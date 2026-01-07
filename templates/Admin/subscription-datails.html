@@ -30,7 +30,16 @@
         .header-main { border-bottom: 1px solid var(--color-border); padding-bottom: 1.5rem; margin-bottom: 2rem; }
         .back-link { color: var(--color-gold); text-decoration: none; font-size: 0.7rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; display: block; margin-bottom: 10px; }
         .header-main h1 { font-family: 'Playfair Display', serif; color: var(--color-gold); font-size: 2.2rem; margin-bottom: 1.5rem; }
-
+.user-link {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: var(--transition);
+    border-bottom: 1px solid transparent;
+}
+.user-link:hover {
+    color: var(--color-gold);
+    
+}
         .info-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
@@ -80,7 +89,8 @@
             <div class="info-grid">
                 <div class="info-item">
                     <label>Customer Name</label>
-                    <span>{{ record.customer.name }}</span>
+                    
+                    <span> <a href="{% url 'customer_profile' record.customer.id %}" class="user-link">{{ record.customer.name }}</a></span>
                 </div>
                 <div class="info-item">
                     <label>Subscription Type</label>

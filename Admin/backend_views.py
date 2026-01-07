@@ -224,7 +224,7 @@ def delete_admin_notice(request,mid):
     
 
 from django.db.models import Min
-
+@transaction.atomic
 def create_customer_history(customer):
     lunches = LunchRecord.objects.filter(customer=customer)
     dinners = DinnerRecord.objects.filter(customer=customer)
@@ -248,7 +248,7 @@ def create_customer_history(customer):
         history[date_key]["dinner"] = {
             "meal_num_used": dr.meal_num_used,
             "service_choice": dr.service_choice,
-            "food_choice": dr.meal_choice or lr.FLAGSHIP_choice or lr.PREMIUM_choice or  "UNKNOWN",
+            "food_choice": dr.meal_choice or dr.FLAGSHIP_choice or dr.PREMIUM_choice or  "UNKNOWN",
         }
 
     lunch_start = lunches.aggregate(Min("for_date"))["for_date__min"]

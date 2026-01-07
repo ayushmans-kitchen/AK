@@ -99,7 +99,16 @@
         /* Plan Coloring */
         .plan-premium { color: var(--tier-premium); font-weight: 700; }
         .plan-flagship { color: var(--tier-flagship); font-weight: 700; }
-
+        .user-link {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: var(--transition);
+    border-bottom: 1px solid transparent;
+}
+.user-link:hover {
+    color: var(--color-gold);
+   
+}
         /* DELETE BUTTON STYLE */
         .btn-delete {
             background: rgba(255, 68, 68, 0.05);
@@ -207,7 +216,10 @@
                         {% for sub in result %}
                         <tr class="record-row">
                             <td>{{forloop.counter}}</td>
-                            <td data-label="Customer"><strong>{{ sub.customer.name }}</strong></td>
+                            <td data-label="Customer"><strong>
+                                    <a href="{% url 'customer_profile' sub.customer.id %}" class="user-link">{{ sub.customer.name }}</a>
+                                </strong>
+                            </td>
                             <td data-label="Plan Choice" class="{% if 'Premium' in sub.subscription_choice %}plan-premium{% elif 'Flagship' in sub.subscription_choice %}plan-flagship{% endif %}">
                                 {{ sub.subscription_choice }}
                             </td>
