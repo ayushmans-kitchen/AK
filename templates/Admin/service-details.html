@@ -294,21 +294,23 @@ td a:hover { color: var(--color-gold); }
             <div class="summary-strip" id="filter-container">
                 <div class="protein-pill active" data-filter="all">ALL</div>
             {% if cancelled_page or service == "DE" %}
-            {# intentionally empty – nothing to render #}
-
             {% elif dayTime == "Lunch" %}
-                {% for key, label in all_menus_lunch %}
-                    <div class="protein-pill" data-filter="{{ key|lower }}">
-                        {{ label }}
-                    </div>
-                {% endfor %}
-
+                <div class="protein-pill" data-filter="all">VEG</div>
+                <div class="protein-pill" data-filter="all">NON-VEG</div>
+                <div class="protein-pill" data-filter="all">PANEER</div>
+                <div class="protein-pill" data-filter="all">MUSHROOM</div>
+                <div class="protein-pill" data-filter="all">CHICKEN</div>
+                <div class="protein-pill" data-filter="all">EGG</div>
+                <div class="protein-pill" data-filter="all">PRAWN</div>
+                <div class="protein-pill" data-filter="all">FISH</div>
             {% else %}
-                {% for key, label in all_menus_dinner %}
-                    <div class="protein-pill" data-filter="{{ key|lower }}">
-                        {{ label }}
-                    </div>
-                {% endfor %}
+                <div class="protein-pill" data-filter="all">VEG</div>
+                <div class="protein-pill" data-filter="all">NON-VEG</div>
+                <div class="protein-pill" data-filter="all">PANEER</div>
+                <div class="protein-pill" data-filter="all">MUSHROOM</div>
+                <div class="protein-pill" data-filter="all">CHICKEN</div>
+                <div class="protein-pill" data-filter="all">EGG</div>
+
             {% endif %}
 
             </div>
