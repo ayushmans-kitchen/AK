@@ -121,6 +121,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>S.No.</th>
                                 <th>Date</th>
                                 <th>Choice</th>
                                 <th>Service</th>
@@ -131,6 +132,7 @@
                             {% for date, meals in record.meal_history.items %}
                                 {% if meals.lunch %}
                                 <tr class="history-row">
+                                    <td>{{forloop.counter}}</td>
                                     <td class="record-date" style="font-weight:700;">
                                         {{ date }}
                                     </td>
@@ -179,6 +181,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>S.No.</th>
                                 <th>Date</th>
                                 <th>Choice</th>
                                 <th>Service</th>
@@ -189,6 +192,7 @@
                             {% for date, meals in record.meal_history.items %}
                                 {% if meals.dinner %}
                                 <tr class="history-row">
+                                    <td>{{forloop.counter}}</td>
                                     <td class="record-date" style="font-weight:700;">
                                         {{ date }}
                                     </td>

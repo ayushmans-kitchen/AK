@@ -27,6 +27,7 @@
                     <table class="data-table history-table">
                         <thead>
                             <tr>
+                                <th>S.No.</th>
                                 <th>Date</th>
                                 <th>Meal Type</th>
                                 <th>Service</th>
@@ -36,6 +37,7 @@
                         <tbody>
                             {% for row in history %}
                             <tr>
+                                <td>{{forloop.counter}}</td>
                                 <td data-label="Date">{{ row.date|date:"d M Y" }}</td>
                                 <td data-label="Meal Type">{{ row.meal_type }}</td>
                                 <td data-label="Service">{{ row.service }}</td>

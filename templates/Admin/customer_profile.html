@@ -192,14 +192,10 @@
                 </div>
                 {% else %}
                 <div class="input-group">
-                    <label>Meals Left</label>
-                    <input type="number" value="{{user.meal_balance}}" style="color: var(--color-danger); font-weight: bold;" name="meal_balance">
-                </div>
-                <div class="input-group">
                     <label>Default Lunch</label>
                     <select name="{{lunch_v}}">
                         {% for key,value in lmenu %}
-                            <option {% if df_lunch == value %}selected{% endif %}>{{value}}</option>
+                        <option {% if df_lunch == value %}selected{% endif %}>{{value}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -213,6 +209,10 @@
                 </div>
                 {% endif %}
                 
+                <div class="input-group">
+                    <label>Meals Left</label>
+                    <input type="number" value="{{user.meal_balance}}" style="color: var(--color-danger); font-weight: bold;" name="meal_balance">
+                </div>
                 <div class="input-group">
                     <label>Default Lunch Service</label>
                     <select name="default_lunch_service_choice">
@@ -268,6 +268,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>S.No.</th>
                                 <th>Phase</th>
                                 <th>Plan Type</th>
                                 <th>Start Date</th>
@@ -277,6 +278,7 @@
                         <tbody>
                             {% for sub in subs_history %}
                             <tr>
+                                <td>{{forloop.counter}}</td>
                                 <td><span class="badge badge-active">{{sub.subscription_phase}}</span></td>
                                 <td>{{sub.start_date}}</td>
                                 <td>{{sub.end_date}}</td>
@@ -296,6 +298,7 @@
  <table class="data-table history-table">
                         <thead>
                             <tr>
+                                <th>S.No.</th>
                                 <th>Date</th>
                                 <th>Meal Type</th>
                                 <th>Service</th>
@@ -305,6 +308,7 @@
                         <tbody>
                             {% for row in current_meal_history %}
                             <tr>
+                                <td>{{forloop.counter}}</td>
                                 <td data-label="Date">{{ row.date|date:"d M Y" }}</td>
                                 <td data-label="Meal Type">{{ row.meal_type }}</td>
                                 <td data-label="Service">{{ row.service }}</td>

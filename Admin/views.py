@@ -172,7 +172,6 @@ def add_customer(request):
     if request.method == "POST":
         name=request.POST.get("name")
         email=request.POST.get("email")
-        email=request.POST.get("email")
         phone=request.POST.get("phone")
         password=request.POST.get("password")
         address=request.POST.get("address")
@@ -379,10 +378,20 @@ def meal_record(request):
 @staff_member_required(login_url="/login/")
 def track_subscription(request):
     result=SubscriptionHistory.objects.all()
-    context={'result':result}
+    context={
+        'result':result,
+        }
     return render(redirect,"Admin/track-subscription.html",context)
 
 @staff_member_required(login_url="/login/")
 def track_subscription_details(request,sid):
     result=get_object_or_404(SubscriptionHistory,pk=sid)
-    return render(request,"Admin/subscription-datails.html",{'record':result})
+    l_count = sum(1 for meals in result.meal_history.values() if meals.get("lunch"))
+    print(l_count)
+    d_count = sum(1 for meals in result.meal_history.values() if meals.get("dinner"))
+    context={
+        'record':result,
+        'l_count':l_count,
+        'd_count':d_count,
+        }
+    return render(request,"Admin/subscription-datails.html",context)

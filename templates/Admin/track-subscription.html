@@ -194,6 +194,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>S.No.</th>
                             <th>Customer</th>
                             <th>Plan Choice</th>
                             <th>Phase</th>
@@ -205,6 +206,7 @@
                     <tbody id="table-body">
                         {% for sub in result %}
                         <tr class="record-row">
+                            <td>{{forloop.counter}}</td>
                             <td data-label="Customer"><strong>{{ sub.customer.name }}</strong></td>
                             <td data-label="Plan Choice" class="{% if 'Premium' in sub.subscription_choice %}plan-premium{% elif 'Flagship' in sub.subscription_choice %}plan-flagship{% endif %}">
                                 {{ sub.subscription_choice }}

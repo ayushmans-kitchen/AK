@@ -180,6 +180,7 @@
                 <table id="order-table">
                     <thead>
                         <tr>
+                            <th>S.No.</th>
                             <th>User</th>
                             {% comment %} <th>Meal Choice</th> {% endcomment %}
                             <th>Subscription Type</th>
@@ -192,6 +193,7 @@
                         
                         {% for r in  records %}
                             <tr data-protein="chicken">
+                                <td>{{forloop.counter}}</td>
                                 <td data-label="User" class="user-name"><strong><a href="{% url "customer_profile" r.id %}">{{r.name}}</a></strong></td>
                                 {% comment %} <td data-label="Meal Choice">{% firstof r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice %}</td> {% endcomment %}
                                 <td data-label="Subscription Choice">{{r.subscription_choice}}</td>

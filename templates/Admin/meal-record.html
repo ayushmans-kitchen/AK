@@ -190,20 +190,26 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>S.No.</th>
                             <th>Customer</th>
+                            <th>Subscription Choice</th>
                             <th>Meals Used</th>
                             <th>Service</th>
                             <th>Choice</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
                         {% if records %}
                         {% for r in records %}
                         <tr class="record-row">
+                            <td>{{forloop.counter}}</td>
                             <td data-label="Customer"><strong>{{ r.customer.name }}</strong></td>
+                            <td data-label="Customer">{{r.customer.subscription_choice}}</td>
                             <td data-label="Meals Used">{{ r.meal_num_used }}</td>
                             <td data-label="Service">{{ r.service_choice }}</td>
                             <td data-label="Choice">{% firstof  r.meal_choice r.FLAGSHIP_choice r.PREMIUM_choice r.sunday_choice  %}</td>
+                            <td data-label="Service">Edit</td>
                         </tr>
                         {% empty %}
                         <tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--color-text-muted);">No records found.</td></tr>
