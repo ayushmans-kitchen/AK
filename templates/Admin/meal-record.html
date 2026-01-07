@@ -8,307 +8,307 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     
     <style>
-:root {
-    --color-gold: #d4af37;
-    --color-bg-deep: #050505;
-    --color-bg-card: #0f0f0f;
-    --color-bg-sidebar: #000000;
-    --color-text: #ffffff;
-    --color-text-muted: #888888;
-    --color-border: #1f1f1f;
-    --sb-width: 260px;
-    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+        :root {
+            --color-gold: #d4af37;
+            --color-bg-deep: #050505;
+            --color-bg-card: #0f0f0f;
+            --color-bg-sidebar: #000000;
+            --color-text: #ffffff;
+            --color-text-muted: #888888;
+            --color-border: #1f1f1f;
+            --sb-width: 260px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-/* RESET & BASE */
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-}
+        /* RESET & BASE */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
 
-body { 
-    font-family: 'Montserrat', sans-serif; 
-    background-color: var(--color-bg-deep); 
-    color: var(--color-text); 
-    line-height: 1.5; 
-    overflow-x: hidden; 
-}
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--color-bg-deep); 
+            color: var(--color-text); 
+            line-height: 1.5; 
+            overflow-x: hidden; 
+        }
 
-/* MOBILE HEADER & TOGGLE */
-#nav-toggle { display: none; }
+        /* MOBILE HEADER & TOGGLE */
+        #nav-toggle { display: none; }
 
-.mobile-header {
-    display: none; 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 65px;
-    background: #000; 
-    padding: 0 1.5rem; 
-    align-items: center; 
-    justify-content: space-between;
-    z-index: 2100; 
-    border-bottom: 1px solid var(--color-border);
-}
+        .mobile-header {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 65px;
+            background: #000; 
+            padding: 0 1.5rem; 
+            align-items: center; 
+            justify-content: space-between;
+            z-index: 2100; 
+            border-bottom: 1px solid var(--color-border);
+        }
 
-.hamburger { 
-    width: 28px; 
-    height: 18px; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between; 
-    cursor: pointer; 
-}
+        .hamburger { 
+            width: 28px; 
+            height: 18px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            cursor: pointer; 
+        }
 
-.hamburger span { 
-    height: 3px; 
-    width: 100%; 
-    background: var(--color-gold); 
-    border-radius: 10px; 
-    transition: var(--transition); 
-}
+        .hamburger span { 
+            height: 3px; 
+            width: 100%; 
+            background: var(--color-gold); 
+            border-radius: 10px; 
+            transition: var(--transition); 
+        }
 
-/* MAIN CONTENT AREA */
-.main-content { 
-    margin-left: var(--sb-width); 
-    padding: 2rem 2.5rem; 
-    transition: var(--transition); 
-    min-height: 100vh; 
-}
+        /* MAIN CONTENT AREA */
+        .main-content { 
+            margin-left: var(--sb-width); 
+            padding: 2rem 2.5rem; 
+            transition: var(--transition); 
+            min-height: 100vh; 
+        }
 
-/* PAGE HEADER */
-.detail-header {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: flex-end;
-    margin-bottom: 2rem; 
-    border-bottom: 1px solid var(--color-border); 
-    padding-bottom: 1.5rem;
-}
+        /* PAGE HEADER */
+        .detail-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end;
+            margin-bottom: 2rem; 
+            border-bottom: 1px solid var(--color-border); 
+            padding-bottom: 1.5rem;
+        }
 
-.detail-header h1 { 
-    font-family: 'Playfair Display', serif; 
-    color: var(--color-gold); 
-    font-size: clamp(1.5rem, 4vw, 2.2rem); 
-}
+        .detail-header h1 { 
+            font-family: 'Playfair Display', serif; 
+            color: var(--color-gold); 
+            font-size: clamp(1.5rem, 4vw, 2.2rem); 
+        }
 
-/* FILTERS */
-.filter-card { 
-    background: var(--color-bg-card); 
-    padding: 1.5rem; 
-    border-radius: 12px; 
-    border: 1px solid var(--color-border); 
-    margin-bottom: 2rem; 
-}
+        /* FILTERS */
+        .filter-card { 
+            background: var(--color-bg-card); 
+            padding: 1.5rem; 
+            border-radius: 12px; 
+            border: 1px solid var(--color-border); 
+            margin-bottom: 2rem; 
+        }
 
-.filter-row { 
-    display: flex; 
-    flex-wrap: wrap; 
-    gap: 2rem; 
-    align-items: flex-end; 
-}
+        .filter-row { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 2rem; 
+            align-items: flex-end; 
+        }
 
-.filter-group { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 8px; 
-}
+        .filter-group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+        }
 
-.filter-label { 
-    font-size: 0.65rem; 
-    color: var(--color-gold); 
-    text-transform: uppercase; 
-    font-weight: 700; 
-    letter-spacing: 1px; 
-}
+        .filter-label { 
+            font-size: 0.65rem; 
+            color: var(--color-gold); 
+            text-transform: uppercase; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+        }
 
-.search-input, .form-input {
-    background: #111; 
-    border: 1px solid var(--color-border); 
-    color: white;
-    padding: 12px 15px; 
-    border-radius: 8px; 
-    font-family: inherit; 
-    outline: none; 
-    transition: 0.3s;
-}
+        .search-input, .form-input {
+            background: #111; 
+            border: 1px solid var(--color-border); 
+            color: white;
+            padding: 12px 15px; 
+            border-radius: 8px; 
+            font-family: inherit; 
+            outline: none; 
+            transition: 0.3s;
+        }
 
-.search-input:focus, .form-input:focus { 
-    border-color: var(--color-gold); 
-}
+        .search-input:focus, .form-input:focus { 
+            border-color: var(--color-gold); 
+        }
 
-/* MEAL PILLS (LUNCH/DINNER RADIOS) */
-.summary-strip { 
-    display: flex; 
-    gap: 10px; 
-}
+        /* MEAL PILLS (LUNCH/DINNER RADIOS) */
+        .summary-strip { 
+            display: flex; 
+            gap: 10px; 
+        }
 
-.protein-pill {
-    background: #111; 
-    border: 1px solid var(--color-border); 
-    padding: 10px 20px; 
-    border-radius: 50px; 
-    cursor: pointer; 
-    font-size: 0.7rem; 
-    color: var(--color-text-muted); 
-    font-weight: 600; 
-    transition: var(--transition); 
-    display: flex; 
-    align-items: center;
-}
+        .protein-pill {
+            background: #111; 
+            border: 1px solid var(--color-border); 
+            padding: 10px 20px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-size: 0.7rem; 
+            color: var(--color-text-muted); 
+            font-weight: 600; 
+            transition: var(--transition); 
+            display: flex; 
+            align-items: center;
+        }
 
-.protein-pill input[type="radio"] { 
-    margin-right: 8px; 
-    accent-color: var(--color-gold); 
-}
+        .protein-pill input[type="radio"] { 
+            margin-right: 8px; 
+            accent-color: var(--color-gold); 
+        }
 
-.protein-pill:has(input:checked) { 
-    border-color: var(--color-gold); 
-    background: rgba(212, 175, 55, 0.1); 
-    color: var(--color-gold); 
-}
+        .protein-pill:has(input:checked) { 
+            border-color: var(--color-gold); 
+            background: rgba(212, 175, 55, 0.1); 
+            color: var(--color-gold); 
+        }
 
-.btn-filter {
-    background: var(--color-gold); 
-    color: #000; 
-    border: none;
-    padding: 12px 30px; 
-    border-radius: 8px; 
-    font-weight: 800;
-    text-transform: uppercase; 
-    font-size: 0.75rem; 
-    cursor: pointer;
-    transition: 0.3s;
-}
+        .btn-filter {
+            background: var(--color-gold); 
+            color: #000; 
+            border: none;
+            padding: 12px 30px; 
+            border-radius: 8px; 
+            font-weight: 800;
+            text-transform: uppercase; 
+            font-size: 0.75rem; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-/* TABLE STYLES */
-.table-container { 
-    background: var(--color-bg-card); 
-    border: 1px solid var(--color-border); 
-    border-radius: 12px; 
-    overflow: hidden; 
-}
+        /* TABLE STYLES */
+        .table-container { 
+            background: var(--color-bg-card); 
+            border: 1px solid var(--color-border); 
+            border-radius: 12px; 
+            overflow: hidden; 
+        }
 
-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-}
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
 
-th { 
-    text-align: left; 
-    background: #080808; 
-    padding: 18px 15px; 
-    color: var(--color-gold); 
-    font-size: 0.7rem; 
-    text-transform: uppercase; 
-    border-bottom: 2px solid var(--color-border); 
-}
+        th { 
+            text-align: left; 
+            background: #080808; 
+            padding: 18px 15px; 
+            color: var(--color-gold); 
+            font-size: 0.7rem; 
+            text-transform: uppercase; 
+            border-bottom: 2px solid var(--color-border); 
+        }
 
-td { 
-    padding: 18px 15px; 
-    border-bottom: 1px solid var(--color-border); 
-    font-size: 0.85rem; 
-    color: var(--color-text); 
-    vertical-align: middle;
-}
+        td { 
+            padding: 18px 15px; 
+            border-bottom: 1px solid var(--color-border); 
+            font-size: 0.85rem; 
+            color: var(--color-text); 
+            vertical-align: middle;
+        }
 
-/* CUSTOMER NAME LINK */
-td[data-label="Customer"] a {
-    color: var(--color-text);
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom: 1px solid transparent;
-    transition: var(--transition);
-}
+        /* CUSTOMER NAME LINK */
+        td[data-label="Customer"] a {
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
 
-td[data-label="Customer"] a:hover {
-    color: var(--color-gold);
-    border-bottom: 1px solid var(--color-gold);
-}
+        td[data-label="Customer"] a:hover {
+            color: var(--color-gold);
+            border-bottom: 1px solid var(--color-gold);
+        }
 
-/* DROPDOWN MENU STYLING */
-.table-dropdown {
-    background: #111;
-    color: var(--color-gold);
-    border: 1px solid var(--color-border);
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    outline: none;
-    cursor: pointer;
-    width: 100%;
-    min-width: 130px;
-    transition: var(--transition);
-    appearance: none; /* Hide default arrow */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23d4af37' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: calc(100% - 12px) center;
-}
+        /* DROPDOWN MENU STYLING */
+        .table-dropdown {
+            background: #111;
+            color: var(--color-gold);
+            border: 1px solid var(--color-border);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            width: 100%;
+            min-width: 130px;
+            transition: var(--transition);
+            appearance: none; /* Hide default arrow */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23d4af37' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 12px) center;
+        }
 
-.table-dropdown:focus {
-    border-color: var(--color-gold);
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
-}
+        .table-dropdown:focus {
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
+        }
 
-/* ACTION BUTTON (EDIT/UPDATE) */
-.btn-edit {
-    display: inline-block;
-    padding: 8px 18px;
-    background: transparent;
-    border: 1px solid var(--color-gold);
-    color: var(--color-gold);
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    text-align: center;
-    white-space: nowrap;
-}
+        /* ACTION BUTTON (EDIT/UPDATE) */
+        .btn-edit {
+            display: inline-block;
+            padding: 8px 18px;
+            background: transparent;
+            border: 1px solid var(--color-gold);
+            color: var(--color-gold);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            white-space: nowrap;
+        }
 
-.btn-edit:hover {
-    background: var(--color-gold);
-    color: #000;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-}
+        .btn-edit:hover {
+            background: var(--color-gold);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
 
-/* RESPONSIVE LOGIC */
-@media (max-width: 1024px) {
-    .mobile-header { display: flex; }
-    .sidebar { transform: translateX(-100%); z-index: 2000; padding-top: 5rem; }
-    .main-content { margin-left: 0; padding: 6.5rem 1.25rem 2rem 1.25rem; }
-    
-    #nav-toggle:checked ~ .sidebar { transform: translateX(0); }
-}
+        /* RESPONSIVE LOGIC */
+        @media (max-width: 1024px) {
+            .mobile-header { display: flex; }
+            .sidebar { transform: translateX(-100%); z-index: 2000; padding-top: 5rem; }
+            .main-content { margin-left: 0; padding: 6.5rem 1.25rem 2rem 1.25rem; }
+            
+            #nav-toggle:checked ~ .sidebar { transform: translateX(0); }
+        }
 
-@media (max-width: 768px) {
-    .filter-row { flex-direction: column; align-items: stretch; }
-    table, thead, tbody, th, td, tr { display: block; }
-    thead tr { position: absolute; top: -9999px; left: -9999px; }
-    tr { border-bottom: 2px solid var(--color-border); padding: 15px 5px; }
-    td { border: none; position: relative; padding-left: 50% !important; text-align: right; margin-bottom: 10px; }
-    td:before { 
-        content: attr(data-label); position: absolute; left: 15px; width: 45%; 
-        text-align: left; font-weight: 700; color: var(--color-gold); font-size: 0.7rem; text-transform: uppercase;
-    }
-}
+        @media (max-width: 768px) {
+            .filter-row { flex-direction: column; align-items: stretch; }
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { border-bottom: 2px solid var(--color-border); padding: 15px 5px; }
+            td { border: none; position: relative; padding-left: 50% !important; text-align: right; margin-bottom: 10px; }
+            td:before { 
+                content: attr(data-label); position: absolute; left: 15px; width: 45%; 
+                text-align: left; font-weight: 700; color: var(--color-gold); font-size: 0.7rem; text-transform: uppercase;
+            }
+        }
 
-.hidden { display: none !important; }
+        .hidden { display: none !important; }
 
-.print-fab { 
-    position: fixed; bottom: 25px; right: 25px; 
-    background: var(--color-gold); color: #000; 
-    padding: 14px 28px; border-radius: 50px; 
-    font-weight: 800; border: none; cursor: pointer; z-index: 2200; 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-}
+        .print-fab { 
+            position: fixed; bottom: 25px; right: 25px; 
+            background: var(--color-gold); color: #000; 
+            padding: 14px 28px; border-radius: 50px; 
+            font-weight: 800; border: none; cursor: pointer; z-index: 2200; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
@@ -388,6 +388,8 @@ td[data-label="Customer"] a:hover {
                     <tbody id="table-body">
                         {% if records %}
                         {% for r in records %}
+                        <form method="post" action="{% url 'update_meal_record' selected_meal r.id %}">
+                            {% csrf_token %}
                         <tr class="record-row">
                             <td>{{forloop.counter}}</td>
                             <td data-label="Customer"><strong><a href="{% url "customer_profile" r.customer.id %}">{{ r.customer.name }}</a></strong></td>
@@ -403,24 +405,45 @@ td[data-label="Customer"] a:hover {
                             </td>
 
                             <td data-label="Choice">
-                                {% with current_val=r.meal_choice|default:r.FLAGSHIP_choice|default:r.PREMIUM_choice|default:r.sunday_choice %}
-                                <select name="menu_choice" class="table-dropdown menu-select">
-                                    <option value="VEG" {% if current_val == "VEG" %}selected{% endif %}>VEG</option>
-                                    <option value="NON-VEG" {% if current_val == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
-                                    
-                                    <option value="PANEER" {% if current_val == "PANEER" %}selected{% endif %}>PANEER</option>
-                                    <option value="MUSHROOM" {% if current_val == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
-                                    <option value="CHICKEN" {% if current_val == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
-                                    <option value="EGG" {% if current_val == "EGG" %}selected{% endif %}>EGG</option>
-                                    <option value="PRAWN" {% if current_val == "PRAWN" %}selected{% endif %}>PRAWN</option>
-                                    <option value="FISH" {% if current_val == "FISH" %}selected{% endif %}>FISH</option>
-                                </select>
-                                {% endwith %}
+                                {% if r.sunday_choice is not None%}
+                                    <select name="sunday_choice" class="table-dropdown menu-select">
+                                        <option value="VEG" {% if r.sunday_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                        <option value="NON-VEG" {% if r.sunday_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
+                                    </select>
+                                {% else %}
+                                    {% if r.customer.subscription_choice == "NORMAL30" or r.customer.subscription_choice == "NORMAL60" %}
+                                        <select name="meal_choice" class="table-dropdown menu-select">
+                                            <option value="VEG" {% if r.meal_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                            <option value="NON-VEG" {% if r.meal_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
+                                        </select>
+                                    {% endif %}
+                                    {% if r.customer.subscription_choice == "FLAGSHIP30" or r.customer.subscription_choice == "FLAGSHIP60" %}
+                                        <select name="FLAGSHIP_choice" class="table-dropdown menu-select">
+                                            <option value="VEG" {% if r.FLAGSHIP_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                            <option value="PANEER" {% if r.FLAGSHIP_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                            <option value="MUSHROOM" {% if r.FLAGSHIP_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                            <option value="CHICKEN" {% if r.FLAGSHIP_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                        </select>
+                                    {% endif %}
+                                    {% if r.customer.subscription_choice == "PREMIUM30" or r.customer.subscription_choice == "PREMIUM60" %}
+                                    <select name="PREMIUM_choice" class="table-dropdown menu-select">
+                                        <option value="VEG" {% if r.PREMIUM_choice == "VEG" %}selected{% endif %}>VEG</option>
+                                        <option value="PANEER" {% if r.PREMIUM_choice == "PANEER" %}selected{% endif %}>PANEER</option>
+                                        <option value="MUSHROOM" {% if r.PREMIUM_choice == "MUSHROOM" %}selected{% endif %}>MUSHROOM</option>
+                                        <option value="CHICKEN" {% if r.PREMIUM_choice == "CHICKEN" %}selected{% endif %}>CHICKEN</option>
+                                        <option value="EGG" {% if r.PREMIUM_choice == "EGG" %}selected{% endif %}>EGG</option>
+                                        <option value="PRAWN" {% if r.PREMIUM_choice == "PRAWN" %}selected{% endif %}>PRAWN</option>
+                                        <option value="FISH" {% if r.PREMIUM_choice == "FISH" %}selected{% endif %}>FISH</option>
+                                        <option value="UNKNOWN" {% if r.PREMIUM_choice == "UNKNOWN" %}selected{% endif %}>UNKNOWN</option>
+                                    </select>
+                                    {% endif %}
+                                {% endif %}
                             </td>
                             <td data-label="Action">
-                                <a href="" class="btn-edit">Update</a>
+                                <button class="btn-edit" > Update </button>
                             </td>
                         </tr>
+                    </form>
                         {% empty %}
                         <tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--color-text-muted);">No records found.</td></tr>
                         {% endfor %}
