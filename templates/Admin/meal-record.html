@@ -204,7 +204,7 @@
                         {% for r in records %}
                         <tr class="record-row">
                             <td>{{forloop.counter}}</td>
-                            <td data-label="Customer"><strong>{{ r.customer.name }}</strong></td>
+                            <td data-label="Customer"><strong><a href="{% url "customer_profile" r.customer.id %}">{{ r.customer.name }}</a></strong></td>
                             <td data-label="Customer">{{r.customer.subscription_choice}}</td>
                             <td data-label="Meals Used">{{ r.meal_num_used }}</td>
                             <td data-label="Service">{{ r.service_choice }}</td>
