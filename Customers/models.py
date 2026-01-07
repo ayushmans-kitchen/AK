@@ -111,9 +111,42 @@ class Customer(AbstractBaseUser, PermissionsMixin):
             return 30 
         else :
             return 60
+    @property
+    def has_valid_default_choices(self):
+        # Sunday is mandatory for all plans
+        if not self.default_sunday_choice:
+            return False
 
-    def __str__(self):
-        return f"{self.name} ({self.subscription_choice}):balance={self.meal_balance}  - {self.email}"
+        plan = self.subscription_choice
+
+        # NORMAL plans
+        if plan in ["NORMAL30", "NORMAL60"]:
+            if self.lunch_status_active and not self.default_meal_choice:
+                return False
+            if self.dinner_status_active and not self.default_meal_choice:
+                return False
+            return True
+
+        # FLAGSHIP plans
+        if plan in ["FLAGSHIP30", "FLAGSHIP60"]:
+            if self.lunch_status_active and not self.FLAGSHIP_MENU_LUNCH_default_choice:
+                return False
+            if self.dinner_status_active and not self.FLAGSHIP_MENU_DINNER_default_choice:
+                return False
+            return True
+
+        # PREMIUM plans
+        if plan in ["PREMIUM30", "PREMIUM60"]:
+            if self.lunch_status_active and not self.PREMIUM_MENU_LUNCH_default_choice:
+                return False
+            if self.dinner_status_active and not self.PREMIUM_MENU_DINNER_default_choice:
+                return False
+            return True
+
+        return True
+
+        def __str__(self):
+            return f"{self.name} ({self.subscription_choice}):balance={self.meal_balance}  - {self.email}"
 
 class LunchRecord(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="lunch_records")
