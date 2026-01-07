@@ -36,7 +36,3 @@ class SubscriptionHistory(models.Model):
             f"renewal_date - {self.created_at} | "
         )
 
-
-# class MealHistory():
-#     pass 
-#   will store day wise entire of meals... in json

@@ -14,6 +14,12 @@
     {% include "Customer/navbar.html" %}
     <main class="user-page">
         <div class="content-container">
+            {% if not request.user.has_valid_default_choices %}
+            <div class="message-banner warning" role="alert">
+                <p>Alert: Please update your default meal choices (including Sunday) .</p>
+            </div>
+            {% endif %}
+
             {% if admin_notice %}
             {% for m in admin_notice %}
             <div class="message-banner info" role="alert">

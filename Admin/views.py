@@ -152,7 +152,7 @@ def service_details(request, dayTime, service):
 @staff_member_required(login_url='/login/')
 def customer_list(request,types):
     if types == "Inactive":
-        result = Customer.objects.filter(is_staff=False,user_status_active=False)
+        result = Customer.objects.filter(is_staff=False,user_status_active=False,paused_subscription=False)
     if types == "PlanEnded":
         result = Customer.objects.filter(is_staff=False,paused_subscription=True)
     context = {
