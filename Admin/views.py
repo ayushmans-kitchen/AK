@@ -239,8 +239,6 @@ def customer_profile(request, uid):
         user.subscription_choice = request.POST.get(
             "subscription_choice", user.subscription_choice
         )
-        user.default_sunday_choice = request.POST.get("default_sunday_choice")
-
         meal_balance = request.POST.get("meal_balance")
         
         if meal_balance is not None:
@@ -274,6 +272,7 @@ def customer_profile(request, uid):
                     user.subscription_phase += 1
                     user.paused_subscription = False
                     user.default_meal_choice = None
+                    user.default_sunday_choice = None
                     user.FLAGSHIP_MENU_LUNCH_default_choice = None
                     user.FLAGSHIP_MENU_DINNER_default_choice = None
                     user.PREMIUM_MENU_LUNCH_default_choice = None
