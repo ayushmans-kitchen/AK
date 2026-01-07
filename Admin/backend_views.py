@@ -223,9 +223,6 @@ def delete_admin_notice(request,mid):
     return redirect("ayushman_dashboard")
     
 
-
-
-
 from django.db.models import Min
 
 def create_customer_history(customer):
@@ -238,28 +235,21 @@ def create_customer_history(customer):
         date_key = str(lr.for_date)
         history.setdefault(date_key, {})
 
-        history[date_key]["lunch"] = (
-            "CANCELLED"
-            if lr.service_choice == "Cancel"
-            else lr.meal_choice
-            or lr.FLAGSHIP_choice
-            or lr.PREMIUM_choice
-            or lr.sunday_choice
-            or "UNKNOWN"
-        )
+        history[date_key]["lunch"] = {
+            "meal_num_used": lr.meal_num_used,
+            "service_choice": lr.service_choice,
+            "food_choice": lr.meal_choice or lr.FLAGSHIP_choice or lr.PREMIUM_choice or lr.sunday_choice or "UNKNOWN",
+        }
 
     for dr in dinners:
         date_key = str(dr.for_date)
         history.setdefault(date_key, {})
 
-        history[date_key]["dinner"] = (
-            "CANCELLED"
-            if dr.service_choice == "Cancel"
-            else dr.meal_choice
-            or dr.FLAGSHIP_choice
-            or dr.PREMIUM_choice
-            or "UNKNOWN"
-        )
+        history[date_key]["dinner"] = {
+            "meal_num_used": dr.meal_num_used,
+            "service_choice": dr.service_choice,
+            "food_choice": dr.meal_choice or lr.FLAGSHIP_choice or lr.PREMIUM_choice or  "UNKNOWN",
+        }
 
     lunch_start = lunches.aggregate(Min("for_date"))["for_date__min"]
     dinner_start = dinners.aggregate(Min("for_date"))["for_date__min"]

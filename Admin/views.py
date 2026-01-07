@@ -278,8 +278,8 @@ def customer_profile(request, uid):
             if action == "renew":
                 history = create_customer_history(user)
                 if history == "created":
-                    LunchRecord.objects.filter(customer=user).delete()
-                    DinnerRecord.objects.filter(customer=user).delete()
+                    # LunchRecord.objects.filter(customer=user).delete()
+                    # DinnerRecord.objects.filter(customer=user).delete()
 
                     user.subscription_phase += 1
                     user.paused_subscription = False
