@@ -239,36 +239,25 @@ def customer_profile(request, uid):
         user.subscription_choice = request.POST.get(
             "subscription_choice", user.subscription_choice
         )
+        user.default_sunday_choice = request.POST.get("default_sunday_choice")
 
         meal_balance = request.POST.get("meal_balance")
+        
         if meal_balance is not None:
             user.meal_balance = int(meal_balance)
 
         password = request.POST.get("password")
+
         if password:
             user.set_password(password)
             update_session_auth_hash(request, user)
+
 
         user.default_lunch_service_choice = request.POST.get(
             "default_lunch_service_choice", user.default_lunch_service_choice
         )
         user.default_dinner_service_choice = request.POST.get(
             "default_dinner_service_choice", user.default_dinner_service_choice
-        )
-        user.default_sunday_choice = request.POST.get("default_sunday_choice")
-        user.default_meal_choice = request.POST.get("default_meal_choice")
-        user.FLAGSHIP_MENU_LUNCH_default_choice = request.POST.get("FLAGSHIP_MENU_LUNCH_default_choice")
-        user.FLAGSHIP_MENU_DINNER_default_choice = request.POST.get("FLAGSHIP_MENU_DINNER_default_choice")
-        user.PREMIUM_MENU_LUNCH_default_choice = request.POST.get("PREMIUM_MENU_LUNCH_default_choice")
-        user.PREMIUM_MENU_DINNER_default_choice = request.POST.get("PREMIUM_MENU_DINNER_default_choice")
-        user.user_status_active = request.POST.get(
-            "user_status_active", user.user_status_active
-        )
-        user.lunch_status_active = request.POST.get(
-            "lunch_status_active", user.lunch_status_active
-        )
-        user.dinner_status_active = request.POST.get(
-            "dinner_status_active", user.dinner_status_active
         )
 
     if request.method == "POST":
@@ -284,41 +273,16 @@ def customer_profile(request, uid):
 
                     user.subscription_phase += 1
                     user.paused_subscription = False
+                    user.default_meal_choice = None
+                    user.FLAGSHIP_MENU_LUNCH_default_choice = None
+                    user.FLAGSHIP_MENU_DINNER_default_choice = None
+                    user.PREMIUM_MENU_LUNCH_default_choice = None
+                    user.PREMIUM_MENU_DINNER_default_choice = None
 
             if action in ("update", "renew"):
                 update_customer_from_post()
                 user.save()
                 return redirect("customer_profile", uid=user.id)
-
-
-    if user.subscription_choice in ["NORMAL30", "NORMAL60"]:
-        lmenu = list(dict.fromkeys(MEAL_MENU))
-        dmenu = list(dict.fromkeys(MEAL_MENU))
-        df_lunch = df_dinner = user.default_meal_choice
-        lunch_v = dinner_v = "default_meal_choice"
-
-    elif user.subscription_choice in ["FLAGSHIP30", "FLAGSHIP60"]:
-        lmenu = list(dict.fromkeys(FLAGSHIP_MENU_LUNCH))
-        dmenu = list(dict.fromkeys(FLAGSHIP_MENU_DINNER))
-        df_lunch = user.FLAGSHIP_MENU_LUNCH_default_choice
-        df_dinner = user.FLAGSHIP_MENU_DINNER_default_choice
-        lunch_v = "FLAGSHIP_MENU_LUNCH_default_choice"
-        dinner_v = "FLAGSHIP_MENU_DINNER_default_choice"
-
-    elif user.subscription_choice in ["PREMIUM30", "PREMIUM60"]:
-        lmenu = list(dict.fromkeys(PREMIUM_MENU_LUNCH))
-        dmenu = list(dict.fromkeys(PREMIUM_MENU_DINNER))
-        df_lunch = user.PREMIUM_MENU_LUNCH_default_choice
-        df_dinner = user.PREMIUM_MENU_DINNER_default_choice
-        lunch_v = "PREMIUM_MENU_LUNCH_default_choice"
-        dinner_v = "PREMIUM_MENU_DINNER_default_choice"
-
-    else:
-        lmenu = dmenu = []
-        df_lunch = df_dinner = None
-        lunch_v = dinner_v = None
-
-
 
     lunch_records = LunchRecord.objects.filter(
         customer=user
@@ -330,8 +294,6 @@ def customer_profile(request, uid):
 
     history = []
 
-
-    # Add lunch records
     for record in lunch_records:
         history.append({
             "date": record.for_date,
@@ -341,7 +303,6 @@ def customer_profile(request, uid):
             "meal_no": record.meal_num_used,
         })
 
-    # Add dinner records
     for record in dinner_records:
         history.append({
             "date": record.for_date,
@@ -353,20 +314,11 @@ def customer_profile(request, uid):
 
     history.sort(key=lambda x: x["meal_no"])
     
-
     context = {
         "user": user,
-        "lmenu": lmenu,
-        "dmenu": dmenu,
-        "df_lunch": df_lunch,
-        "df_dinner": df_dinner,
-        "lunch_v": lunch_v,
-        "dinner_v": dinner_v,
         "subs_history":SubscriptionHistory.objects.filter(customer=user).order_by('subscription_phase'),
         "current_meal_history":history,
-
     }
-
     return render(request, "Admin/customer_profile.html", context)
 
 

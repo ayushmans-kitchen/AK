@@ -90,8 +90,8 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     paused_subscription = models.BooleanField(default=False)
 
     subscription_choice = models.CharField(max_length=20, choices=SUBSCRIPTION_TYPE)
-    default_lunch_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
-    default_dinner_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE)
+    default_lunch_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE,default="DineIn")
+    default_dinner_service_choice = models.CharField(max_length=20, choices=SERVICE_TYPE,default="DineIn")
 
     default_meal_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)
     default_sunday_choice = models.CharField(max_length=20, choices=MEAL_MENU,null=True,blank=True)

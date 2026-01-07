@@ -362,34 +362,6 @@ tbody td {
                         <option {% if user.subscription_choice == "PREMIUM60" %} selected {% endif %} >PREMIUM60</option>
                     </select>
                 </div>
-                {% if user.subscription_choice == "NORMAL30" or user.subscription_choice == "NORMAL60" %}
-                <div class="input-group">
-                    <label>Default Meal</label>
-                    <select name="{{lunch_v}}">
-                        {% for key,value in lmenu %}
-                            <option {% if df_lunch == value %}selected{% endif %}>{{value}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                {% else %}
-                <div class="input-group">
-                    <label>Default Lunch</label>
-                    <select name="{{lunch_v}}">
-                        {% for key,value in lmenu %}
-                        <option {% if df_lunch == value %}selected{% endif %}>{{value}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Default Dinner</label>
-                    <select name="{{dinner_v}}">
-                        {% for key,value in dmenu %}
-                            <option {% if df_dinner == value %}selected{% endif %}>{{value}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                {% endif %}
-                
                 <div class="input-group">
                     <label>Meals Left</label>
                     <input type="number" value="{{user.meal_balance}}" style="color: var(--color-danger); font-weight: bold;" name="meal_balance">
@@ -413,10 +385,16 @@ tbody td {
             </div>
             <div class="input-group">
                 <label>Default Sunday</label>
-                <select name="default_sunday_choice">    
-                    <option {% if user.default_sunday_choice == "VEG" %}selected{% endif %}>VEG</option>
-                    <option {% if user.default_sunday_choice == "NON-VEG" %}selected{% endif %}>NON-VEG</option>
-                </select>
+                <input type="text"  value="{{ user.default_sunday_choice }}" readonly>
+            </div>
+            <div class="input-group">
+                <label>Default Lunch</label>
+                <input type="text"  value=" {% firstof user.default_meal_choice user.FLAGSHIP_MENU_LUNCH_default_choice user.PREMIUM_MENU_LUNCH_default_choice %} " readonly>
+            </div>
+            
+            <div class="input-group">
+                <label>Default Dinner</label>
+                <input type="text"  value=" {% firstof user.default_meal_choice user.FLAGSHIP_MENU_DINNER_default_choice user.PREMIUM_MENU_DINNER_default_choice %} " readonly>
             </div>
             <div class="field-group">
                 <label class="field-label">Account States</label>

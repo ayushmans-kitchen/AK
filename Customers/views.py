@@ -37,9 +37,6 @@ def user_dashboard(request):
     tsunday= today.isoweekday() == 4  # use present date for testing puropose sunday to satur 0-7
     slunch_record = LunchRecord.objects.filter(customer=user,for_date= today  + timedelta(days=1)).first()
 
-    # is_out_of_time_lunch = now.time() >= time(11, 0)
-    # is_out_of_time_dinner = now.time() >= time(18, 0)
-    # is_out_of_time_sundaylunch = now.time() >= time(23, 59)
 
 
     context={
@@ -62,45 +59,29 @@ def user_dashboard(request):
 def user_profile(request):
     user=request.user
     if request.method == "POST":
-        default_lunch_service = request.POST.get("default_lunch_service")
-        default_dinner_service = request.POST.get("default_dinner_service")
+        user.default_lunch_service_choice = request.POST.get("default_lunch_service",user.default_lunch_service_choice) 
+        user.default_dinner_service_choice = request.POST.get("default_dinner_service",user.default_dinner_service_choice)
         status_availability=request.POST.get("status_availability")
-        
+        user.user_status_active=True if status_availability == "True" else False
+        user.default_sunday_choice=request.POST.get("default_sunday_choice")
+        user.default_meal_choice=None
+        user.FLAGSHIP_MENU_LUNCH_default_choice=None
+        user.FLAGSHIP_MENU_DINNER_default_choice=None
+        user.PREMIUM_MENU_LUNCH_default_choice=None
+        user.PREMIUM_MENU_DINNER_default_choice=None
 
         if user.subscription_choice == "NORMAL30" or user.subscription_choice == "NORMAL60" :            
-            user.default_lunch_service_choice=default_lunch_service
-            user.default_dinner_service_choice=default_dinner_service
-            
-            user.default_sunday_choice=request.POST.get("default_sunday_choice")
             user.default_meal_choice=request.POST.get("default_meal_choice")
             
-            user.user_status_active=True if status_availability == "True" else False
-            user.save()
-
         if user.subscription_choice == "FLAGSHIP30" or user.subscription_choice == "FLAGSHIP60" :
-            user.default_lunch_service_choice=default_lunch_service
-            user.default_dinner_service_choice=default_dinner_service
-
-            user.default_sunday_choice=request.POST.get("default_sunday_choice")
             user.FLAGSHIP_MENU_LUNCH_default_choice=request.POST.get("default_flagship_lunch")
             user.FLAGSHIP_MENU_DINNER_default_choice=request.POST.get("default_flagship_dinner")
             
-            user.user_status_active=True if status_availability == "True" else False
-
-            user.save()
-        
         if user.subscription_choice == "PREMIUM30" or user.subscription_choice == "PREMIUM60" :
-            user.default_lunch_service_choice=default_lunch_service
-            user.default_dinner_service_choice=default_dinner_service
-
-            user.default_sunday_choice=request.POST.get("default_sunday_choice")
             user.PREMIUM_MENU_LUNCH_default_choice=request.POST.get("default_premium_lunch")
             user.PREMIUM_MENU_DINNER_default_choice=request.POST.get("default_premium_dinner")
             
-            user.user_status_active=True if status_availability == "True" else False
-
-            user.save()
-
+        user.save()
         return redirect("user_profile")
     return render(request,'Customer/user-profile.html')
 
@@ -111,7 +92,6 @@ def user_lunch_form(request):
 
     customer = request.user
     service_choice = request.POST.get("lunch_service")
-    print(service_choice)
     meal_choice = None
     FLAGSHIP_choice = None
     PREMIUM_choice = None
@@ -130,6 +110,7 @@ def user_lunch_form(request):
         lr = LunchRecord.objects.create(
             customer=customer,
             for_date=today,
+            sunday_choice = None,    
             meal_choice=meal_choice,
             FLAGSHIP_choice=FLAGSHIP_choice,
             PREMIUM_choice=PREMIUM_choice,
