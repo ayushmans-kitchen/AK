@@ -6,6 +6,7 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_POST
 from Customers.models import Customer, LunchRecord, DinnerRecord, SERVICE_TYPE,SUBSCRIPTION_TYPE
 from .models import AdminNotice,SubscriptionHistory
 from django.shortcuts import render,redirect
@@ -380,9 +381,9 @@ def meal_record(request):
         target_date = request.POST.get("target_date") or date.today()
 
         if meal_time == "Lunch":
-            records = LunchRecord.objects.filter(for_date=target_date)
+            records = LunchRecord.objects.filter(for_date=target_date).exclude(service_choice="Cancel")
         elif meal_time == "Dinner":
-            records = DinnerRecord.objects.filter(for_date=target_date)
+            records = DinnerRecord.objects.filter(for_date=target_date).exclude(service_choice="Cancel")
 
     context = {
         "records": records,
@@ -391,6 +392,47 @@ def meal_record(request):
     }
     return render(request, "Admin/meal-record.html", context)
 
+@staff_member_required(login_url="/login/")
+@require_POST
+@transaction.atomic
+def update_meal_record(request, selected_meal, ldid):
+    service_choice = request.POST.get("service_choice")
+
+    if selected_meal == "Lunch":
+        record = get_object_or_404(LunchRecord, pk=ldid)
+    elif selected_meal == "Dinner":
+        record = get_object_or_404(DinnerRecord, pk=ldid)
+    else:
+        return redirect("meal_list")
+
+    customer = record.customer
+
+    if service_choice == "Cancel" and record.service_choice != "Cancel":
+        customer.meal_balance += 1
+        customer.save()
+
+        record.meal_choice = None
+        record.FLAGSHIP_choice = None
+        record.PREMIUM_choice = None
+        record.sunday_choice = None
+
+    record.service_choice = service_choice
+
+    if service_choice != "Cancel":
+        if "sunday_choice" in request.POST:
+            record.sunday_choice = request.POST.get("sunday_choice")
+
+        elif "meal_choice" in request.POST:
+            record.meal_choice = request.POST.get("meal_choice")
+
+        elif "FLAGSHIP_choice" in request.POST:
+            record.FLAGSHIP_choice = request.POST.get("FLAGSHIP_choice")
+
+        elif "PREMIUM_choice" in request.POST:
+            record.PREMIUM_choice = request.POST.get("PREMIUM_choice")
+
+    record.save()
+    return redirect("meal_record")
 
 @staff_member_required(login_url="/login/")
 def track_subscription(request):
