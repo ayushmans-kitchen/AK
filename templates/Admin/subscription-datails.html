@@ -144,25 +144,19 @@
                                 {% if meals.lunch %}
                                 <tr class="history-row">
                                     <td>{{ forloop.counter }}</td>
-
-                                    <td class="record-date" style="font-weight:700;">
-                                        {{ date }}
-                                    </td>
-
-                                    <td>
-                                        {{ meals.lunch.food_choice }}
-                                    </td>
-
+                                
+                                    <td class="record-date" style="font-weight:700;">{{ date }}</td>
+                                    <td>{{ meals.lunch.food_choice }}</td>
                                     <td>
                                         {% if meals.lunch.service_choice == "Cancel" %}
-                                            <span class="badge badge-cancelled">Cancelled</span>
+                                        <span class="badge badge-cancelled">Cancelled</span>
                                         {% else %}
-                                            <span class="badge badge-active">
-                                                {{ meals.lunch.service_choice }}
-                                            </span>
+                                        <span class="badge badge-active">
+                                            {{ meals.lunch.service_choice }}
+                                        </span>
                                         {% endif %}
                                     </td>
-
+                                
                                     <td>
                                         {{ meals.lunch.meal_num_used }}
                                     </td>
@@ -208,15 +202,13 @@
                                 {% if meals.dinner %}
                                 <tr class="history-row">
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ date }}</td>
+                                    <td class="record-date" style="font-weight:700;">{{ date }}</td>
                                     <td>{{ meals.dinner.food_choice }}</td>
                                     <td>
                                         {% if meals.dinner.service_choice == "Cancel" %}
                                             <span class="badge badge-cancelled">Cancelled</span>
                                         {% else %}
-                                            <span class="badge badge-active">
-                                                {{ meals.dinner.service_choice }}
-                                            </span>
+                                            <span class="badge badge-active">{{ meals.dinner.service_choice }}</span>
                                         {% endif %}
                                     </td>
                                     <td>{{ meals.dinner.meal_num_used }}</td>
@@ -240,15 +232,28 @@
 
     </main>
 
-    <script>
-        document.getElementById('dateSearch').addEventListener('input', function() {
-            const query = this.value.toLowerCase().trim();
-            const rows = document.querySelectorAll('.history-row');
-            rows.forEach(row => {
-                const dateText = row.querySelector('.record-date').textContent.toLowerCase();
-                row.style.display = dateText.includes(query) ? "" : "none";
+<script>
+    // 1. Format Dates on Load
+    document.querySelectorAll('.record-date').forEach(el => {
+        const rawDate = el.textContent.trim(); // e.g., "2025-12-15"
+        const dateObj = new Date(rawDate);
+        if (!isNaN(dateObj)) {
+            el.textContent = dateObj.toLocaleDateString('en-GB', {
+                day: '2-digit', month: 'short', year: 'numeric'
             });
+        }
+    });
+
+    // 2. Search Logic
+    document.getElementById('dateSearch').addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('.history-row');
+
+        rows.forEach(row => {
+            const dateText = row.querySelector('.record-date').textContent.toLowerCase();
+            row.style.display = dateText.includes(query) ? "" : "none";
         });
-    </script>
+    });
+</script>
 </body>
 </html>
