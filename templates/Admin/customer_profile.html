@@ -302,7 +302,8 @@
                                 <th>Date</th>
                                 <th>Meal Type</th>
                                 <th>Service</th>
-                                <th>Status</th>
+                                <th>Meal Choice</th>
+                                <th>Meal No. Used</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -312,13 +313,8 @@
                                 <td data-label="Date">{{ row.date|date:"d M Y" }}</td>
                                 <td data-label="Meal Type">{{ row.meal_type }}</td>
                                 <td data-label="Service">{{ row.service }}</td>
-                                <td data-label="Status">
-                                    {% if row.status == "Cancelled" %}
-                                    <span class="badge badge-cancelled">Cancelled</span>
-                                    {% else %}
-                                    <span class="badge badge-completed">Completed</span>
-                                    {% endif %}
-                                </td>
+                                <td data-label="Meal Choice">{{row.meal_choice}}</td>
+                                <td data-label="Meal No. Used">{{row.meal_no}}</td>
                             </tr>
                             {% empty %}
                             <tr>

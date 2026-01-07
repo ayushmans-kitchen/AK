@@ -329,13 +329,14 @@ def customer_profile(request, uid):
 
     history = []
 
+
     # Add lunch records
     for record in lunch_records:
         history.append({
             "date": record.for_date,
             "meal_type": "Lunch",
             "service": record.service_choice,
-            "status": "Cancelled" if record.service_choice == "Cancel" else "Completed",
+            "meal_choice": record.meal_choice or record.FLAGSHIP_choice or record.PREMIUM_choice or record.sunday_choice or "UNKNOWN",  
             "meal_no": record.meal_num_used,
         })
 
@@ -345,9 +346,13 @@ def customer_profile(request, uid):
             "date": record.for_date,
             "meal_type": "Dinner",
             "service": record.service_choice,
-            "status": "Cancelled" if record.service_choice == "Cancel" else "Completed",
+            "meal_choice": record.meal_choice or record.FLAGSHIP_choice or record.PREMIUM_choice or record.sunday_choice or "UNKNOWN", 
             "meal_no": record.meal_num_used,
         })
+
+    history.sort(key=lambda x: x["meal_no"])
+    
+
     context = {
         "user": user,
         "lmenu": lmenu,
